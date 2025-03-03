@@ -1,0 +1,256 @@
+@import "tailwindcss";
+@plugin "tailwindcss-animate";
+
+@custom-variant root (&:is(.root *));
+
+@theme {
+  --font-poppins: var(--font-poppins);
+}
+
+:root {
+  /* Primary Colors */
+  --primary: #CEEF0A;
+  --primary-foreground: #FFFFFF;
+  --primary-300: #BBD423;
+  --primary-fade: #CEEF0A0A;
+  /* Hex with alpha */
+  --primary-alpha-8: #CEEF0A14;
+  /* Hex with alpha */
+
+  /* Base Colors */
+  --background: #FFFFFF;
+  --foreground: #010101;
+  --background-alt: #F5F5F5;
+
+  /* Text Colors */
+  --text-title: #010101;
+  /* Hex with alpha */
+  --text-body: #010101A3;
+  --icon-color: #010101CC;
+  /* Hex with alpha */
+  --sidebar-heading: #0101018F;
+  /* Hex with alpha */
+
+  /* Status Colors */
+  --success: #1FC16B;
+  --success-light: #1FC16B14;
+  /* Hex with alpha */
+  --warning: #DFB400;
+  --warning-light: #FFDB4314;
+  /* Hex with alpha */
+  --destructive: #D00416;
+  --destructive-foreground: #FFFFFF;
+
+  /* Component Colors */
+  --card: #FFFFFF;
+  --card-foreground: #010101;
+  --popover: #FFFFFF;
+  --popover-foreground: #010101;
+  --secondary: #F5F5F5;
+  --secondary-foreground: #010101;
+  --muted: #F5F5F5;
+  --muted-foreground: #0101018F;
+  /* Hex with alpha */
+  --accent: #CEEF0A;
+  --accent-foreground: #010101;
+  --border: #F5F5F5;
+  --input: #F5F5F5;
+  --ring: #CEEF0A;
+
+  /* Chart Colors */
+  --chart-1: #FF6B6B;
+  /* Example color */
+  --chart-2: #4ECDC4;
+  /* Example color */
+  --chart-3: #556270;
+  /* Example color */
+  --chart-4: #C7F464;
+  /* Example color */
+  --chart-5: #FFD166;
+  /* Example color */
+
+  /* Border Radius */
+  --radius: 0.75rem;
+  /* 12px */
+  --radius-sm: 0.5rem;
+  /* 8px */
+
+  /* Sidebar */
+  --sidebar: #FFFFFF;
+  --sidebar-foreground: #010101;
+  --sidebar-primary: #CEEF0A;
+  --sidebar-primary-foreground: #010101;
+  --sidebar-accent: #F5F5F5;
+  --sidebar-accent-foreground: #010101;
+  --sidebar-border: #F5F5F5;
+  --sidebar-ring: #CEEF0A;
+}
+
+.dark {
+  /* Base Colors */
+  --background: #010101;
+  --foreground: #FFFFFF;
+  --background-alt: #F5F5F5;
+
+  /* Component Colors for dark mode */
+  --card: #151515;
+  --card-foreground: #FFFFFF;
+  --popover: #151515;
+  --popover-foreground: #FFFFFF;
+  --secondary: #252525;
+  --secondary-foreground: #FFFFFF;
+  --muted: #252525;
+  --muted-foreground: #FFFFFF8F;
+  /* Hex with alpha */
+  --accent: #CEEF0A;
+  --accent-foreground: #010101;
+  --border: #252525;
+  --input: #252525;
+
+  /* Status Colors */
+  --success: #1FC16B;
+  --success-light: #1FC16B14;
+  /* Hex with alpha */
+  --warning: #DFB400;
+  --warning-light: #FFDB4314;
+  /* Hex with alpha */
+  --destructive: #D00416;
+  --destructive-foreground: #FFFFFF;
+
+  /* Sidebar */
+  --sidebar: #151515;
+  --sidebar-foreground: #FFFFFF;
+  --sidebar-primary: #CEEF0A;
+  --sidebar-primary-foreground: #010101;
+  --sidebar-accent: #252525;
+  --sidebar-accent-foreground: #FFFFFF;
+  --sidebar-border: #252525;
+  --sidebar-ring: #CEEF0A;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-background-alt: var(--background-alt);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary-300: var(--primary-300);
+  --color-primary-fade: var(--primary-fade);
+  --color-primary-alpha-8: var(--primary-alpha-8);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-success: var(--success);
+  --color-success-light: var(--success-light);
+  --color-warning: var(--warning);
+  --color-warning-light: var(--warning-light);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-text-title: var(--text-title);
+  --color-text-body: var(--text-body);
+  --color-icon: var(--icon-color);
+  --color-sidebar-heading: var(--sidebar-heading);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --radius-sm: var(--radius-sm);
+  --radius-md: var(--radius);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  body {
+    @apply bg-background text-foreground font-poppins;
+  }
+}
+
+/* Colors utility classes */
+@layer utilities {
+  .text-title-color {
+    @apply text-text-title;
+  }
+
+  .text-body-color {
+    @apply text-text-body;
+  }
+
+  .icon-color {
+    color: var(--icon-color);
+    /* Define the icon-color utility */
+  }
+
+  .sidebar-heading-color {
+    @apply text-sidebar-heading;
+  }
+}
+
+/* Status badges styles */
+.status-success {
+  @apply bg-success-light text-success px-3 py-1 rounded-full text-xs font-medium;
+}
+
+.status-pending {
+  @apply bg-warning-light text-warning px-3 py-1 rounded-full text-xs font-medium;
+}
+
+.status-error {
+  @apply bg-destructive/10 text-destructive px-3 py-1 rounded-full text-xs font-medium;
+}
+
+
+
+/* Custom scrollbar styles */
+/* Custom scrollbar styles */
+::-webkit-scrollbar {
+  width: 8px;
+  /* Width of the scrollbar */
+  height: 8px;
+  /* Height of the scrollbar (for horizontal scrollbars) */
+}
+
+/* Track (background of the scrollbar) */
+::-webkit-scrollbar-track {
+  background: white;
+  /* Use your design system's background color */
+  border-radius: 4px;
+}
+
+/* Handle (the draggable part of the scrollbar) */
+::-webkit-scrollbar-thumb {
+  background: white;
+  /* Use your design system's border color */
+  border-radius: 4px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: var(--sidebar-primary);
+  /* Use your design system's primary color */
+}
+
+/* Handle on hover */
