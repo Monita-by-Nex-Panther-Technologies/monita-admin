@@ -14,6 +14,7 @@ import esimIcon from "@/assets/icons/sim.svg";
 import settingsIcon from "@/assets/icons/settings.svg";
 import supportIcon from "@/assets/icons/support.svg";
 import logoutIcon from "@/assets/icons/logoutIcon.svg";
+import exportIcon from "@/assets/icons/export.svg";
 
 export const icons = {
   home: homeIcon,
@@ -31,6 +32,7 @@ export const icons = {
   settingsIcon,
   supportIcon,
   logoutIcon,
+  exportIcon,
 } as const;
 
 export type IconAssets = typeof icons;
