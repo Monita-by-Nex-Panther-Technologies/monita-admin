@@ -211,15 +211,15 @@
 
 /* Status badges styles */
 .status-success {
-  @apply bg-success-light text-success px-3 py-1 rounded-full text-xs font-medium;
+  @apply bg-success-light text-success px-3 py-2 rounded-sm w-[102px] text-base font-medium;
 }
 
 .status-pending {
-  @apply bg-warning-light text-warning px-3 py-1 rounded-full text-xs font-medium;
+  @apply bg-warning-light text-warning px-5 py-2 rounded-sm w-[102px] text-base font-medium;
 }
 
 .status-error {
-  @apply bg-destructive/10 text-destructive px-3 py-1 rounded-full text-xs font-medium;
+  @apply bg-destructive/10 text-destructive px-8 py-2 rounded-sm w-[200px] text-base font-medium;
 }
 
 
