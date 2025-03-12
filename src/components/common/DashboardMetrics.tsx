@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowUpIcon, ArrowDownIcon, UsersIcon, CreditCardIcon, ClockIcon } from 'lucide-react';
+import { ArrowUpIcon, ArrowDownIcon } from 'lucide-react';
 import { icons } from '@/constants/icons';
 
 const DashboardMetrics = () => {

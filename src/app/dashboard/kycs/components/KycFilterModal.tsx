@@ -21,6 +21,10 @@ interface FilterModalProps {
     onApply: (filters: FilterCriteria) => void;
 }
 
+// Define valid status and KYC level types for better type safety
+type Status = "" | "Approved" | "Pending" | "Rejected";
+type KycLevel = "" | "Tier 1" | "Tier 2" | "Tier 3";
+
 const KycFilterModal: React.FC<FilterModalProps> = ({ isOpen, onClose, onApply }) => {
     const [filters, setFilters] = useState<FilterCriteria>({
         username: "",
@@ -30,16 +34,17 @@ const KycFilterModal: React.FC<FilterModalProps> = ({ isOpen, onClose, onApply }
         endDate: undefined,
     });
 
-    const handleChange = (field: keyof FilterCriteria, value: any) => {
+    // Type-safe handle change function with overloads
+    const handleChange = <K extends keyof FilterCriteria>(field: K, value: FilterCriteria[K]): void => {
         setFilters((prev) => ({ ...prev, [field]: value }));
     };
 
-    const handleApply = () => {
+    const handleApply = (): void => {
         onApply(filters);
         onClose();
     };
 
-    const handleResetFilters = () => {
+    const handleResetFilters = (): void => {
         setFilters({
             username: "",
             status: "",
@@ -75,7 +80,7 @@ const KycFilterModal: React.FC<FilterModalProps> = ({ isOpen, onClose, onApply }
                         <label className="block text-sm font-medium mb-1">KYC Status</label>
                         <Select
                             value={filters.status}
-                            onValueChange={(value) => handleChange("status", value)}
+                            onValueChange={(value: Status) => handleChange("status", value)}
                         >
                             <SelectTrigger>
                                 <SelectValue placeholder="Select status" />
@@ -93,7 +98,7 @@ const KycFilterModal: React.FC<FilterModalProps> = ({ isOpen, onClose, onApply }
                         <label className="block text-sm font-medium mb-1">KYC Level</label>
                         <Select
                             value={filters.kycLevel}
-                            onValueChange={(value) => handleChange("kycLevel", value)}
+                            onValueChange={(value: KycLevel) => handleChange("kycLevel", value)}
                         >
                             <SelectTrigger>
                                 <SelectValue placeholder="Select KYC level" />
@@ -122,7 +127,7 @@ const KycFilterModal: React.FC<FilterModalProps> = ({ isOpen, onClose, onApply }
                                 <Calendar
                                     mode="single"
                                     selected={filters.startDate}
-                                    onSelect={(date) => handleChange("startDate", date)}
+                                    onSelect={(date: Date | undefined) => handleChange("startDate", date)}
                                     initialFocus
                                 />
                             </PopoverContent>
@@ -144,7 +149,7 @@ const KycFilterModal: React.FC<FilterModalProps> = ({ isOpen, onClose, onApply }
                                 <Calendar
                                     mode="single"
                                     selected={filters.endDate}
-                                    onSelect={(date) => handleChange("endDate", date)}
+                                    onSelect={(date: Date | undefined) => handleChange("endDate", date)}
                                     initialFocus
                                 />
                             </PopoverContent>

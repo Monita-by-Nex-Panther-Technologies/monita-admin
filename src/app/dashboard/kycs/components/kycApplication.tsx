@@ -2,8 +2,8 @@
 import React, { useState, useRef } from "react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Search, MoreHorizontal, ListFilter, ChevronLeft, ChevronRight, Copy, X } from "lucide-react";
+// import { Input } from "@/components/ui/input";
+import { Search, MoreHorizontal, ListFilter, X } from "lucide-react";
 import { Select, SelectTrigger, SelectContent, SelectItem } from "@/components/ui/select";
 
 import {
@@ -18,9 +18,9 @@ import {
 import * as XLSX from "xlsx";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
-import { format } from "date-fns";
+// import { format } from "date-fns";
 import FilterModal from "./KycFilterModal";
-import { kycApplications, KycApplication } from "./data"; // Import data from data.ts
+import { kycApplications } from "./data"; // Import data from data.ts
 
 const itemsPerPageOptions = [5, 10, 20, 50];
 

@@ -1,6 +1,6 @@
 "use client"
 import React from 'react';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Area, ComposedChart } from 'recharts';
+import { Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Area, ComposedChart } from 'recharts';
 
 const DBAnalyticsSection = () => {
     // Sample transaction trend data matching the graph
