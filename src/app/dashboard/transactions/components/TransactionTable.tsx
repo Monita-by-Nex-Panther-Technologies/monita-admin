@@ -21,7 +21,7 @@ import autoTable from "jspdf-autotable";
 import { icons } from "@/constants/icons";
 // import { format } from "date-fns";
 import FilterModal from "./TransactionFilterModal";
-import { transactions, Transaction } from "./data"; // Import data from data.ts
+import { transactions } from "./data"; // Import data from data.ts
 
 const itemsPerPageOptions = [5, 10, 20, 50];
 
@@ -140,7 +140,7 @@ const TransactionsTable = () => {
         );
     };
 
-    const isSelected = (id: string) => selected.includes(id);
+    // const isSelected = (id: string) => selected.includes(id);
 
     const copyToClipboard = (text: string) => {
         navigator.clipboard.writeText(text);

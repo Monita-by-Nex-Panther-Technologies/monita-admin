@@ -1,4 +1,5 @@
 // src/types/declaration.d.ts
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import "jspdf-autotable";
 
 declare module "jspdf" {
@@ -8,13 +9,13 @@ declare module "jspdf" {
 
   // Define proper typing for autotable options
   interface AutoTableOptions {
-    head?: Array<Array<any>>;
-    body?: Array<Array<any>>;
-    foot?: Array<Array<any>>;
+    head?: Array<Array<unknown>>;
+    body?: Array<Array<unknown>>;
+    foot?: Array<Array<unknown>>;
     columns?: Array<{
       header?: string;
       dataKey?: string | number;
-      [key: string]: any;
+      [key: string]: unknown;
     }>;
     startY?: number;
     margin?: {
@@ -44,38 +45,16 @@ declare module "jspdf" {
       valign?: "top" | "middle" | "bottom";
       fillColor?: string;
       textColor?: string;
-      [key: string]: any;
+      [key: string]: unknown;
     };
-    headStyles?: {
-      [key: string]: any;
-    };
-    bodyStyles?: {
-      [key: string]: any;
-    };
-    footStyles?: {
-      [key: string]: any;
-    };
-    alternateRowStyles?: {
-      [key: string]: any;
-    };
-    columnStyles?: {
-      [key: string]: any;
-    };
-    didDrawPage?: (data: any) => void;
-    didDrawCell?: (data: any) => void;
-    willDrawCell?: (data: any) => void;
-    [key: string]: any; // Allow for other configuration options
+    headStyles?: Record<string, unknown>;
+    bodyStyles?: Record<string, unknown>;
+    footStyles?: Record<string, unknown>;
+    alternateRowStyles?: Record<string, unknown>;
+    columnStyles?: Record<string, unknown>;
+    didDrawPage?: (data: unknown) => void;
+    didDrawCell?: (data: unknown) => void;
+    willDrawCell?: (data: unknown) => void;
+    [key: string]: unknown; // Allow for other configuration options
   }
 }
-
-// Alternative solution with ESLint disable comment if you prefer
-// that approach instead of the full type definition above:
-
-/*
-declare module "jspdf" {
-  interface jsPDF {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    autoTable: (options: any) => jsPDF;
-  }
-}
-*/

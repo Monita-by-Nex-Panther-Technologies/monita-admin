@@ -139,7 +139,7 @@ const KycApplicationsTable = () => {
         );
     };
 
-    const isSelected = (id: string) => selected.includes(id);
+    // const isSelected = (id: string) => selected.includes(id);
 
     const exportData = (format: string) => {
         const dataToExport = selected.length > 0

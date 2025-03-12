@@ -11,7 +11,7 @@ import { ChevronDown, ChevronUp } from "lucide-react";
 import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import Image from "next/image";
+// import Image from "next/image";
 
 
 export const SideBarSectionHeading = ({ title }: { title: string }) => {
