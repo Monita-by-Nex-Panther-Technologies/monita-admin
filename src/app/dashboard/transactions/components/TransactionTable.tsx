@@ -2,8 +2,8 @@
 import React, { useState, useRef } from "react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Search, MoreHorizontal, ListFilter, ChevronLeft, ChevronRight, Copy, Calendar as CalendarIcon, X } from "lucide-react";
+// import { Input } from "@/components/ui/input";
+import { Search, MoreHorizontal, ListFilter, Copy, X } from "lucide-react";
 import { Select, SelectTrigger, SelectContent, SelectItem } from "@/components/ui/select";
 
 import {
@@ -19,7 +19,7 @@ import * as XLSX from "xlsx";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import { icons } from "@/constants/icons";
-import { format } from "date-fns";
+// import { format } from "date-fns";
 import FilterModal from "./TransactionFilterModal";
 import { transactions, Transaction } from "./data"; // Import data from data.ts
 
