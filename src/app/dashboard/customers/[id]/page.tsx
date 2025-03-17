@@ -10,14 +10,11 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { BlockUserDialog } from "../components/block-user-dialog"
 import Image from "next/image"
 
-interface UserDetailsProps {
-    params: {
-        id: string
-    }
-    searchParams?: Record<string, string | string[] | undefined>
+type Props = {
+    params: { id: string }
 }
 
-export default function UserDetailsPage({ params }: UserDetailsProps) {
+export default function UserDetailsPage({ params }: Props) {
     const [blockDialogOpen, setBlockDialogOpen] = useState<boolean>(false)
     const [searchTerm, setSearchTerm] = useState<string>("")
     const [selected, setSelected] = useState<string[]>([])
