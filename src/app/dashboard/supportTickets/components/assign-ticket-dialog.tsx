@@ -16,7 +16,7 @@ export function AssignTicketDialog({ open, onOpenChange }: AssignTicketDialogPro
     const [commentText, setCommentText] = useState<string>("")
     const textareaRef = useRef<HTMLTextAreaElement>(null)
 
-    const handleFormatText = (command: string, value = "") => {
+    const handleFormatText = (command: string,) => {
         if (!textareaRef.current) return
 
         const textarea = textareaRef.current

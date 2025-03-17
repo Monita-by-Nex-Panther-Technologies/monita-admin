@@ -80,7 +80,8 @@ const CashbackRecipientsTable = () => {
     }
 
     const exportData = (format: string) => {
-        // Export functionality would go here
+        // Export functionality would go herefotma
+        console.log(format)
         setExportDropdownOpen(false)
     }
 

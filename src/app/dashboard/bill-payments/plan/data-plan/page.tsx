@@ -19,11 +19,6 @@ type NetworkPlansType = {
     [key: string]: PlanType[];
 };
 
-type NetworkType = {
-    name: string;
-    logo: string;
-    color: string;
-};
 
 
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";

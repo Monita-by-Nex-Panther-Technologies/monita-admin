@@ -17,7 +17,7 @@ import {
     Legend,
 } from "recharts"
 import { Search, MoreHorizontal, ListFilter, Calendar } from "lucide-react"
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogClose } from "@/components/ui/dialog"
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Button } from "@/components/ui/button"
 import { Select, SelectTrigger, SelectContent, SelectItem } from "@/components/ui/select"

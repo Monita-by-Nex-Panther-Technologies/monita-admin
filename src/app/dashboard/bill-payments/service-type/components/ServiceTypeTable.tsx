@@ -2,7 +2,7 @@ import { Switch } from "@/components/ui/switch";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { Pen, Plus, Trash2 } from "lucide-react";
-import { cn } from "@/lib/utils";
+
 import {
     Table,
     TableBody,

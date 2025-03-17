@@ -46,7 +46,7 @@ const SupportTicketTable = () => {
     // Mock data for tickets
     const tickets: Ticket[] = Array(8)
         .fill(null)
-        .map((_, index) => ({
+        .map(() => ({
             id: "102911120111",
             name: "Ade Johnson",
             issue: "Delay in transaction...",
@@ -285,6 +285,8 @@ const SupportTicketTable = () => {
                             <ListFilter size={16} />
                             <span className="text-base">Filter</span>
                         </button>
+
+                        <div className={`${isFilterModalOpen ? "" : ""}`}></div>
 
                         <div className="flex flex-row justify-center items-center">
                             <input
