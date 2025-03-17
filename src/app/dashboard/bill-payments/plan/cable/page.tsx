@@ -15,6 +15,7 @@ type PlanType = {
     sellingPrice: string;
     commission: string; // Added Commission field
     validity: string;
+    package: string; // Added Package field
 };
 
 type ServiceProviderType = {
@@ -40,20 +41,20 @@ const CablePlanManagement = () => {
 
     const serviceProviders: ServiceProviderType = {
         "Showmax": [
-            { id: 1, name: "Mobile", disabled: false, costPrice: "₦1200", sellingPrice: "₦1300", commission: "₦50", validity: "30 days" },
-            { id: 2, name: "Mobile Pro", disabled: false, costPrice: "₦2500", sellingPrice: "₦2600", commission: "₦100", validity: "30 days" },
+            { id: 1, name: "Mobile", disabled: false, costPrice: "₦1200", sellingPrice: "₦1300", commission: "₦50", validity: "30 days", package: "Basic" },
+            { id: 2, name: "Mobile Pro", disabled: false, costPrice: "₦2500", sellingPrice: "₦2600", commission: "₦100", validity: "30 days", package: "Premium" },
         ],
         "DSTV": [
-            { id: 1, name: "Compact", disabled: false, costPrice: "₦5000", sellingPrice: "₦5200", commission: "₦200", validity: "30 days" },
-            { id: 2, name: "Compact Plus", disabled: false, costPrice: "₦7000", sellingPrice: "₦7200", commission: "₦300", validity: "30 days" },
+            { id: 1, name: "Compact", disabled: false, costPrice: "₦5000", sellingPrice: "₦5200", commission: "₦200", validity: "30 days", package: "Basic" },
+            { id: 2, name: "Compact Plus", disabled: false, costPrice: "₦7000", sellingPrice: "₦7200", commission: "₦300", validity: "30 days", package: "Premium" },
         ],
         "GOTV": [
-            { id: 1, name: "Jolli", disabled: false, costPrice: "₦1500", sellingPrice: "₦1600", commission: "₦50", validity: "30 days" },
-            { id: 2, name: "Jinja", disabled: false, costPrice: "₦2500", sellingPrice: "₦2600", commission: "₦100", validity: "30 days" },
+            { id: 1, name: "Jolli", disabled: false, costPrice: "₦1500", sellingPrice: "₦1600", commission: "₦50", validity: "30 days", package: "Basic" },
+            { id: 2, name: "Jinja", disabled: false, costPrice: "₦2500", sellingPrice: "₦2600", commission: "₦100", validity: "30 days", package: "Premium" },
         ],
         "Startimes": [
-            { id: 1, name: "Nova", disabled: false, costPrice: "₦1200", sellingPrice: "₦1300", commission: "₦50", validity: "30 days" },
-            { id: 2, name: "Basic", disabled: false, costPrice: "₦1800", sellingPrice: "₦1900", commission: "₦100", validity: "30 days" },
+            { id: 1, name: "Nova", disabled: false, costPrice: "₦1200", sellingPrice: "₦1300", commission: "₦50", validity: "30 days", package: "Basic" },
+            { id: 2, name: "Basic", disabled: false, costPrice: "₦1800", sellingPrice: "₦1900", commission: "₦100", validity: "30 days", package: "Premium" },
         ],
     };
 
@@ -94,7 +95,8 @@ const CablePlanManagement = () => {
             costPrice: newPlan.costPrice,
             sellingPrice: newPlan.sellingPrice,
             commission: newPlan.commission, // Added Commission field
-            validity: newPlan.validity
+            validity: newPlan.validity,
+            package: newPlan.package // Added Package field
         });
         setServicePlans(updatedPlans);
         setIsDialogOpen(false);
