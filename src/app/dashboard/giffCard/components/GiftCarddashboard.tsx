@@ -58,7 +58,15 @@ const giftCards = [
 ]
 
 // Custom shape for the bar chart with rounded tops
-const RoundedBar = (props: any) => {
+interface RoundedBarProps {
+    x?: number
+    y?: number
+    width?: number
+    height?: number
+    fill?: string
+}
+
+const RoundedBar = (props: RoundedBarProps) => {
     const { x, y, width, height, fill } = props
     const radius = 4
 
