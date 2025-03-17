@@ -41,7 +41,7 @@ const Sidebar = () => {
                 <div className="w-full flex flex-col gap-[10px]">
                     <SideBarSectionHeading title="Products & Support" />
                     <SidebarNavItem icon={icons.cardIcon} label="One Card" href="/dashboard/oneCard" />
-                    <SidebarNavItem icon={icons.esimIcon} label="eSIMs" href="/dashboard/eSIMs" />
+                    <SidebarNavItem icon={icons.esimIcon} label="eSIMs" href="/dashboard/bill-payments/products/esims" />
                     <SidebarNavItem icon={icons.settingsIcon} label="Settings" href="/dashboard/settings" />
                     <SidebarNavItem icon={icons.supportIcon} label="Support Tickets" href="/dashboard/supportTickets" />
                 </div>

@@ -62,7 +62,7 @@ export const BillPayments = () => {
 
     // Check if any nested item is active
     const isActive = [
-        "/dashboard/bill-payments/electricity",
+        "/dashboard/bill-payments/products/airtime",
         "/dashboard/bill-payments/water",
         "/dashboard/bill-payments/internet",
     ].includes(pathname);
@@ -105,8 +105,8 @@ export const BillPayments = () => {
             <CollapsibleContent className="pl-8 pt-2 gap-[10px] flex flex-col">
                 <SidebarNavItem
                     icon={icons.bilpayIcon}
-                    label="Electricity"
-                    href="/dashboard/bill-payments/electricity"
+                    label="Airtime"
+                    href="/dashboard/bill-payments/products/airtime"
                 />
                 <SidebarNavItem
                     icon={icons.cashbackIcon}
