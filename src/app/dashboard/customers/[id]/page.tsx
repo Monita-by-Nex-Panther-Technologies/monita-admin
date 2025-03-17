@@ -10,17 +10,18 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { BlockUserDialog } from "../components/block-user-dialog"
 import Image from "next/image"
 
-type Props = {
-    params: { id: string }
+// Client component receives id as a prop instead of params
+interface UserDetailsClientProps {
+    id: string
 }
 
-export default function UserDetailsPage({ params }: Props) {
+export default function UserDetailsPage({ id }: UserDetailsClientProps) {
     const [blockDialogOpen, setBlockDialogOpen] = useState<boolean>(false)
     const [searchTerm, setSearchTerm] = useState<string>("")
     const [selected, setSelected] = useState<string[]>([])
     const [exportDropdownOpen, setExportDropdownOpen] = useState<boolean>(false)
     const [userData, setUserData] = useState({
-        id: params.id,
+        id: id,
         name: "Ade Johnson",
         email: "Adejohn@gmail.com",
         phone: "09012345678",
