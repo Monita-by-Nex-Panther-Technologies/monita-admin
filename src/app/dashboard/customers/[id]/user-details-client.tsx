@@ -15,7 +15,7 @@ interface UserDetailsClientProps {
     id: string
 }
 
-export default function UserDetailsPage({ id }: UserDetailsClientProps) {
+export default function UserDetailsClient({ id }: UserDetailsClientProps) {
     const [blockDialogOpen, setBlockDialogOpen] = useState<boolean>(false)
     const [searchTerm, setSearchTerm] = useState<string>("")
     const [selected, setSelected] = useState<string[]>([])

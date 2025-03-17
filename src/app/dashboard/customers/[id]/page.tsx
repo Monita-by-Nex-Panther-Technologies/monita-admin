@@ -1,8 +1,10 @@
-import UserDetailsPage from "./user-details-client"
+import UserDetailsClient from "./user-details-client"
 
-// This is a server component that receives the params from Next.js
-export default function Page({ params }: { params: { id: string } }) {
-    // Pass the params to the client component
-    return <UserDetailsPage id={params.id} />
+// Make the page component async to handle the Promise-based params
+export default async function Page({ params }: { params: Promise<{ id: string }> }) {
+    // Await the params to get the actual values
+    const resolvedParams = await params
+
+    // Pass the id to the client component
+    return <UserDetailsClient id={resolvedParams.id} />
 }
-
