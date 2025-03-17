@@ -67,7 +67,12 @@ const ServicePlanManagement = () => {
 
     const [servicePlans, setServicePlans] = useState<ServiceProviderType>(serviceProviders);
 
-    const handlePlanUpdate = (serviceName: string, planId: number, field: keyof PlanType, value: any) => {
+    const handlePlanUpdate = (
+        serviceName: string,
+        planId: number,
+        field: keyof PlanType,
+        value: string | boolean // Union type for possible values
+    ) => {
         const updatedPlans = { ...servicePlans };
         const planIndex = updatedPlans[serviceName].findIndex(plan => plan.id === planId);
 

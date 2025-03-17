@@ -8,6 +8,7 @@ import { ArrowLeft, Copy, Search, MoreHorizontal } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { BlockUserDialog } from "../components/block-user-dialog"
+import Image from "next/image"
 
 interface UserDetailsProps {
     params: {
@@ -20,11 +21,7 @@ export default function UserDetailsPage({ params }: UserDetailsProps) {
     const [searchTerm, setSearchTerm] = useState<string>("")
     const [selected, setSelected] = useState<string[]>([])
     const [exportDropdownOpen, setExportDropdownOpen] = useState<boolean>(false)
-
-    const router = useRouter()
-
-    // Mock user data
-    const user = {
+    const [userData, setUserData] = useState({
         id: params.id,
         name: "Ade Johnson",
         email: "Adejohn@gmail.com",
@@ -72,7 +69,9 @@ export default function UserDetailsPage({ params }: UserDetailsProps) {
                 dateTime: "Jan 02, 2024 4:30pm",
             },
         ],
-    }
+    })
+
+    const router = useRouter()
 
     const handleGoBack = () => {
         router.push("/dashboard/customers")
@@ -92,7 +91,7 @@ export default function UserDetailsPage({ params }: UserDetailsProps) {
 
     const handleSelectAll = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.checked) {
-            const allIds = user.transactions.map((tx) => tx.id)
+            const allIds = userData.transactions.map((tx) => tx.id)
             setSelected(allIds)
         } else {
             setSelected([])
@@ -101,6 +100,22 @@ export default function UserDetailsPage({ params }: UserDetailsProps) {
 
     const handleSelect = (id: string) => {
         setSelected((prev) => (prev.includes(id) ? prev.filter((selectedId) => selectedId !== id) : [...prev, id]))
+    }
+
+    const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setUserData(prev => ({ ...prev, name: e.target.value }))
+    }
+
+    const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setUserData(prev => ({ ...prev, email: e.target.value }))
+    }
+
+    const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setUserData(prev => ({ ...prev, phone: e.target.value }))
+    }
+
+    const handleAddressChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setUserData(prev => ({ ...prev, address: e.target.value }))
     }
 
     const exportData = (format: string) => {
@@ -129,7 +144,7 @@ export default function UserDetailsPage({ params }: UserDetailsProps) {
                     <Button variant="ghost" size="icon" className="rounded-full" onClick={handleGoBack}>
                         <ArrowLeft className="h-5 w-5" />
                     </Button>
-                    <h1 className="text-xl font-semibold">{user.name}</h1>
+                    <h1 className="text-xl font-semibold">{userData.name}</h1>
                 </div>
                 <div className="flex flex-row gap-x-4">
                     <button
@@ -153,13 +168,15 @@ export default function UserDetailsPage({ params }: UserDetailsProps) {
                     <div className="flex items-center gap-4">
                         <div className="relative">
                             <div className="w-12 h-12 rounded-full bg-gray-300 overflow-hidden">
-                                <img
-                                    src={`/placeholder.svg?height=48&width=48`}
-                                    alt={user.name}
+                                <Image
+                                    src="/placeholder.svg"
+                                    alt={userData.name}
+                                    width={48}
+                                    height={48}
                                     className="w-full h-full object-cover"
                                 />
                             </div>
-                            {user.imageVerified && (
+                            {userData.imageVerified && (
                                 <div className="absolute -bottom-1 -right-1 bg-green-500 rounded-full p-1">
                                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path
@@ -175,7 +192,7 @@ export default function UserDetailsPage({ params }: UserDetailsProps) {
                         </div>
                         <div>
                             <div className="font-semibold">Image Verified</div>
-                            <div className="text-sm text-gray-500">Match: {user.imageMatch}</div>
+                            <div className="text-sm text-gray-500">Match: {userData.imageMatch}</div>
                         </div>
                     </div>
                     <button className="bg-[#DDFF00] text-black font-medium px-4 py-2 rounded-[12px]" onClick={handleSaveChanges}>
@@ -186,27 +203,27 @@ export default function UserDetailsPage({ params }: UserDetailsProps) {
                 <div className="grid grid-cols-1 md:grid-cols-6 gap-6">
                     <div>
                         <p className="text-gray-500 text-sm mb-1">Name</p>
-                        <input type="text" className="w-full p-2 border rounded-md" value={user.name} onChange={(e) => { }} />
+                        <input type="text" className="w-full p-2 border rounded-md" value={userData.name} onChange={handleNameChange} />
                     </div>
                     <div>
                         <p className="text-gray-500 text-sm mb-1">Email Address</p>
-                        <input type="email" className="w-full p-2 border rounded-md" value={user.email} onChange={(e) => { }} />
+                        <input type="email" className="w-full p-2 border rounded-md" value={userData.email} onChange={handleEmailChange} />
                     </div>
                     <div>
                         <p className="text-gray-500 text-sm mb-1">Phone Number</p>
-                        <input type="tel" className="w-full p-2 border rounded-md" value={user.phone} onChange={(e) => { }} />
+                        <input type="tel" className="w-full p-2 border rounded-md" value={userData.phone} onChange={handlePhoneChange} />
                     </div>
                     <div>
                         <p className="text-gray-500 text-sm mb-1">Address</p>
-                        <input type="text" className="w-full p-2 border rounded-md" value={user.address} onChange={(e) => { }} />
+                        <input type="text" className="w-full p-2 border rounded-md" value={userData.address} onChange={handleAddressChange} />
                     </div>
                     <div>
                         <p className="text-gray-500 text-sm mb-1">Status</p>
-                        <span className="px-4 py-2 rounded-md bg-[#E6F7EF] text-[#00A85A] inline-block">{user.status}</span>
+                        <span className="px-4 py-2 rounded-md bg-[#E6F7EF] text-[#00A85A] inline-block">{userData.status}</span>
                     </div>
                     <div>
                         <p className="text-gray-500 text-sm mb-1">Registration Date</p>
-                        <p className="font-medium">{user.registrationDate}</p>
+                        <p className="font-medium">{userData.registrationDate}</p>
                     </div>
                 </div>
             </div>
@@ -217,19 +234,19 @@ export default function UserDetailsPage({ params }: UserDetailsProps) {
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
                     <div>
                         <p className="text-gray-500 text-sm mb-1">Name</p>
-                        <p className="font-medium">{user.device.name}</p>
+                        <p className="font-medium">{userData.device.name}</p>
                     </div>
                     <div>
                         <p className="text-gray-500 text-sm mb-1">OS</p>
-                        <p className="font-medium">{user.device.os}</p>
+                        <p className="font-medium">{userData.device.os}</p>
                     </div>
                     <div>
                         <p className="text-gray-500 text-sm mb-1">IP Address</p>
-                        <p className="font-medium text-blue-500">{user.device.ipAddress}</p>
+                        <p className="font-medium text-blue-500">{userData.device.ipAddress}</p>
                     </div>
                     <div>
                         <p className="text-gray-500 text-sm mb-1">Location</p>
-                        <p className="font-medium">{user.device.location}</p>
+                        <p className="font-medium">{userData.device.location}</p>
                     </div>
                 </div>
             </div>
@@ -241,20 +258,20 @@ export default function UserDetailsPage({ params }: UserDetailsProps) {
                     <div>
                         <p className="text-gray-500 text-sm mb-1">Provider response</p>
                         <span className="px-4 py-1 rounded-md bg-[#FFEBEB] text-[#FF0000] inline-block">
-                            {user.provider.response}
+                            {userData.provider.response}
                         </span>
                     </div>
                     <div>
                         <p className="text-gray-500 text-sm mb-1">Status Code</p>
-                        <p className="font-medium">{user.provider.statusCode}</p>
+                        <p className="font-medium">{userData.provider.statusCode}</p>
                     </div>
                     <div>
                         <p className="text-gray-500 text-sm mb-1">Process Time</p>
-                        <p className="font-medium">{user.provider.processTime}</p>
+                        <p className="font-medium">{userData.provider.processTime}</p>
                     </div>
                     <div>
                         <p className="text-gray-500 text-sm mb-1">Provider details</p>
-                        <p className="font-medium">{user.provider.details}</p>
+                        <p className="font-medium">{userData.provider.details}</p>
                     </div>
                 </div>
             </div>
@@ -363,7 +380,7 @@ export default function UserDetailsPage({ params }: UserDetailsProps) {
                                     <input
                                         type="checkbox"
                                         className="w-6 h-6 mt-1 border-[#01010129] cursor-pointer"
-                                        checked={selected.length === user.transactions.length && selected.length > 0}
+                                        checked={selected.length === userData.transactions.length && selected.length > 0}
                                         onChange={handleSelectAll}
                                     />
                                 </TableHead>
@@ -377,7 +394,7 @@ export default function UserDetailsPage({ params }: UserDetailsProps) {
                             </TableRow>
                         </TableHeader>
                         <TableBody>
-                            {user.transactions.map((tx, index) => (
+                            {userData.transactions.map((tx, index) => (
                                 <TableRow key={index} className="py-6">
                                     <TableCell className="p-4">
                                         <input

@@ -19,8 +19,6 @@ type NetworkPlansType = {
     [key: string]: PlanType[];
 };
 
-
-
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -57,7 +55,12 @@ const DataPlanManagement = () => {
     const [dataPlans, setDataPlans] = useState<NetworkPlansType>(networkPlans);
 
     // Handle plan updates
-    const handlePlanUpdate = (networkName: string, planId: number, field: keyof PlanType, value: any) => {
+    const handlePlanUpdate = (
+        networkName: string,
+        planId: number,
+        field: keyof PlanType,
+        value: string | number | boolean // Union type for possible values
+    ) => {
         const updatedPlans = { ...dataPlans };
         const planIndex = updatedPlans[networkName].findIndex(plan => plan.id === planId);
 

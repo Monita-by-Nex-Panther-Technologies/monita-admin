@@ -4,7 +4,6 @@ import React, { useState } from 'react';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-// import { Switch } from "@/components/ui/switch";
 import { Pencil, Trash2, Plus } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 
@@ -67,7 +66,12 @@ const CablePlanManagement = () => {
 
     const [servicePlans, setServicePlans] = useState<ServiceProviderType>(serviceProviders);
 
-    const handlePlanUpdate = (serviceName: string, planId: number, field: keyof PlanType, value: any) => {
+    const handlePlanUpdate = (
+        serviceName: string,
+        planId: number,
+        field: keyof PlanType,
+        value: string | boolean // Union type for possible values
+    ) => {
         const updatedPlans = { ...servicePlans };
         const planIndex = updatedPlans[serviceName].findIndex(plan => plan.id === planId);
 
