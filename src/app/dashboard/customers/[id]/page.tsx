@@ -14,6 +14,7 @@ interface UserDetailsProps {
     params: {
         id: string
     }
+    searchParams?: Record<string, string | string[] | undefined>
 }
 
 export default function UserDetailsPage({ params }: UserDetailsProps) {
@@ -103,19 +104,19 @@ export default function UserDetailsPage({ params }: UserDetailsProps) {
     }
 
     const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setUserData(prev => ({ ...prev, name: e.target.value }))
+        setUserData((prev) => ({ ...prev, name: e.target.value }))
     }
 
     const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setUserData(prev => ({ ...prev, email: e.target.value }))
+        setUserData((prev) => ({ ...prev, email: e.target.value }))
     }
 
     const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setUserData(prev => ({ ...prev, phone: e.target.value }))
+        setUserData((prev) => ({ ...prev, phone: e.target.value }))
     }
 
     const handleAddressChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setUserData(prev => ({ ...prev, address: e.target.value }))
+        setUserData((prev) => ({ ...prev, address: e.target.value }))
     }
 
     const exportData = (format: string) => {
@@ -203,19 +204,39 @@ export default function UserDetailsPage({ params }: UserDetailsProps) {
                 <div className="grid grid-cols-1 md:grid-cols-6 gap-6">
                     <div>
                         <p className="text-gray-500 text-sm mb-1">Name</p>
-                        <input type="text" className="w-full p-2 border rounded-md" value={userData.name} onChange={handleNameChange} />
+                        <input
+                            type="text"
+                            className="w-full p-2 border rounded-md"
+                            value={userData.name}
+                            onChange={handleNameChange}
+                        />
                     </div>
                     <div>
                         <p className="text-gray-500 text-sm mb-1">Email Address</p>
-                        <input type="email" className="w-full p-2 border rounded-md" value={userData.email} onChange={handleEmailChange} />
+                        <input
+                            type="email"
+                            className="w-full p-2 border rounded-md"
+                            value={userData.email}
+                            onChange={handleEmailChange}
+                        />
                     </div>
                     <div>
                         <p className="text-gray-500 text-sm mb-1">Phone Number</p>
-                        <input type="tel" className="w-full p-2 border rounded-md" value={userData.phone} onChange={handlePhoneChange} />
+                        <input
+                            type="tel"
+                            className="w-full p-2 border rounded-md"
+                            value={userData.phone}
+                            onChange={handlePhoneChange}
+                        />
                     </div>
                     <div>
                         <p className="text-gray-500 text-sm mb-1">Address</p>
-                        <input type="text" className="w-full p-2 border rounded-md" value={userData.address} onChange={handleAddressChange} />
+                        <input
+                            type="text"
+                            className="w-full p-2 border rounded-md"
+                            value={userData.address}
+                            onChange={handleAddressChange}
+                        />
                     </div>
                     <div>
                         <p className="text-gray-500 text-sm mb-1">Status</p>
