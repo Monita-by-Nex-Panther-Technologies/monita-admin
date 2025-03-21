@@ -34,21 +34,30 @@ export const signIn = createAsyncThunk(
   "auth/signIn",
   async (
     credentials: { email: string; password: string },
-    { rejectWithValue }
+    { rejectWithValue },
   ) => {
     try {
+      if (typeof window !== "undefined" && (window as any).mockAuthResponse) {
+        await new Promise((resolve) => setTimeout(resolve, 2000));
+        const response = (window as any).mockAuthResponse;
+
+        toast.success("Login successful!");
+
+        return response;
+      }
+
       const response = await axiosInstance.post("/auth/login", credentials);
       return response.data.data;
     } catch (error) {
       if (axios.isAxiosError(error)) {
         const axiosError = error as AxiosError<ErrorResponse>;
         return rejectWithValue(
-          axiosError.response?.data?.message || "Login failed"
+          axiosError.response?.data?.message || "Login failed",
         );
       }
       return rejectWithValue("An unknown error occurred");
     }
-  }
+  },
 );
 
 const authSlice = createSlice({

@@ -15,6 +15,7 @@ import settingsIcon from "@/assets/icons/settings.svg";
 import supportIcon from "@/assets/icons/support.svg";
 import logoutIcon from "@/assets/icons/logoutIcon.svg";
 import exportIcon from "@/assets/icons/export.svg";
+import { ExpandIcon, ShieldCloseIcon } from "lucide-react";
 
 export const icons = {
   home: homeIcon,
@@ -33,6 +34,8 @@ export const icons = {
   supportIcon,
   logoutIcon,
   exportIcon,
+  expandIcon: ExpandIcon,
+  collapseIcon: ShieldCloseIcon,
 } as const;
 
 export type IconAssets = typeof icons;

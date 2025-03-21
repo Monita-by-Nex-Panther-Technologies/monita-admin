@@ -1,15 +1,14 @@
-import React from 'react'
-import StatisticsSat from './components/StatisticsSat'
-import StatisticsDash from './components/StatisticsDash'
+import React from "react";
+import StatisticsSat from "./components/StatisticsSat";
+import StatisticsDash from "./components/StatisticsDash";
 
 const page = () => {
-    return (
-        <div>
-            <StatisticsSat />
-            <StatisticsDash />
+  return (
+    <div>
+      <StatisticsSat />
+      <StatisticsDash />
+    </div>
+  );
+};
 
-        </div>
-    )
-}
-
-export default page
+export default page;
