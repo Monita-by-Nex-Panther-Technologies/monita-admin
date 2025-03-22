@@ -25,12 +25,14 @@ interface SidebarNavItemProps {
   icon: React.FC<React.SVGProps<SVGSVGElement>>; // SVG Component
   label: string;
   href: string;
+  onClick?: () => void; // Add onClick property
 }
 
 export const SidebarNavItem: React.FC<SidebarNavItemProps> = ({
   icon: Icon,
   label,
   href,
+  onClick,
 }) => {
   const pathname = usePathname();
   const isActive = pathname === href;
@@ -39,18 +41,27 @@ export const SidebarNavItem: React.FC<SidebarNavItemProps> = ({
     <Link
       href={href}
       className={`flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer transition-colors w-full h-fit
-                ${isActive ? "bg-sidebar-primary text-text-title" : "text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"}`}
+                ${
+                  isActive
+                    ? "bg-sidebar-primary text-text-title"
+                    : "text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
+                }`}
+      onClick={onClick} // Add onClick handler here
     >
       {/* Icon: Ensure proper alignment */}
       <div className="flex items-center justify-center w-6 h-6">
         <Icon
-          className={`w-6 h-6 ${isActive ? "text-text-title" : "text-text-body opacity-60"}`}
+          className={`w-6 h-6 ${
+            isActive ? "text-text-title" : "text-text-body opacity-60"
+          }`}
         />
       </div>
 
       {/* Label: Ensure it's aligned with the icon */}
       <span
-        className={`text-[16px] font-normal font-poppins leading-none ${isActive ? "text-text-title" : "text-text-body"}`}
+        className={`text-[16px] font-normal font-poppins leading-none ${
+          isActive ? "text-text-title" : "text-text-body"
+        }`}
       >
         {label}
       </span>

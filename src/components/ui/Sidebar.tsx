@@ -11,7 +11,11 @@ import {
 } from "./SidebarComponents";
 import { icons } from "@/constants/icons";
 
-const Sidebar = () => {
+interface SidebarProps {
+  onNavigate?: () => void;
+}
+
+const Sidebar = ({ onNavigate }: SidebarProps) => {
   return (
     <div className="w-full bg-background justify-start items-start flex flex-col px-6 py-10 gap-14 pb-20 ">
       <Image
@@ -28,16 +32,19 @@ const Sidebar = () => {
             icon={icons.home}
             label="Dashboard"
             href="/dashboard"
+            onClick={onNavigate}
           />
           <SidebarNavItem
             icon={icons.transact}
             label="Transactions"
             href="/dashboard/transactions"
+            onClick={onNavigate}
           />
           <SidebarNavItem
             icon={icons.statisticsIcon}
             label="Statistics"
             href="/dashboard/statistics"
+            onClick={onNavigate}
           />
         </div>
 
@@ -47,16 +54,19 @@ const Sidebar = () => {
             icon={icons.customersIcon}
             label="Customers"
             href="/dashboard/customers"
+            onClick={onNavigate}
           />
           <SidebarNavItem
             icon={icons.kycIcon}
             label="KYC Applications"
             href="/dashboard/kycs"
+            onClick={onNavigate}
           />
           <SidebarNavItem
             icon={icons.staffIcon}
             label="Staff"
             href="/dashboard/staffs"
+            onClick={onNavigate}
           />
         </div>
 
@@ -70,16 +80,19 @@ const Sidebar = () => {
             icon={icons.giftcardIcon}
             label="GiftCards"
             href="/dashboard/giffCard"
+            onClick={onNavigate}
           />
           <SidebarNavItem
             icon={icons.virtAccIcon}
             label="Virtual Accounts"
             href="/dashboard/virtualAcccount"
+            onClick={onNavigate}
           />
           <SidebarNavItem
             icon={icons.cashbackIcon}
             label="Cashback"
             href="/dashboard/cashback"
+            onClick={onNavigate}
           />
         </div>
 
@@ -89,21 +102,25 @@ const Sidebar = () => {
             icon={icons.cardIcon}
             label="One Card"
             href="/dashboard/oneCard"
+            onClick={onNavigate}
           />
           <SidebarNavItem
             icon={icons.esimIcon}
             label="eSIMs"
             href="/dashboard/bill-payments/products/esims"
+            onClick={onNavigate}
           />
           <SidebarNavItem
             icon={icons.settingsIcon}
             label="Settings"
             href="/dashboard/settings"
+            onClick={onNavigate}
           />
           <SidebarNavItem
             icon={icons.supportIcon}
             label="Support Tickets"
             href="/dashboard/supportTickets"
+            onClick={onNavigate}
           />
         </div>
       </nav>

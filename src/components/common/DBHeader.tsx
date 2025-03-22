@@ -1,61 +1,49 @@
 "use client";
 
+import { Avatar, AvatarImage, AvatarFallback } from "@radix-ui/react-avatar";
+import { Menu as MenuIcon, Settings } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { SearchInput } from "../ui/SearchInput";
-import { icons } from "@/constants/icons";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 
-const DBHeader = () => {
+interface DBHeaderProps {
+  onMenuClick: () => void;
+}
+
+const DBHeader = ({ onMenuClick }: DBHeaderProps) => {
   const pathname = usePathname();
-
-  // Route-to-title mapping
-  const routeTitles: { [key: string]: string } = {
-    "/dashboard": "Dashboard",
-    "/dashboard/transactions": "Transactions",
-    "/dashboard/statistics": "Statistics",
-    "/dashboard/customers": "Customers",
-    "/dashboard/kycs": "KYC Applications",
-    "/dashboard/staffs": "Staff",
-    "/dashboard/bill-payments": "Bill Payments", // Parent route
-    "/dashboard/bill-payments/electricity": "Bill Pay- Electricity Bills ", // Sub-route
-    "/dashboard/bill-payments/water": "Bill Pay - Water", // Sub-route
-    "/dashboard/bill-payments/internet": "Bill Pay - internet ", // Sub-route
-    "/dashboard/giffCard": "GiftCards",
-    "/dashboard/virtualAcccount": "Virtual Accounts",
-    "/dashboard/cashback": "Cashback",
-    "/dashboard/oneCard": "One Card",
-    "/dashboard/eSIMs": "eSIMs",
-    "/dashboard/settings": "Settings",
-    "/dashboard/supportTickets": "Support Tickets",
-  };
-
-  // Get the current title based on the route
-  const currentTitle = routeTitles[pathname] || "Dashboard";
+  const currentTitle =
+    (pathname?.split("/")?.pop()?.charAt(0)?.toUpperCase() ?? "") +
+      (pathname?.split("/")?.pop()?.slice(1) ?? "") || "Dashboard";
 
   return (
-    <div className="h-[104px] w-full flex flex-row py-8 px-10 gap-2.5 justify-between items-center bg-background">
+    <div className="h-[104px] w-full flex flex-row py-8 px-4 md:px-10 gap-2.5 justify-between items-center bg-background">
+      {/* Mobile Menu Button */}
+      <button
+        onClick={onMenuClick}
+        className="lg:hidden p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800"
+      >
+        <MenuIcon className="h-6 w-6" />
+      </button>
+
       {/* Dynamic Title */}
-      <h1 className="text-text-title text-[32px] leading-6 font-poppins font-bold">
+      <h1 className="text-text-title text-xl md:text-[32px] leading-6 font-poppins font-bold">
         {currentTitle}
       </h1>
 
-      <div className="flex flex-row gap-[32px] justify-center items-center">
-        <SearchInput />
+      <div className="flex flex-row gap-2 md:gap-[32px] justify-center items-center">
+        <SearchInput className="hidden md:flex" />
 
-        <button className="bg-background-alt w-10 h-10 rounded-full justify-center items-center flex">
-          <icons.settingsIcon />
-        </button>
-        <button className="bg-background-alt w-10 h-10 rounded-full justify-center items-center flex">
-          <icons.settingsIcon />
+        <button className="bg-background-alt w-10 h-10 rounded-full justify-center items-center hidden md:flex">
+          <Settings />
         </button>
 
         <div>
-          <div className="flex flex-row gap-4">
-            <Avatar className="w-12 h-12">
+          <div className="flex flex-row gap-2 md:gap-4">
+            <Avatar className="w-8 h-8 md:w-12 md:h-12">
               <AvatarImage src="https://github.com/shadcn.png" />
               <AvatarFallback>CN</AvatarFallback>
             </Avatar>
-            <div className="flex flex-col gap-1">
+            <div className="hidden md:flex flex-col gap-1">
               <h3 className="font-poppins font-medium text-base text-text-title">
                 James Matthew
               </h3>
