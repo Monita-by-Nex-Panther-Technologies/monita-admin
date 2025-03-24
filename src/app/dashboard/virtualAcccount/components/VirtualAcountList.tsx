@@ -3,7 +3,7 @@
 import React, { useState } from "react"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Button } from "@/components/ui/button"
-import { Search, MoreHorizontal, ListFilter, Copy } from 'lucide-react'
+import { Search, MoreHorizontal, ListFilter, Copy, Trash2 } from 'lucide-react'
 import { Select, SelectTrigger, SelectContent, SelectItem } from "@/components/ui/select"
 import {
     Pagination,
@@ -14,6 +14,8 @@ import {
     PaginationPrevious,
     PaginationEllipsis,
 } from "@/components/ui/pagination"
+import { DialogClose, DialogContent, DialogTitle, DialogTrigger } from "@radix-ui/react-dialog"
+import { Dialog } from "@/components/ui/dialog"
 
 
 const accounts = [
@@ -165,9 +167,34 @@ export default function VirtualAccountsList() {
                     Virtual Accounts Lists
                 </h1>
                 <div className='flex flex-row gap-x-4'>
-                    <button className='justify-center items-center bg-background border border-destructive text-destructive font-poppins font-medium px-6 py-3 rounded-[12px]'>
-                        Block
-                    </button>
+                    <Dialog>
+                        <DialogTrigger asChild>
+                            <button className='flex justify-center items-center bg-gray-100 border border-gray-300 text-gray-700 font-poppins font-medium px-6 py-3 rounded-md hover:bg-gray-200 transition'>
+                                Block Account
+                            </button>
+                        </DialogTrigger>
+                        <DialogContent className="fixed inset-0 flex items-center justify-center z-50 bg-black/20 bg-opacity-50">
+                            <div className="bg-white rounded-lg shadow-lg p-6 w-[500px]" onClick={(e) => e.stopPropagation()}>
+
+                                <DialogTitle className="text-lg font-semibold text-gray-800 flex items-center gap-1 mb-1 "> <Trash2 className="text-red-500" size={16} /> Block Account</DialogTitle>
+                                <p className="text-gray-600 mb-4">
+                                    Blocking this account will revoke their access and permissions. This action cannot be undone.
+                                </p>
+                                <div className="flex justify-end gap-2 w-full mt-10">
+                                    <DialogClose asChild>
+                                        <button className="flex-1 border py-3 border-[#CEEF0A] text-[#CEEF0A] font-poppins font-medium px-4 rounded-full hover:bg-gray-50 transition">
+                                            Cancel
+                                        </button>
+                                    </DialogClose>
+                                    <DialogClose asChild>
+                                        <button className="flex-1 bg-[#CEEF0A] text-text-title font-poppins font-medium px-4 py-2 rounded-full transition flex items-center justify-center gap-2">
+                                            Block Account
+                                        </button>
+                                    </DialogClose>
+                                </div>
+                            </div>
+                        </DialogContent>
+                    </Dialog>
                     <button className='justify-center bg-[#22C55E] items-center text-white font-poppins font-medium px-6 py-3 rounded-[12px]'>
                         Unblock
                     </button>
