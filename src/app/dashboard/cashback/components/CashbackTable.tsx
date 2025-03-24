@@ -5,6 +5,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Button } from "@/components/ui/button"
 import { Search, MoreHorizontal, ListFilter } from "lucide-react"
 import { Select, SelectTrigger, SelectContent, SelectItem } from "@/components/ui/select"
+import CashbackSettingsDialog from "./CashbackSettingsDialog"
 
 import {
     Pagination,
@@ -15,6 +16,7 @@ import {
     PaginationPrevious,
     PaginationEllipsis,
 } from "@/components/ui/pagination"
+import Link from "next/link"
 
 // Sample data for cashback recipients
 const cashbackRecipients = [
@@ -36,9 +38,12 @@ const CashbackRecipientsTable = () => {
     const [selected, setSelected] = useState<string[]>([])
     const [exportDropdownOpen, setExportDropdownOpen] = useState<boolean>(false)
     const [searchTerm, setSearchTerm] = useState<string>("")
+    const [isSettingsDialogOpen, setIsSettingsDialogOpen] = useState<boolean>(false)
 
     const exportDropdownRef = useRef<HTMLDivElement>(null)
     const tableRef = useRef<HTMLDivElement>(null)
+
+    // ... keep existing code (search filtering, pagination logic)
 
     const filteredRecipients = cashbackRecipients.filter((recipient) => {
         // Search filter
@@ -80,12 +85,13 @@ const CashbackRecipientsTable = () => {
     }
 
     const exportData = (format: string) => {
-        // Export functionality would go herefotma
+        // Export functionality would go here
         console.log(format)
         setExportDropdownOpen(false)
     }
 
     const renderPaginationItems = () => {
+        // ... keep existing code (pagination rendering)
         const items = []
         items.push(
             <PaginationItem key="page-1">
@@ -171,13 +177,23 @@ const CashbackRecipientsTable = () => {
             <div className="w-full flex flex-row justify-between items-center bg-background p-4 rounded-[8px] mt-6">
                 <h1 className="text-text-title text-xl font-semibold font-poppins">Cashback Recipients</h1>
                 <div className="flex flex-row gap-x-4">
-                    <button className="justify-center items-center bg-primary text-text-body font-poppins font-medium px-4  py-4 w-[202px] rounded-[12px] active:bg-primary-foreground">
+                    <button
+                        className="justify-center items-center bg-primary text-text-body font-poppins font-medium px-4 py-4 w-[202px] rounded-[12px] active:bg-primary-foreground"
+                        onClick={() => setIsSettingsDialogOpen(true)}
+                    >
                         Cashback Settings
                     </button>
                 </div>
             </div>
 
+            {/* Cashback Settings Dialog */}
+            <CashbackSettingsDialog
+                open={isSettingsDialogOpen}
+                onOpenChange={setIsSettingsDialogOpen}
+            />
+
             <div className="bg-background rounded-2xl my-6 py-4">
+                {/* ... keep existing code (filter, search, table) */}
                 <div className="flex justify-between items-center my-4 px-6">
                     <div className="flex flex-row gap-5">
                         <button className="border border-primary bg-background flex gap-3 justify-center items-center px-10 py-3 rounded-[8px]">
@@ -285,12 +301,12 @@ const CashbackRecipientsTable = () => {
                                         {recipient.cashbackEarned}
                                     </TableCell>
                                     <TableCell>
-                                        <Button
-                                            variant="ghost"
+                                        <Link
+                                            href={`/dashboard/cashback/${recipient.id}`}
                                             className="cursor-pointer border border-primary-300 rounded-sm hover:bg-transparent"
                                         >
                                             <MoreHorizontal size={14} className="text-primary-300" />
-                                        </Button>
+                                        </Link>
                                     </TableCell>
                                 </TableRow>
                             ))}
@@ -300,6 +316,7 @@ const CashbackRecipientsTable = () => {
             </div>
 
             <div className="flex justify-between items-center mt-4 p-8">
+                {/* ... keep existing code (pagination controls) */}
                 <div className="flex items-center gap-2">
                     <span>Showing</span>
                     <Select
@@ -345,4 +362,3 @@ const CashbackRecipientsTable = () => {
 }
 
 export default CashbackRecipientsTable
-
