@@ -9,7 +9,7 @@ import { icons } from "@/constants/icons";
 
 const Sidebar = () => {
     return (
-        <div className="w-full bg-background justify-start items-start flex flex-col px-6 py-10 gap-14 pb-20 ">
+        <div className="w-full bg-[#262C05] justify-start items-start flex flex-col px-6 py-10 gap-14 pb-20 ">
             <Image src={images.image.monitaLogo} alt="monitaLogo" width={164} height={39.96} />
 
             <nav className="w-full">

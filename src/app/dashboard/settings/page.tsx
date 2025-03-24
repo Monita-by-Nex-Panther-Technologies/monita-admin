@@ -12,11 +12,11 @@ export default function SettingsPage() {
     return (
         <div className="min-h-screen bg-[#F5F5F5] p-4">
             <div className="max-w-5xl mx-auto">
-                <div className="mb-8">
-                    <div className="grid grid-cols-4 bg-[#F5F5F5] p-1.5 rounded-lg">
+                <div className="mb-8 bg-white rounded-lg p-3">
+                    <div className="grid grid-cols-4 gap-2 bg-[#F5F5F5] p-1.5 rounded-lg">
                         <button
                             onClick={() => setActiveTab("personal")}
-                            className={`rounded-md py-3 px-4 text-sm font-medium transition-colors ${activeTab === "personal" ? "bg-[#CEEF0A]/20 text-text-title" : "bg-white text-text-body"
+                            className={`rounded-md py-3 px-4 text-sm font-medium transition-colors ${activeTab === "personal" ? "bg-[#CEEF0A]/20 text-text-title border-[#CEEF0A] border-2" : "bg-white text-text-body"
                                 }`}
                         >
                             Personal Info
@@ -58,10 +58,10 @@ export default function SettingsPage() {
                                         alt="Profile"
                                         width={60}
                                         height={60}
-                                        className="rounded-full mr-4"
+                                        className="rounded-full mr-4 bg-gray-500"
                                     />
                                 </div>
-                                <Button className="bg-[#CEEF0A] hover:bg-[#BBD423] text-black font-medium">Save Changes</Button>
+                                <Button className="bg-[#CEEF0A] hover:bg-[#BBD423] py-4 h-12 w-[200px] px-5 text-black font-medium">Save Changes</Button>
                             </div>
 
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
@@ -69,7 +69,7 @@ export default function SettingsPage() {
                                     <label htmlFor="fullName" className="block text-sm font-medium text-text-title">
                                         Full Name
                                     </label>
-                                    <Input id="fullName" defaultValue="James Matthew" className="bg-input text-text-title" />
+                                    <Input id="fullName" defaultValue="James Matthew" className=" text-text-title py-3 h-14 bg-white" />
                                 </div>
 
                                 <div className="space-y-2">
@@ -80,7 +80,7 @@ export default function SettingsPage() {
                                         id="email"
                                         type="email"
                                         defaultValue="JamesMatthew@gmail.com"
-                                        className="bg-input text-text-title"
+                                        className=" text-text-title py-3 h-14 bg-white "
                                     />
                                 </div>
 
@@ -88,7 +88,7 @@ export default function SettingsPage() {
                                     <label htmlFor="role" className="block text-sm font-medium text-text-title">
                                         Role
                                     </label>
-                                    <Input id="role" defaultValue="Product Manager" className="bg-input text-text-title" />
+                                    <Input id="role" defaultValue="Product Manager" className=" text-text-title py-3 h-14 bg-white" />
                                 </div>
 
                                 <div className="space-y-2">
@@ -100,7 +100,7 @@ export default function SettingsPage() {
                                             <span className="text-sm text-text-body">🇳🇬</span>
                                             <span className="ml-1 text-sm text-text-body">+234</span>
                                         </div>
-                                        <Input id="phone" defaultValue="7069774330" className="bg-input text-text-title rounded-l-none" />
+                                        <Input id="phone" defaultValue="7069774330" className=" text-text-title py-3 h-14 bg-white rounded-l-none" />
                                     </div>
                                 </div>
                             </div>
@@ -114,20 +114,21 @@ export default function SettingsPage() {
                                 <h2 className="text-xl font-semibold text-text-title">Security</h2>
                                 <Button className="bg-[#CEEF0A] hover:bg-[#BBD423] text-black font-medium">Save Changes</Button>
                             </div>
+                            <hr className="bg-[#01010114]" />
 
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6 pt-10">
                                 <div className="space-y-2">
                                     <label htmlFor="currentPassword" className="block text-sm font-medium text-text-title">
                                         Current Password
                                     </label>
-                                    <Input id="currentPassword" type="password" className="bg-input text-text-title" />
+                                    <Input id="currentPassword" type="password" className=" text-text-title py-3 h-14 bg-white" />
                                 </div>
 
                                 <div className="space-y-2">
                                     <label htmlFor="newPassword" className="block text-sm font-medium text-text-title">
                                         New Password
                                     </label>
-                                    <Input id="newPassword" type="password" className="bg-input text-text-title" />
+                                    <Input id="newPassword" type="password" className=" text-text-title py-3 h-14 bg-white" />
                                 </div>
                             </div>
                         </div>

@@ -16,7 +16,7 @@ import { usePathname } from "next/navigation";
 
 export const SideBarSectionHeading = ({ title }: { title: string }) => {
     return (
-        <h1 className="text-sidebar-heading text-base font-light leading-6 py-3 px-4">
+        <h1 className="text-[#FFFFFFA3] text-base font-light leading-6 py-3 px-4">
             {title}
         </h1>
     )
@@ -36,15 +36,15 @@ export const SidebarNavItem: React.FC<SidebarNavItemProps> = ({ icon: Icon, labe
         <Link
             href={href}
             className={`flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer transition-colors w-full h-fit
-                ${isActive ? "bg-sidebar-primary text-text-title" : "text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"}`}
+                ${isActive ? "bg-[#CEEF0A1F] text-white" : "text-sidebar-foreground hover:bg-[#CEEF0A1A]"}`}
         >
             {/* Icon: Ensure proper alignment */}
             <div className="flex items-center justify-center w-6 h-6">
-                <Icon className={`w-6 h-6 ${isActive ? "text-text-title" : "text-text-body opacity-60"}`} />
+                <Icon className={`w-6 h-6 text-white ${isActive ? "text-white" : "text-text-body opacity-60"}`} />
             </div>
 
             {/* Label: Ensure it's aligned with the icon */}
-            <span className={`text-[16px] font-normal font-poppins leading-none ${isActive ? "text-text-title" : "text-text-body"}`}>
+            <span className={`text-[16px] font-light font-poppins leading-none text-white ${isActive ? "text-text-title" : "text-text-body"}`}>
                 {label}
             </span>
         </Link>
@@ -76,7 +76,7 @@ export const BillPayments = () => {
                 <div
                     className={`flex items-center justify-between px-4 py-3 rounded-lg cursor-pointer transition-colors ${isActive
                         ? "bg-sidebar-primary text-text-title"
-                        : "text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
+                        : "text-sidebar-foreground hover:bg-[#CEEF0A1A]"
                         }`}
                 >
                     <div className="flex items-center gap-3">
@@ -89,20 +89,25 @@ export const BillPayments = () => {
                             />
                         </span>
                         <span
-                            className={`text-sm text-[16px] font-normal font-poppins leading-none ${isActive ? "text-text-title" : "text-text-body"
+                            className={`text-sm text-[16px] font-normal font-poppins leading-none ${isActive ? "text-white" : "text-white"
                                 }`}
                         >
                             Bill Payments
                         </span>
                     </div>
                     {isBillPaymentsOpen ? (
-                        <ChevronUp className="w-4 h-4" />
+                        <ChevronUp className="w-4 h-4 text-white" />
                     ) : (
-                        <ChevronDown className="w-4 h-4" />
+                        <ChevronDown className="w-4 h-4 text-white" />
                     )}
                 </div>
             </CollapsibleTrigger>
             <CollapsibleContent className="pl-8 pt-2 gap-[10px] flex flex-col">
+                <SidebarNavItem
+                    icon={icons.bilpayIcon}
+                    label="E-Sim"
+                    href="/dashboard/bill-payments/products/esims"
+                />
                 <SidebarNavItem
                     icon={icons.bilpayIcon}
                     label="Airtime"
@@ -110,13 +115,18 @@ export const BillPayments = () => {
                 />
                 <SidebarNavItem
                     icon={icons.cashbackIcon}
-                    label="Water"
-                    href="/dashboard/bill-payments/water"
+                    label="Data Plan"
+                    href="/dashboard/bill-payments/plan/data-plan"
                 />
                 <SidebarNavItem
                     icon={icons.esimIcon}
                     label="Internet"
-                    href="/dashboard/bill-payments/internet"
+                    href="/dashboard/bill-payments/plan/internet"
+                />
+                <SidebarNavItem
+                    icon={icons.esimIcon}
+                    label="Cable TV"
+                    href="/dashboard/bill-payments/plan/cable"
                 />
             </CollapsibleContent>
         </Collapsible>
