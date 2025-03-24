@@ -159,71 +159,77 @@ export default function SettingsPage() {
                             <h2 className="text-xl font-semibold text-text-title mb-8">Notifications</h2>
 
                             <div className="space-y-8">
-                                <div className="space-y-4">
-                                    <h3 className="text-base font-medium text-text-title">Reminders</h3>
-                                    <p className="text-sm text-text-body">
-                                        These notifications keep you informed about important Monita updates and any updates you may have
-                                        missed.
-                                    </p>
+                                <div className="space-y-4 flex flex-row justify-between">
+                                    <div className="space-y-1 w-[50%]">
+                                        <h3 className="text-base font-medium text-text-title">Reminders</h3>
+                                        <p className="text-sm text-text-body">
+                                            These notifications keep you informed about important Monita updates and any updates you may have
+                                            missed.
+                                        </p>
+                                    </div>
                                     <div className="space-y-3">
-                                        <div className="flex items-center justify-between">
+                                        <div className="flex items-center justify-between flex-row-reverse gap-4 text-start">
                                             <span className="text-sm text-text-body">Push</span>
                                             <Switch className="data-[state=checked]:bg-[#CEEF0A]" />
                                         </div>
-                                        <div className="flex items-center justify-between">
+                                        <div className="flex items-center justify-between flex-row-reverse gap-4 text-start">
                                             <span className="text-sm text-text-body">Email</span>
                                             <Switch className="data-[state=checked]:bg-[#CEEF0A]" />
                                         </div>
-                                        <div className="flex items-center justify-between">
+                                        <div className="flex items-center justify-between flex-row-reverse gap-4 text-start">
+                                            <span className="text-sm text-text-body">SMS</span>
+                                            <Switch className="data-[state=checked]:bg-[#CEEF0A]" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="space-y-4 flex flex-row justify-between">
+                                    <div className="space-y-1 w-[50%]">
+                                        <h3 className="text-base font-medium text-text-title">Reminders</h3>
+                                        <p className="text-sm text-text-body">
+                                            These notifications keep you informed about important Monita updates and any updates you may have
+                                            missed.
+                                        </p>
+                                    </div>
+                                    <div className="space-y-3">
+                                        <div className="flex items-center justify-between flex-row-reverse gap-4 text-start">
+                                            <span className="text-sm text-text-body">Push</span>
+                                            <Switch className="data-[state=checked]:bg-[#CEEF0A]" />
+                                        </div>
+                                        <div className="flex items-center justify-between flex-row-reverse gap-4 text-start">
+                                            <span className="text-sm text-text-body">Email</span>
+                                            <Switch className="data-[state=checked]:bg-[#CEEF0A]" />
+                                        </div>
+                                        <div className="flex items-center justify-between flex-row-reverse gap-4 text-start">
+                                            <span className="text-sm text-text-body">SMS</span>
+                                            <Switch className="data-[state=checked]:bg-[#CEEF0A]" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="space-y-4 flex flex-row justify-between">
+                                    <div className="space-y-1 w-[50%]">
+                                        <h3 className="text-base font-medium text-text-title">Reminders</h3>
+                                        <p className="text-sm text-text-body">
+                                            These notifications keep you informed about important Monita updates and any updates you may have
+                                            missed.
+                                        </p>
+                                    </div>
+                                    <div className="space-y-3">
+                                        <div className="flex items-center justify-between flex-row-reverse gap-4 text-start">
+                                            <span className="text-sm text-text-body">Push</span>
+                                            <Switch className="data-[state=checked]:bg-[#CEEF0A]" />
+                                        </div>
+                                        <div className="flex items-center justify-between flex-row-reverse gap-4 text-start">
+                                            <span className="text-sm text-text-body">Email</span>
+                                            <Switch className="data-[state=checked]:bg-[#CEEF0A]" />
+                                        </div>
+                                        <div className="flex items-center justify-between flex-row-reverse gap-4 text-start">
                                             <span className="text-sm text-text-body">SMS</span>
                                             <Switch className="data-[state=checked]:bg-[#CEEF0A]" />
                                         </div>
                                     </div>
                                 </div>
 
-                                <div className="space-y-4">
-                                    <h3 className="text-base font-medium text-text-title">Reminders</h3>
-                                    <p className="text-sm text-text-body">
-                                        These are notifications to remind you on any updates pertaining to Monita which you might have
-                                        missed.
-                                    </p>
-                                    <div className="space-y-3">
-                                        <div className="flex items-center justify-between">
-                                            <span className="text-sm text-text-body">Push</span>
-                                            <Switch className="data-[state=checked]:bg-[#CEEF0A]" />
-                                        </div>
-                                        <div className="flex items-center justify-between">
-                                            <span className="text-sm text-text-body">Email</span>
-                                            <Switch className="data-[state=checked]:bg-[#CEEF0A]" />
-                                        </div>
-                                        <div className="flex items-center justify-between">
-                                            <span className="text-sm text-text-body">SMS</span>
-                                            <Switch className="data-[state=checked]:bg-[#CEEF0A]" />
-                                        </div>
-                                    </div>
-                                </div>
 
-                                <div className="space-y-4">
-                                    <h3 className="text-base font-medium text-text-title">Reminders</h3>
-                                    <p className="text-sm text-text-body">
-                                        These are notifications to remind you on any updates pertaining to Monita which you might have
-                                        missed.
-                                    </p>
-                                    <div className="space-y-3">
-                                        <div className="flex items-center justify-between">
-                                            <span className="text-sm text-text-body">Push</span>
-                                            <Switch className="data-[state=checked]:bg-[#CEEF0A]" />
-                                        </div>
-                                        <div className="flex items-center justify-between">
-                                            <span className="text-sm text-text-body">Email</span>
-                                            <Switch className="data-[state=checked]:bg-[#CEEF0A]" />
-                                        </div>
-                                        <div className="flex items-center justify-between">
-                                            <span className="text-sm text-text-body">SMS</span>
-                                            <Switch className="data-[state=checked]:bg-[#CEEF0A]" />
-                                        </div>
-                                    </div>
-                                </div>
                             </div>
                         </div>
                     )}
