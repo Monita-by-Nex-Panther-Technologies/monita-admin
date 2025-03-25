@@ -10,12 +10,23 @@ import {
   SideBarSectionHeading,
 } from "./SidebarComponents";
 import { icons } from "@/constants/icons";
+import { useDispatch } from "react-redux";
+import { logout } from "@/store/reducers/authSlice";
+import { useRouter } from "next/navigation";
 
 interface SidebarProps {
   onNavigate?: () => void;
 }
 
 const Sidebar = ({ onNavigate }: SidebarProps) => {
+  const dispatch = useDispatch();
+  const router = useRouter();
+
+  const handleLogout = () => {
+    dispatch(logout());
+    router.push("/auth");
+  };
+
   return (
     <div className="w-full bg-background justify-start items-start flex flex-col px-6 py-10 gap-14 pb-20 ">
       <Image
@@ -126,7 +137,7 @@ const Sidebar = ({ onNavigate }: SidebarProps) => {
       </nav>
 
       <div className="">
-        <Button icon={icons.logoutIcon} label="Logout" onClick={() => {}} />
+        <Button icon={icons.logoutIcon} label="Logout" onClick={handleLogout} />
       </div>
     </div>
   );

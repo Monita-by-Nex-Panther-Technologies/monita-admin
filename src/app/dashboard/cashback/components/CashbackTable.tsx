@@ -1,20 +1,32 @@
-"use client"
-import type React from "react"
-import { useState, useRef } from "react"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { Button } from "@/components/ui/button"
-import { Search, MoreHorizontal, ListFilter } from "lucide-react"
-import { Select, SelectTrigger, SelectContent, SelectItem } from "@/components/ui/select"
+"use client";
+import type React from "react";
+import { useState, useRef } from "react";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Button } from "@/components/ui/button";
+import { Search, MoreHorizontal, ListFilter } from "lucide-react";
+import {
+  Select,
+  SelectTrigger,
+  SelectContent,
+  SelectItem,
+} from "@/components/ui/select";
 
 import {
-    Pagination,
-    PaginationContent,
-    PaginationItem,
-    PaginationLink,
-    PaginationNext,
-    PaginationPrevious,
-    PaginationEllipsis,
-} from "@/components/ui/pagination"
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+  PaginationEllipsis,
+} from "@/components/ui/pagination";
 
 // Sample data for cashback recipients
 const cashbackRecipients = [
@@ -71,14 +83,14 @@ const cashbackRecipients = [
 const itemsPerPageOptions = [5, 10, 20, 50];
 
 const CashbackRecipientsTable = () => {
-    const [currentPage, setCurrentPage] = useState<number>(1)
-    const [itemsPerPage, setItemsPerPage] = useState<number>(10)
-    const [selected, setSelected] = useState<string[]>([])
-    const [exportDropdownOpen, setExportDropdownOpen] = useState<boolean>(false)
-    const [searchTerm, setSearchTerm] = useState<string>("")
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [itemsPerPage, setItemsPerPage] = useState<number>(10);
+  const [selected, setSelected] = useState<string[]>([]);
+  const [exportDropdownOpen, setExportDropdownOpen] = useState<boolean>(false);
+  const [searchTerm, setSearchTerm] = useState<string>("");
 
-    const exportDropdownRef = useRef<HTMLDivElement>(null)
-    const tableRef = useRef<HTMLDivElement>(null)
+  const exportDropdownRef = useRef<HTMLDivElement>(null);
+  const tableRef = useRef<HTMLDivElement>(null);
 
   const filteredRecipients = cashbackRecipients.filter((recipient) => {
     // Search filter
@@ -91,7 +103,7 @@ const CashbackRecipientsTable = () => {
   const totalPages = Math.ceil(filteredRecipients.length / itemsPerPage);
   const paginatedData = filteredRecipients.slice(
     (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage,
+    currentPage * itemsPerPage
   );
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -122,117 +134,133 @@ const CashbackRecipientsTable = () => {
     setSelected((prev) =>
       prev.includes(id)
         ? prev.filter((selectedId) => selectedId !== id)
-        : [...prev, id],
+        : [...prev, id]
     );
   };
 
-    const exportData = (format: string) => {
-        // Export functionality would go herefotma
-        console.log(format)
-        setExportDropdownOpen(false)
-    }
+  const exportData = (format: string) => {
+    // Export functionality would go herefotma
+    console.log(format);
+    setExportDropdownOpen(false);
+  };
 
-    const renderPaginationItems = () => {
-        const items = []
+  const renderPaginationItems = () => {
+    const items: React.ReactNode[] = [];
+    items.push(
+      <PaginationItem key="page-1">
+        <PaginationLink
+          isActive={currentPage === 1}
+          onClick={() => setCurrentPage(1)}
+          className={
+            currentPage === 1 ? "bg-primary text-white hover:bg-primary/90" : ""
+          }
+        >
+          1
+        </PaginationLink>
+      </PaginationItem>
+    );
+    if (totalPages <= 7) {
+      for (let i = 2; i <= totalPages; i++) {
         items.push(
-            <PaginationItem key="page-1">
-                <PaginationLink
-                    isActive={currentPage === 1}
-                    onClick={() => setCurrentPage(1)}
-                    className={currentPage === 1 ? "bg-primary text-white hover:bg-primary/90" : ""}
-                >
-                    1
-                </PaginationLink>
-            </PaginationItem>,
-        )
-        if (totalPages <= 7) {
-            for (let i = 2; i <= totalPages; i++) {
-                items.push(
-                    <PaginationItem key={`page-${i}`}>
-                        <PaginationLink
-                            isActive={currentPage === i}
-                            onClick={() => setCurrentPage(i)}
-                            className={currentPage === i ? "bg-primary text-white hover:bg-primary/90" : ""}
-                        >
-                            {i}
-                        </PaginationLink>
-                    </PaginationItem>,
-                )
-            }
-        } else {
-            let startPage = Math.max(2, currentPage - 1)
-            let endPage = Math.min(totalPages - 1, currentPage + 1)
-            if (currentPage <= 3) {
-                startPage = 2
-                endPage = 4
-            } else if (currentPage >= totalPages - 2) {
-                startPage = totalPages - 3
-                endPage = totalPages - 1
-            }
-            if (startPage > 2) {
-                items.push(
-                    <PaginationItem key="ellipsis-1">
-                        <PaginationEllipsis />
-                    </PaginationItem>,
-                )
-            }
-            for (let i = startPage; i <= endPage; i++) {
-                items.push(
-                    <PaginationItem key={`page-${i}`}>
-                        <PaginationLink
-                            isActive={currentPage === i}
-                            onClick={() => setCurrentPage(i)}
-                            className={currentPage === i ? "bg-primary text-white hover:bg-primary/90" : ""}
-                        >
-                            {i}
-                        </PaginationLink>
-                    </PaginationItem>,
-                )
-            }
-            if (endPage < totalPages - 1) {
-                items.push(
-                    <PaginationItem key="ellipsis-2">
-                        <PaginationEllipsis />
-                    </PaginationItem>,
-                )
-            }
-            if (totalPages > 1) {
-                items.push(
-                    <PaginationItem key={`page-${totalPages}`}>
-                        <PaginationLink
-                            isActive={currentPage === totalPages}
-                            onClick={() => setCurrentPage(totalPages)}
-                            className={currentPage === totalPages ? "bg-primary text-white hover:bg-primary/90" : ""}
-                        >
-                            {totalPages}
-                        </PaginationLink>
-                    </PaginationItem>,
-                )
-            }
-        }
-        return items
+          <PaginationItem key={`page-${i}`}>
+            <PaginationLink
+              isActive={currentPage === i}
+              onClick={() => setCurrentPage(i)}
+              className={
+                currentPage === i
+                  ? "bg-primary text-white hover:bg-primary/90"
+                  : ""
+              }
+            >
+              {i}
+            </PaginationLink>
+          </PaginationItem>
+        );
+      }
+    } else {
+      let startPage = Math.max(2, currentPage - 1);
+      let endPage = Math.min(totalPages - 1, currentPage + 1);
+      if (currentPage <= 3) {
+        startPage = 2;
+        endPage = 4;
+      } else if (currentPage >= totalPages - 2) {
+        startPage = totalPages - 3;
+        endPage = totalPages - 1;
+      }
+      if (startPage > 2) {
+        items.push(
+          <PaginationItem key="ellipsis-1">
+            <PaginationEllipsis />
+          </PaginationItem>
+        );
+      }
+      for (let i = startPage; i <= endPage; i++) {
+        items.push(
+          <PaginationItem key={`page-${i}`}>
+            <PaginationLink
+              isActive={currentPage === i}
+              onClick={() => setCurrentPage(i)}
+              className={
+                currentPage === i
+                  ? "bg-primary text-white hover:bg-primary/90"
+                  : ""
+              }
+            >
+              {i}
+            </PaginationLink>
+          </PaginationItem>
+        );
+      }
+      if (endPage < totalPages - 1) {
+        items.push(
+          <PaginationItem key="ellipsis-2">
+            <PaginationEllipsis />
+          </PaginationItem>
+        );
+      }
+      if (totalPages > 1) {
+        items.push(
+          <PaginationItem key={`page-${totalPages}`}>
+            <PaginationLink
+              isActive={currentPage === totalPages}
+              onClick={() => setCurrentPage(totalPages)}
+              className={
+                currentPage === totalPages
+                  ? "bg-primary text-white hover:bg-primary/90"
+                  : ""
+              }
+            >
+              {totalPages}
+            </PaginationLink>
+          </PaginationItem>
+        );
+      }
     }
     return items;
   };
 
-    return (
-        <>
-            <div className="w-full flex flex-row justify-between items-center bg-background p-4 rounded-[8px] mt-6">
-                <h1 className="text-text-title text-xl font-semibold font-poppins">Cashback Recipients</h1>
-                <div className="flex flex-row gap-x-4">
-                    <button className="justify-center items-center bg-primary text-text-body font-poppins font-medium px-4  py-4 w-[202px] rounded-[12px] active:bg-primary-foreground">
-                        Cashback Settings
-                    </button>
-                </div>
-            </div>
+  return (
+    <>
+      <div className="w-full flex flex-row justify-between items-center bg-background p-4 rounded-[8px] mt-6">
+        <h1 className="text-text-title text-xl font-semibold font-poppins">
+          Cashback Recipients
+        </h1>
+        <div className="flex flex-row gap-x-4">
+          <button className="justify-center items-center bg-primary text-text-body font-poppins font-medium px-4  py-4 w-[202px] rounded-[12px] active:bg-primary-foreground">
+            Cashback Settings
+          </button>
+        </div>
+      </div>
 
-            <div className="bg-background rounded-2xl my-6 py-4">
-                <div className="flex justify-between items-center my-4 px-6">
-                    <div className="flex flex-row gap-5">
-                        <button className="border border-primary bg-background flex gap-3 justify-center items-center px-10 py-3 rounded-[8px]">
-                            <ListFilter size={16} />
-                            <span className="text-text-title font-poppins text-base">Filter</span>
-                        </button>
+      <div className="bg-background rounded-2xl my-6 py-4">
+        <div className="flex justify-between items-center my-4 px-6">
+          <div className="flex flex-row gap-5">
+            <button className="border border-primary bg-background flex gap-3 justify-center items-center px-10 py-3 rounded-[8px]">
+              <ListFilter size={16} />
+              <span className="text-text-title font-poppins text-base">
+                Filter
+              </span>
+            </button>
 
             <div className="flex flex-row justify-center items-center">
               <input
@@ -311,75 +339,92 @@ const CashbackRecipientsTable = () => {
           </div>
         </div>
 
-                <div className="overflow-auto relative" ref={tableRef}>
-                    <Table className="w-full rounded-2xl bg-background p-5">
-                        <TableHeader className="bg-primary-fade text-muted-foreground hover:bg-primary-fade ml-5">
-                            <TableRow>
-                                <TableHead className="p-4">
-                                    <input
-                                        type="checkbox"
-                                        className="w-6 h-6 mt-1 border-[#01010129] cursor-pointer"
-                                        checked={selected.length === filteredRecipients.length && selected.length > 0}
-                                        onChange={handleSelectAll}
-                                    />
-                                </TableHead>
-                                <TableHead className="text-base font-poppins text-text-title">Name</TableHead>
-                                <TableHead className="text-base font-poppins text-text-title">Email Address</TableHead>
-                                <TableHead className="text-base font-poppins text-text-title">Cashback Earned</TableHead>
-                                <TableHead className="text-base font-poppins text-text-title">Action</TableHead>
-                            </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                            {paginatedData.map((recipient) => (
-                                <TableRow key={recipient.id} className="py-6">
-                                    <TableCell className="p-4">
-                                        <input
-                                            type="checkbox"
-                                            className="w-6 h-6 mt-1 cursor-pointer"
-                                            checked={selected.includes(recipient.id)}
-                                            onChange={() => handleSelect(recipient.id)}
-                                        />
-                                    </TableCell>
-                                    <TableCell className="text-text-body font-poppins text-base py-6">{recipient.name}</TableCell>
-                                    <TableCell className="text-text-body font-poppins text-base py-6">{recipient.email}</TableCell>
-                                    <TableCell className="text-text-body font-poppins text-base py-6">
-                                        {recipient.cashbackEarned}
-                                    </TableCell>
-                                    <TableCell>
-                                        <Button
-                                            variant="ghost"
-                                            className="cursor-pointer border border-primary-300 rounded-sm hover:bg-transparent"
-                                        >
-                                            <MoreHorizontal size={14} className="text-primary-300" />
-                                        </Button>
-                                    </TableCell>
-                                </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
-                </div>
-            </div>
-
-            <div className="flex justify-between items-center mt-4 p-8">
-                <div className="flex items-center gap-2">
-                    <span>Showing</span>
-                    <Select
-                        onValueChange={(value) => {
-                            setItemsPerPage(Number(value))
-                            setCurrentPage(1)
-                        }}
+        <div className="overflow-auto relative" ref={tableRef}>
+          <Table className="w-full rounded-2xl bg-background p-5">
+            <TableHeader className="bg-primary-fade text-muted-foreground hover:bg-primary-fade ml-5">
+              <TableRow>
+                <TableHead className="p-4">
+                  <input
+                    type="checkbox"
+                    className="w-6 h-6 mt-1 border-[#01010129] cursor-pointer"
+                    checked={
+                      selected.length === filteredRecipients.length &&
+                      selected.length > 0
+                    }
+                    onChange={handleSelectAll}
+                  />
+                </TableHead>
+                <TableHead className="text-base font-poppins text-text-title">
+                  Name
+                </TableHead>
+                <TableHead className="text-base font-poppins text-text-title">
+                  Email Address
+                </TableHead>
+                <TableHead className="text-base font-poppins text-text-title">
+                  Cashback Earned
+                </TableHead>
+                <TableHead className="text-base font-poppins text-text-title">
+                  Action
+                </TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {paginatedData.map((recipient) => (
+                <TableRow key={recipient.id} className="py-6">
+                  <TableCell className="p-4">
+                    <input
+                      type="checkbox"
+                      className="w-6 h-6 mt-1 cursor-pointer"
+                      checked={selected.includes(recipient.id)}
+                      onChange={() => handleSelect(recipient.id)}
+                    />
+                  </TableCell>
+                  <TableCell className="text-text-body font-poppins text-base py-6">
+                    {recipient.name}
+                  </TableCell>
+                  <TableCell className="text-text-body font-poppins text-base py-6">
+                    {recipient.email}
+                  </TableCell>
+                  <TableCell className="text-text-body font-poppins text-base py-6">
+                    {recipient.cashbackEarned}
+                  </TableCell>
+                  <TableCell>
+                    <Button
+                      variant="ghost"
+                      className="cursor-pointer border border-primary-300 rounded-sm hover:bg-transparent"
                     >
-                        <SelectTrigger className="w-16 bg-background">{itemsPerPage}</SelectTrigger>
-                        <SelectContent>
-                            {itemsPerPageOptions.map((option) => (
-                                <SelectItem key={option} value={String(option)}>
-                                    {option}
-                                </SelectItem>
-                            ))}
-                        </SelectContent>
-                    </Select>
-                    <span>Entries</span>
-                </div>
+                      <MoreHorizontal size={14} className="text-primary-300" />
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </div>
+      </div>
+
+      <div className="flex justify-between items-center mt-4 p-8">
+        <div className="flex items-center gap-2">
+          <span>Showing</span>
+          <Select
+            onValueChange={(value) => {
+              setItemsPerPage(Number(value));
+              setCurrentPage(1);
+            }}
+          >
+            <SelectTrigger className="w-16 bg-background">
+              {itemsPerPage}
+            </SelectTrigger>
+            <SelectContent>
+              {itemsPerPageOptions.map((option) => (
+                <SelectItem key={option} value={String(option)}>
+                  {option}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          <span>Entries</span>
+        </div>
 
         <Pagination className="justify-end">
           <PaginationContent>
@@ -413,5 +458,4 @@ const CashbackRecipientsTable = () => {
   );
 };
 
-export default CashbackRecipientsTable
-
+export default CashbackRecipientsTable;

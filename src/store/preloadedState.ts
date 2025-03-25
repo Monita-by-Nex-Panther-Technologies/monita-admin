@@ -1,31 +1,18 @@
 import { AuthState } from "@/interfaces/store";
 
-export const getPreloadedState = () => {
-  if (typeof window === "undefined") {
-    return { auth: { user: null, tokens: null, loading: false, error: null } };
-  }
+// Handle server-side rendering
+const authTokens =
+  typeof window !== "undefined" ? localStorage.getItem("authTokens") : null;
+const user =
+  typeof window !== "undefined" ? localStorage.getItem("user") : null;
 
-  try {
-    const authTokens = localStorage.getItem("authTokens");
-    const user = localStorage.getItem("user");
-
-    return {
-      auth: {
-        tokens: authTokens ? JSON.parse(authTokens) : null,
-        user: user ? JSON.parse(user) : null,
-        loading: false,
-        error: null,
-      } as AuthState,
-    };
-  } catch (error) {
-    console.error("Error loading state from localStorage:", error);
-    return {
-      auth: {
-        user: null,
-        tokens: null,
-        loading: false,
-        error: null,
-      } as AuthState,
-    };
-  }
+export const preloadedState = {
+  auth: {
+    user: user ? JSON.parse(user) : null,
+    tokens: authTokens
+      ? JSON.parse(authTokens)
+      : { accessToken: null, refreshToken: null },
+    loading: false,
+    error: null,
+  } as AuthState,
 };

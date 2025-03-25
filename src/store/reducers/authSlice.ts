@@ -34,7 +34,7 @@ export const signIn = createAsyncThunk(
   "auth/signIn",
   async (
     credentials: { email: string; password: string },
-    { rejectWithValue },
+    { rejectWithValue }
   ) => {
     try {
       if (typeof window !== "undefined" && (window as any).mockAuthResponse) {
@@ -52,12 +52,12 @@ export const signIn = createAsyncThunk(
       if (axios.isAxiosError(error)) {
         const axiosError = error as AxiosError<ErrorResponse>;
         return rejectWithValue(
-          axiosError.response?.data?.message || "Login failed",
+          axiosError.response?.data?.message || "Login failed"
         );
       }
       return rejectWithValue("An unknown error occurred");
     }
-  },
+  }
 );
 
 const authSlice = createSlice({
