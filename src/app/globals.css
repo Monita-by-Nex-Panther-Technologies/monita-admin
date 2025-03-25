@@ -9,64 +9,64 @@
 
 :root {
   /* Primary Colors */
-  --primary: #CEEF0A;
-  --primary-foreground: #FFFFFF;
-  --primary-300: #BBD423;
-  --primary-fade: #CEEF0A0A;
+  --primary: #ceef0a;
+  --primary-foreground: #ffffff;
+  --primary-300: #bbd423;
+  --primary-fade: #ceef0a0a;
   /* Hex with alpha */
-  --primary-alpha-8: #CEEF0A14;
+  --primary-alpha-8: #ceef0a14;
   /* Hex with alpha */
 
   /* Base Colors */
-  --background: #FFFFFF;
+  --background: #ffffff;
   --foreground: #010101;
-  --background-alt: #F5F5F5;
+  --background-alt: #f5f5f5;
 
   /* Text Colors */
   --text-title: #010101;
   /* Hex with alpha */
-  --text-body: #010101A3;
-  --icon-color: #010101CC;
+  --text-body: #010101a3;
+  --icon-color: #010101cc;
   /* Hex with alpha */
-  --sidebar-heading: #0101018F;
+  --sidebar-heading: #0101018f;
   /* Hex with alpha */
 
   /* Status Colors */
-  --success: #1FC16B;
-  --success-light: #1FC16B14;
+  --success: #1fc16b;
+  --success-light: #1fc16b14;
   /* Hex with alpha */
-  --warning: #DFB400;
-  --warning-light: #FFDB4314;
+  --warning: #dfb400;
+  --warning-light: #ffdb4314;
   /* Hex with alpha */
-  --destructive: #D00416;
-  --destructive-foreground: #FFFFFF;
+  --destructive: #d00416;
+  --destructive-foreground: #ffffff;
 
   /* Component Colors */
-  --card: #FFFFFF;
+  --card: #ffffff;
   --card-foreground: #010101;
-  --popover: #FFFFFF;
+  --popover: #ffffff;
   --popover-foreground: #010101;
-  --secondary: #F5F5F5;
+  --secondary: #f5f5f5;
   --secondary-foreground: #010101;
-  --muted: #F5F5F5;
-  --muted-foreground: #0101018F;
+  --muted: #f5f5f5;
+  --muted-foreground: #0101018f;
   /* Hex with alpha */
-  --accent: #CEEF0A;
+  --accent: #ceef0a;
   --accent-foreground: #010101;
-  --border: #F5F5F5;
-  --input: #F5F5F5;
-  --ring: #CEEF0A;
+  --border: #f5f5f5;
+  --input: #f5f5f5;
+  --ring: #ceef0a;
 
   /* Chart Colors */
-  --chart-1: #FF6B6B;
+  --chart-1: #ff6b6b;
   /* Example color */
-  --chart-2: #4ECDC4;
+  --chart-2: #4ecdc4;
   /* Example color */
   --chart-3: #556270;
   /* Example color */
-  --chart-4: #C7F464;
+  --chart-4: #c7f464;
   /* Example color */
-  --chart-5: #FFD166;
+  --chart-5: #ffd166;
   /* Example color */
 
   /* Border Radius */
@@ -76,56 +76,56 @@
   /* 8px */
 
   /* Sidebar */
-  --sidebar: #FFFFFF;
+  --sidebar: #ffffff;
   --sidebar-foreground: #010101;
-  --sidebar-primary: #CEEF0A;
+  --sidebar-primary: #ceef0a;
   --sidebar-primary-foreground: #010101;
-  --sidebar-accent: #F5F5F5;
+  --sidebar-accent: #f5f5f5;
   --sidebar-accent-foreground: #010101;
-  --sidebar-border: #F5F5F5;
-  --sidebar-ring: #CEEF0A;
+  --sidebar-border: #f5f5f5;
+  --sidebar-ring: #ceef0a;
 }
 
 .dark {
   /* Base Colors */
   --background: #010101;
-  --foreground: #FFFFFF;
-  --background-alt: #F5F5F5;
+  --foreground: #ffffff;
+  --background-alt: #f5f5f5;
 
   /* Component Colors for dark mode */
   --card: #151515;
-  --card-foreground: #FFFFFF;
+  --card-foreground: #ffffff;
   --popover: #151515;
-  --popover-foreground: #FFFFFF;
+  --popover-foreground: #ffffff;
   --secondary: #252525;
-  --secondary-foreground: #FFFFFF;
+  --secondary-foreground: #ffffff;
   --muted: #252525;
-  --muted-foreground: #FFFFFF8F;
+  --muted-foreground: #ffffff8f;
   /* Hex with alpha */
-  --accent: #CEEF0A;
+  --accent: #ceef0a;
   --accent-foreground: #010101;
   --border: #252525;
   --input: #252525;
 
   /* Status Colors */
-  --success: #1FC16B;
-  --success-light: #1FC16B14;
+  --success: #1fc16b;
+  --success-light: #1fc16b14;
   /* Hex with alpha */
-  --warning: #DFB400;
-  --warning-light: #FFDB4314;
+  --warning: #dfb400;
+  --warning-light: #ffdb4314;
   /* Hex with alpha */
-  --destructive: #D00416;
-  --destructive-foreground: #FFFFFF;
+  --destructive: #d00416;
+  --destructive-foreground: #ffffff;
 
   /* Sidebar */
   --sidebar: #151515;
-  --sidebar-foreground: #FFFFFF;
-  --sidebar-primary: #CEEF0A;
+  --sidebar-foreground: #ffffff;
+  --sidebar-primary: #ceef0a;
   --sidebar-primary-foreground: #010101;
   --sidebar-accent: #252525;
-  --sidebar-accent-foreground: #FFFFFF;
+  --sidebar-accent-foreground: #ffffff;
   --sidebar-border: #252525;
-  --sidebar-ring: #CEEF0A;
+  --sidebar-ring: #ceef0a;
 }
 
 @theme inline {
@@ -221,8 +221,6 @@
 .status-error {
   @apply bg-destructive/10 text-destructive px-8 py-2 rounded-sm w-[200px] text-base font-medium;
 }
-
-
 
 /* Custom scrollbar styles */
 /* Custom scrollbar styles */

@@ -1,16 +1,14 @@
 import PlanHeadder from "./components/PlanHeader";
 
-
 export default function RootLayout({
-    children,
+  children,
 }: Readonly<{
-    children: React.ReactNode;
+  children: React.ReactNode;
 }>) {
-    return (
-        <div>
-            <PlanHeadder />
-            {children}
-        </div>
-
-    );
+  return (
+    <div>
+      <PlanHeadder />
+      {children}
+    </div>
+  );
 }

@@ -15,6 +15,7 @@ import settingsIcon from "@/assets/icons/mdi-light_settings.svg";
 import supportIcon from "@/assets/icons/mynaui_support.svg";
 import logoutIcon from "@/assets/icons/logoutIcon.svg";
 import exportIcon from "@/assets/icons/export.svg";
+import { ExpandIcon, Menu, ShieldCloseIcon } from "lucide-react";
 
 export const icons = {
   home: homeIcon,
@@ -33,6 +34,9 @@ export const icons = {
   supportIcon,
   logoutIcon,
   exportIcon,
+  expandIcon: ExpandIcon,
+  collapseIcon: ShieldCloseIcon,
+  menuIcon: Menu,
 } as const;
 
 export type IconAssets = typeof icons;

@@ -1,14 +1,14 @@
-import React from 'react'
-import CashBackStat from './components/CashBackStat'
-import CashbackRecipientsTable from './components/CashbackTable'
+import React from "react";
+import CashBackStat from "./components/CashBackStat";
+import CashbackRecipientsTable from "./components/CashbackTable";
 
 const page = () => {
-    return (
-        <div>
-            <CashBackStat />
-            <CashbackRecipientsTable />
-        </div>
-    )
-}
+  return (
+    <div>
+      <CashBackStat />
+      <CashbackRecipientsTable />
+    </div>
+  );
+};
 
-export default page
+export default page;

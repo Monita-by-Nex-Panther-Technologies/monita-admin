@@ -1,12 +1,12 @@
-import React from 'react'
-import StaffManagementTable from './components/StaffManagmentTable'
+import React from "react";
+import StaffManagementTable from "./components/StaffManagmentTable";
 
 const page = () => {
-    return (
-        <div>
-            <StaffManagementTable />
-        </div>
-    )
-}
+  return (
+    <div>
+      <StaffManagementTable />
+    </div>
+  );
+};
 
-export default page
+export default page;
