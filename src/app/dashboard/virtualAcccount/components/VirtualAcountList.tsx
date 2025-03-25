@@ -105,7 +105,7 @@ export default function VirtualAccountsList() {
   const totalPages = Math.ceil(filteredAccounts.length / itemsPerPage);
   const paginatedData = filteredAccounts.slice(
     (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage,
+    currentPage * itemsPerPage
   );
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -134,7 +134,7 @@ export default function VirtualAccountsList() {
     setSelected((prev) =>
       prev.includes(id)
         ? prev.filter((selectedId) => selectedId !== id)
-        : [...prev, id],
+        : [...prev, id]
     );
   };
 
@@ -156,7 +156,7 @@ export default function VirtualAccountsList() {
         >
           1
         </PaginationLink>
-      </PaginationItem>,
+      </PaginationItem>
     );
     if (totalPages <= 7) {
       for (let i = 2; i <= totalPages; i++) {
@@ -173,7 +173,7 @@ export default function VirtualAccountsList() {
             >
               {i}
             </PaginationLink>
-          </PaginationItem>,
+          </PaginationItem>
         );
       }
     } else {
@@ -190,7 +190,7 @@ export default function VirtualAccountsList() {
         items.push(
           <PaginationItem key="ellipsis-1">
             <PaginationEllipsis />
-          </PaginationItem>,
+          </PaginationItem>
         );
       }
       for (let i = startPage; i <= endPage; i++) {
@@ -207,14 +207,14 @@ export default function VirtualAccountsList() {
             >
               {i}
             </PaginationLink>
-          </PaginationItem>,
+          </PaginationItem>
         );
       }
       if (endPage < totalPages - 1) {
         items.push(
           <PaginationItem key="ellipsis-2">
             <PaginationEllipsis />
-          </PaginationItem>,
+          </PaginationItem>
         );
       }
       if (totalPages > 1) {
@@ -231,7 +231,7 @@ export default function VirtualAccountsList() {
             >
               {totalPages}
             </PaginationLink>
-          </PaginationItem>,
+          </PaginationItem>
         );
       }
     }

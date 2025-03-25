@@ -11,7 +11,7 @@ import { ChevronDown, ChevronUp } from "lucide-react";
 import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-// import Image from "next/image";
+import { ButtonProps } from "react-day-picker";
 
 export const SideBarSectionHeading = ({ title }: { title: string }) => {
   return (
@@ -22,10 +22,10 @@ export const SideBarSectionHeading = ({ title }: { title: string }) => {
 };
 
 interface SidebarNavItemProps {
-  icon: React.FC<React.SVGProps<SVGSVGElement>>; // SVG Component
+  icon: React.FC<React.SVGProps<SVGSVGElement>>;
   label: string;
   href: string;
-  onClick?: () => void; // Add onClick property
+  onClick?: () => void;
 }
 
 export const SidebarNavItem: React.FC<SidebarNavItemProps> = ({
@@ -41,14 +41,13 @@ export const SidebarNavItem: React.FC<SidebarNavItemProps> = ({
     <Link
       href={href}
       className={`flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer transition-colors w-full h-fit
-                ${
-                  isActive
-                    ? "bg-sidebar-primary text-text-title"
-                    : "text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
-                }`}
-      onClick={onClick} // Add onClick handler here
+        ${
+          isActive
+            ? "bg-sidebar-primary text-text-title"
+            : "text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
+        }`}
+      onClick={onClick}
     >
-      {/* Icon: Ensure proper alignment */}
       <div className="flex items-center justify-center w-6 h-6">
         <Icon
           className={`w-6 h-6 ${
@@ -56,8 +55,6 @@ export const SidebarNavItem: React.FC<SidebarNavItemProps> = ({
           }`}
         />
       </div>
-
-      {/* Label: Ensure it's aligned with the icon */}
       <span
         className={`text-[16px] font-normal font-poppins leading-none ${
           isActive ? "text-text-title" : "text-text-body"
@@ -73,11 +70,13 @@ export const BillPayments = () => {
   const pathname = usePathname();
   const [isBillPaymentsOpen, setIsBillPaymentsOpen] = useState(false);
 
-  // Check if any nested item is active
   const isActive = [
     "/dashboard/bill-payments/products/airtime",
     "/dashboard/bill-payments/water",
     "/dashboard/bill-payments/internet",
+    "/dashboard/bill-payments/products/esims",
+    "/dashboard/bill-payments/plan/data-plan",
+    "/dashboard/bill-payments/plan/cable",
   ].includes(pathname);
 
   return (
@@ -87,7 +86,7 @@ export const BillPayments = () => {
           className={`flex items-center justify-between px-4 py-3 rounded-lg cursor-pointer transition-colors ${
             isActive
               ? "bg-sidebar-primary text-text-title"
-              : "text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
+              : "text-sidebar-foreground hover:bg-[#CEEF0A1A]"
           }`}
         >
           <div className="flex items-center gap-3">
@@ -102,21 +101,26 @@ export const BillPayments = () => {
               />
             </span>
             <span
-              className={`text-sm text-[16px] font-normal font-poppins leading-none ${
-                isActive ? "text-text-title" : "text-text-body"
+              className={`text-[16px] font-normal font-poppins leading-none ${
+                isActive ? "text-white" : "text-white"
               }`}
             >
               Bill Payments
             </span>
           </div>
           {isBillPaymentsOpen ? (
-            <ChevronUp className="w-4 h-4" />
+            <ChevronUp className="w-4 h-4 text-white" />
           ) : (
-            <ChevronDown className="w-4 h-4" />
+            <ChevronDown className="w-4 h-4 text-white" />
           )}
         </div>
       </CollapsibleTrigger>
       <CollapsibleContent className="pl-8 pt-2 gap-[10px] flex flex-col">
+        <SidebarNavItem
+          icon={icons.bilpayIcon}
+          label="E-Sim"
+          href="/dashboard/bill-payments/products/esims"
+        />
         <SidebarNavItem
           icon={icons.bilpayIcon}
           label="Airtime"
@@ -124,26 +128,31 @@ export const BillPayments = () => {
         />
         <SidebarNavItem
           icon={icons.cashbackIcon}
-          label="Water"
-          href="/dashboard/bill-payments/water"
+          label="Data Plan"
+          href="/dashboard/bill-payments/plan/data-plan"
         />
         <SidebarNavItem
           icon={icons.esimIcon}
           label="Internet"
-          href="/dashboard/bill-payments/internet"
+          href="/dashboard/bill-payments/plan/internet"
+        />
+        <SidebarNavItem
+          icon={icons.esimIcon}
+          label="Cable TV"
+          href="/dashboard/bill-payments/plan/cable"
         />
       </CollapsibleContent>
     </Collapsible>
   );
 };
 
-interface ButtonProps {
-  icon: React.FC<React.SVGProps<SVGSVGElement>>; // SVG Component
+interface CustomButtonProps
+  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  icon: React.FC<React.SVGProps<SVGSVGElement>>;
   label: string;
-  onClick?: () => void; // Optional click handler
 }
 
-export const Button: React.FC<ButtonProps> = ({
+export const Button: React.FC<CustomButtonProps> = ({
   icon: Icon,
   label,
   onClick,
@@ -151,14 +160,11 @@ export const Button: React.FC<ButtonProps> = ({
   return (
     <button
       onClick={onClick}
-      className="flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer transition-colors w-full h-fit text-sidebar-foreground "
+      className="flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer transition-colors w-full h-fit text-sidebar-foreground"
     >
-      {/* Icon: Ensure proper alignment */}
       <div className="flex items-center justify-center w-6 h-6">
         <Icon className="w-6 h-6 text-text-body" />
       </div>
-
-      {/* Label: Ensure it's aligned with the icon */}
       <span className="text-[16px] font-normal font-poppins leading-none text-destructive">
         {label}
       </span>
