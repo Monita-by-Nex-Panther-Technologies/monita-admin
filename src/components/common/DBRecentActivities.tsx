@@ -13,7 +13,6 @@ import { Button } from "@/components/ui/button";
 import { Search, MoreHorizontal, ListFilter } from "lucide-react";
 import { icons } from "@/constants/icons";
 
-// Define transaction type
 interface Transaction {
   username: string;
   id: string;
@@ -23,7 +22,6 @@ interface Transaction {
   date: string;
 }
 
-// Transaction data
 const transactions: Transaction[] = [
   {
     username: "Adebayo10",
@@ -71,7 +69,6 @@ const DBRecentActivities: React.FC = () => {
   const [selected, setSelected] = useState<number[]>([]);
   const [activeTab, setActiveTab] = useState<string>("Transactions");
 
-  // Handle Select All
   const handleSelectAll = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.checked) {
       setSelected(transactions.map((_, index) => index));
@@ -80,7 +77,6 @@ const DBRecentActivities: React.FC = () => {
     }
   };
 
-  // Handle Single Checkbox Toggle
   const handleSelect = (index: number) => {
     setSelected((prev) =>
       prev.includes(index) ? prev.filter((i) => i !== index) : [...prev, index]
@@ -88,32 +84,38 @@ const DBRecentActivities: React.FC = () => {
   };
 
   return (
-    <div className="w-full py-3 sm:py-6 px-2 sm:px-4">
+    <div className="w-full py-6 px-6 md:px-10 lg:px-16 xl:px-24 mb-6">
       {/* Recent Activities Section */}
-      <div className="w-full flex flex-col sm:flex-row justify-between items-start sm:items-center bg-background p-3 sm:p-4 rounded-[8px] gap-3 sm:gap-0">
-        <h1 className="text-text-title text-lg sm:text-xl font-semibold font-poppins">
+      <div className="w-full flex flex-col lg:flex-row justify-between items-start lg:items-center bg-background p-4 lg:p-6 rounded-lg gap-4 lg:gap-0 mb-6">
+        <h1 className="text-text-title text-xl lg:text-2xl font-semibold font-poppins">
           Recent Activities
         </h1>
-        <div className="flex w-full sm:w-auto flex-wrap bg-background-alt gap-1 sm:gap-x-1.5 px-2 py-1 sm:px-3 sm:py-2 rounded-[8px]">
+        <div className="flex w-full lg:w-auto bg-background-alt gap-2 px-3 py-2 rounded-lg">
           <button
-            className={`bg-background text-text-body px-2 sm:px-4 py-2 sm:py-3 flex-1 sm:w-[186px] rounded-[8px] text-xs sm:text-sm ${
-              activeTab === "Transactions" ? "bg-primary-foreground" : ""
+            className={`px-4 py-2 lg:px-6 lg:py-3 w-full lg:w-48 rounded-lg text-sm lg:text-base ${
+              activeTab === "Transactions"
+                ? "bg-primary-foreground text-text-title"
+                : "bg-background text-text-body"
             }`}
             onClick={() => setActiveTab("Transactions")}
           >
             Transactions
           </button>
           <button
-            className={`bg-background text-text-body px-2 sm:px-4 py-2 sm:py-3 flex-1 sm:w-[186px] rounded-[8px] text-xs sm:text-sm ${
-              activeTab === "KYC Updates" ? "bg-primary-foreground" : ""
+            className={`px-4 py-2 lg:px-6 lg:py-3 w-full lg:w-48 rounded-lg text-sm lg:text-base ${
+              activeTab === "KYC Updates"
+                ? "bg-primary-foreground text-text-title"
+                : "bg-background text-text-body"
             }`}
             onClick={() => setActiveTab("KYC Updates")}
           >
             KYC Updates
           </button>
           <button
-            className={`bg-background text-text-body px-2 sm:px-4 py-2 sm:py-3 flex-1 sm:w-[186px] rounded-[8px] text-xs sm:text-sm ${
-              activeTab === "Recent Logins" ? "bg-primary-foreground" : ""
+            className={`px-4 py-2 lg:px-6 lg:py-3 w-full lg:w-48 rounded-lg text-sm lg:text-base ${
+              activeTab === "Recent Logins"
+                ? "bg-primary-foreground text-text-title"
+                : "bg-background text-text-body"
             }`}
             onClick={() => setActiveTab("Recent Logins")}
           >
@@ -123,36 +125,34 @@ const DBRecentActivities: React.FC = () => {
       </div>
 
       {/* Transactions Table */}
-      <div className="w-full overflow-x-auto bg-background rounded-2xl my-3 sm:my-6">
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center my-2 sm:my-4 px-3 sm:px-6 gap-3 sm:gap-0">
-          <div className="flex flex-col sm:flex-row gap-2 sm:gap-5 w-full sm:w-auto">
-            <button className="border border-primary bg-background flex gap-2 sm:gap-3 justify-center items-center px-4 sm:px-10 py-2 sm:py-3 rounded-[8px] text-sm sm:text-base">
-              <ListFilter size={14} className="sm:size-16" />
-              <span className="text-text-title font-poppins text-sm sm:text-base">
-                Filter
-              </span>
+      <div className="w-full overflow-x-auto bg-background rounded-xl lg:rounded-2xl p-4 lg:p-6 mx-2 md:mx-4">
+        <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-6 gap-4 lg:gap-0">
+          <div className="flex flex-col lg:flex-row gap-3 lg:gap-4 w-full lg:w-auto">
+            <button className="border border-primary bg-background flex gap-2 justify-center items-center px-4 py-2 lg:px-6 lg:py-3 rounded-lg text-sm lg:text-base">
+              <ListFilter size={16} />
+              <span className="text-text-title font-poppins">Filter</span>
             </button>
 
-            <div className="flex flex-row justify-center items-center w-full sm:w-auto">
+            <div className="flex flex-row justify-center items-center w-full lg:w-auto">
               <input
                 type="text"
                 placeholder="Search"
-                className="bg-background-alt border-border rounded-l-[8px] p-2 sm:p-4 w-full sm:w-auto text-sm"
+                className="bg-background-alt border-border rounded-l-lg p-3 lg:p-4 w-full lg:w-64 text-sm lg:text-base"
               />
-              <button className="bg-primary rounded-r-[8px] p-2 sm:p-4">
-                <Search size={20} className="sm:size-24 text-text-body" />
+              <button className="bg-primary rounded-r-lg p-3 lg:p-4">
+                <Search size={20} className="text-text-body" />
               </button>
             </div>
           </div>
-          <button className="bg-[#010101CC] flex gap-2 sm:gap-3 justify-center items-center px-3 sm:px-4 py-2 sm:py-3 rounded-[12px] text-sm sm:text-base w-full sm:w-auto">
-            <icons.exportIcon size={14} className="sm:size-16 text-white" />
+          <button className="bg-[#010101CC] flex gap-2 justify-center items-center px-4 py-2 lg:px-6 lg:py-3 rounded-lg text-sm lg:text-base w-full lg:w-auto mt-2 lg:mt-0">
+            <icons.exportIcon size={16} className="text-white" />
             <span className="font-poppins text-white">Export</span>
           </button>
         </div>
 
         {/* Responsive Table Container */}
         <div className="overflow-x-auto pb-2">
-          <Table className="rounded-2xl bg-background min-w-[800px]">
+          <Table className="rounded-xl bg-background min-w-[800px] lg:min-w-full">
             <TableHeader>
               <TableRow className="bg-primary-fade text-muted-foreground hover:bg-primary-fade">
                 <TableHead>
@@ -163,25 +163,25 @@ const DBRecentActivities: React.FC = () => {
                     onChange={handleSelectAll}
                   />
                 </TableHead>
-                <TableHead className="text-sm sm:text-base font-poppins text-text-title">
+                <TableHead className="font-poppins text-text-title">
                   Username
                 </TableHead>
-                <TableHead className="text-sm sm:text-base font-poppins text-text-title">
+                <TableHead className="font-poppins text-text-title">
                   ID
                 </TableHead>
-                <TableHead className="text-sm sm:text-base font-poppins text-text-title">
+                <TableHead className="font-poppins text-text-title">
                   Amount
                 </TableHead>
-                <TableHead className="text-sm sm:text-base font-poppins text-text-title">
+                <TableHead className="font-poppins text-text-title">
                   Type
                 </TableHead>
-                <TableHead className="text-sm sm:text-base font-poppins text-text-title">
+                <TableHead className="font-poppins text-text-title">
                   Status
                 </TableHead>
-                <TableHead className="text-sm sm:text-base font-poppins text-text-title">
+                <TableHead className="font-poppins text-text-title">
                   Date
                 </TableHead>
-                <TableHead className="text-sm sm:text-base font-poppins text-text-title">
+                <TableHead className="font-poppins text-text-title">
                   Actions
                 </TableHead>
               </TableRow>
@@ -200,21 +200,21 @@ const DBRecentActivities: React.FC = () => {
                       onChange={() => handleSelect(index)}
                     />
                   </TableCell>
-                  <TableCell className="text-text-body font-poppins text-xs sm:text-base">
+                  <TableCell className="text-text-body font-poppins">
                     {transaction.username}
                   </TableCell>
-                  <TableCell className="text-text-body font-poppins text-xs sm:text-base">
+                  <TableCell className="text-text-body font-poppins">
                     {transaction.id}
                   </TableCell>
-                  <TableCell className="text-text-body font-poppins text-xs sm:text-base">
+                  <TableCell className="text-text-body font-poppins">
                     {transaction.amount}
                   </TableCell>
-                  <TableCell className="text-text-body font-poppins text-xs sm:text-base">
+                  <TableCell className="text-text-body font-poppins">
                     {transaction.type}
                   </TableCell>
-                  <TableCell className="text-text-body font-poppins text-xs sm:text-base">
+                  <TableCell className="text-text-body font-poppins">
                     <span
-                      className={`px-1 sm:px-2 py-0.5 sm:py-1 rounded-md text-xs sm:text-sm font-semibold ${
+                      className={`px-2 py-1 rounded-md text-sm font-semibold ${
                         transaction.status === "Successful"
                           ? "status-success"
                           : transaction.status === "Failed"
@@ -225,18 +225,15 @@ const DBRecentActivities: React.FC = () => {
                       {transaction.status}
                     </span>
                   </TableCell>
-                  <TableCell className="text-text-body font-poppins text-xs sm:text-base">
+                  <TableCell className="text-text-body font-poppins">
                     {transaction.date}
                   </TableCell>
                   <TableCell>
                     <Button
                       variant="ghost"
-                      className="cursor-pointer border border-primary-300 rounded-sm hover:bg-transparent p-1 sm:p-2"
+                      className="cursor-pointer border border-primary-300 rounded-sm hover:bg-transparent p-2"
                     >
-                      <MoreHorizontal
-                        size={12}
-                        className="sm:size-14 text-primary-300"
-                      />
+                      <MoreHorizontal size={16} className="text-primary-300" />
                     </Button>
                   </TableCell>
                 </TableRow>
