@@ -12,7 +12,6 @@ import {
 } from "recharts";
 
 const DBAnalyticsSection = () => {
-  // Sample transaction trend data matching the graph
   const transactionData = [
     { name: "Jan", value: 250000 },
     { name: "Feb", value: 280000 },
@@ -29,7 +28,7 @@ const DBAnalyticsSection = () => {
   ];
 
   return (
-    <div className="w-full py-6 px-2 sm:px-4">
+    <div className="w-full mb-8">
       {/* Filter by Date Section */}
       <div className="w-full flex flex-col sm:flex-row justify-between items-start sm:items-center bg-background p-3 sm:p-4 rounded-[8px] gap-3 sm:gap-0">
         <h1 className="text-text-title text-lg sm:text-xl font-semibold font-poppins">
@@ -49,7 +48,7 @@ const DBAnalyticsSection = () => {
       </div>
 
       {/* Analytics & Trends Section */}
-      <div className="w-full flex-col flex gap-4 py-6">
+      <div className="w-full flex-col flex gap-4 mt-6">
         <div className="w-full flex flex-col lg:flex-row gap-4">
           {/* Transaction Trends Chart */}
           <div className="flex flex-col w-full lg:w-[65%] gap-4">
@@ -68,7 +67,7 @@ const DBAnalyticsSection = () => {
                 </div>
               </div>
             </div>
-            <div className="w-full bg-background rounded-[8px] p-3 sm:p-4">
+            <div className="w-full bg-background rounded-[8px] p-3 sm:p-4 flex-grow">
               <ResponsiveContainer
                 width="100%"
                 height={250}
@@ -99,9 +98,9 @@ const DBAnalyticsSection = () => {
                   <CartesianGrid strokeDasharray="3 3" stroke="#eee" />
                   <XAxis dataKey="name" tick={{ fontSize: 12 }} />
                   <YAxis
-                    tickFormatter={(value) => `${value / 1000}k`} // Abbreviate values (e.g., 250000 -> 250k)
-                    domain={[0, 500000]} // Set the Y-axis domain (min: 0, max: 500000)
-                    ticks={[0, 100000, 200000, 300000, 400000, 500000]} // Set fixed intervals at 100k
+                    tickFormatter={(value) => `${value / 1000}k`}
+                    domain={[0, 500000]}
+                    ticks={[0, 100000, 200000, 300000, 400000, 500000]}
                     tick={{ fontSize: 10 }}
                     width={40}
                   />
@@ -125,18 +124,18 @@ const DBAnalyticsSection = () => {
           </div>
 
           {/* Users Growth Section */}
-          <div className="w-full lg:w-[35%] bg-background rounded-[8px] px-4 sm:px-8 h-auto sm:h-[445px] py-5 flex flex-col">
-            <h1 className="text-text-title text-lg sm:text-xl font-semibold font-poppins mb-4">
+          <div className="w-full lg:w-[35%] bg-background rounded-[8px] px-4 sm:px-5 py-5 flex flex-col lg:h-auto">
+            <h1 className="text-text-title text-lg sm:text-xl font-semibold font-poppins mb-2 sm:mb-4">
               Users Growth
             </h1>
-            <div className="flex flex-col gap-8 justify-start items-center sm:items-start relative w-full h-[80%] mt-4 sm:mt-8">
+            <div className="flex flex-col gap-6 sm:gap-8 justify-between items-center sm:items-start relative w-full flex-grow">
               {/* Circular Progress Bar */}
-              <div className="flex justify-center w-full">
+              <div className="flex justify-center w-full mt-2 sm:mt-4">
                 <svg
                   width="120"
                   height="120"
                   viewBox="0 0 200 200"
-                  className="sm:w-[132px] sm:h-[132px]"
+                  className="w-[120px] h-[120px] sm:w-[132px] sm:h-[132px]"
                 >
                   {/* Background Circle */}
                   <circle
@@ -144,7 +143,7 @@ const DBAnalyticsSection = () => {
                     cy="100"
                     r="90"
                     fill="none"
-                    stroke="#e0e0e0" // Light gray background
+                    stroke="#e0e0e0"
                     strokeWidth="20"
                   />
 
@@ -154,10 +153,10 @@ const DBAnalyticsSection = () => {
                     cy="100"
                     r="90"
                     fill="none"
-                    stroke="#010101CC" // Inactive users color
+                    stroke="#010101CC"
                     strokeWidth="20"
-                    strokeDasharray="565.48" // Circumference of the circle (2 * π * r)
-                    strokeDashoffset="0" // No offset
+                    strokeDasharray="565.48"
+                    strokeDashoffset="0"
                     transform="rotate(-90 100 100)"
                   />
 
@@ -167,10 +166,10 @@ const DBAnalyticsSection = () => {
                     cy="100"
                     r="90"
                     fill="none"
-                    stroke="#728406" // Returning users color
+                    stroke="#728406"
                     strokeWidth="20"
                     strokeDasharray="565.48"
-                    strokeDashoffset="113.1" // 20% of the circle (500 / 2500 * 565.48)
+                    strokeDashoffset="113.1"
                     transform="rotate(-90 100 100)"
                   />
 
@@ -180,10 +179,10 @@ const DBAnalyticsSection = () => {
                     cy="100"
                     r="90"
                     fill="none"
-                    stroke="#CEEF0A" // Active users color
+                    stroke="#CEEF0A"
                     strokeWidth="20"
                     strokeDasharray="565.48"
-                    strokeDashoffset="339.29" // 60% of the circle (2000 / 2500 * 565.48)
+                    strokeDashoffset="339.29"
                     transform="rotate(-90 100 100)"
                   />
 
@@ -210,12 +209,12 @@ const DBAnalyticsSection = () => {
               <span className="border border-[#01010129] w-full"></span>
 
               {/* User Breakdown */}
-              <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 w-full bg-background-alt py-4 sm:py-7 rounded-[8px] justify-between px-3 sm:px-6">
+              <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 w-full bg-background-alt py-4 sm:py-5 rounded-[8px] justify-between px-3 sm:px-6 mb-2">
                 <div className="text-center">
                   <span className="text-sm sm:text-base font-poppins text-text-body">
                     New Users
                   </span>
-                  <div className="flex items-center justify-center">
+                  <div className="flex items-center justify-center mt-1">
                     <span className="w-2 sm:w-3 h-2 sm:h-3 bg-[#CEEF0A] rounded-full mr-2"></span>
                     <span className="font-bold font-poppins text-sm sm:text-base text-text-title">
                       7,000
@@ -226,9 +225,8 @@ const DBAnalyticsSection = () => {
                   <span className="text-sm sm:text-base font-poppins text-text-body">
                     Returning
                   </span>
-                  <div className="flex items-center justify-center">
+                  <div className="flex items-center justify-center mt-1">
                     <span className="w-2 sm:w-3 h-2 sm:h-3 bg-[#728406] rounded-full mr-2"></span>
-
                     <span className="font-bold font-poppins text-text-title text-sm sm:text-base">
                       2,000
                     </span>
@@ -238,9 +236,8 @@ const DBAnalyticsSection = () => {
                   <span className="text-sm sm:text-base font-poppins text-text-body">
                     Inactive
                   </span>
-                  <div className="flex items-center justify-center">
+                  <div className="flex items-center justify-center mt-1">
                     <span className="w-2 sm:w-3 h-2 sm:h-3 bg-[#010101CC] rounded-full mr-2"></span>
-
                     <span className="font-bold font-poppins text-text-title text-sm sm:text-base">
                       500
                     </span>

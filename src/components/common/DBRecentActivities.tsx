@@ -84,7 +84,7 @@ const DBRecentActivities: React.FC = () => {
   };
 
   return (
-    <div className="w-full py-6 px-6 md:px-10 lg:px-16 xl:px-24 mb-6">
+    <div className="w-full">
       {/* Recent Activities Section */}
       <div className="w-full flex flex-col lg:flex-row justify-between items-start lg:items-center bg-background p-4 lg:p-6 rounded-lg gap-4 lg:gap-0 mb-6">
         <h1 className="text-text-title text-xl lg:text-2xl font-semibold font-poppins">
@@ -125,7 +125,7 @@ const DBRecentActivities: React.FC = () => {
       </div>
 
       {/* Transactions Table */}
-      <div className="w-full overflow-x-auto bg-background rounded-xl lg:rounded-2xl p-4 lg:p-6 mx-2 md:mx-4">
+      <div className="w-full overflow-x-auto bg-background rounded-xl lg:rounded-2xl p-4 lg:p-6">
         <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-6 gap-4 lg:gap-0">
           <div className="flex flex-col lg:flex-row gap-3 lg:gap-4 w-full lg:w-auto">
             <button className="border border-primary bg-background flex gap-2 justify-center items-center px-4 py-2 lg:px-6 lg:py-3 rounded-lg text-sm lg:text-base">

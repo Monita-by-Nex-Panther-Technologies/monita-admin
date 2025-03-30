@@ -16,7 +16,7 @@ const DashboardMetrics = () => {
   };
 
   return (
-    <div className="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-3 gap-2 xs:gap-3 sm:gap-4 p-1.5 xs:p-2 sm:p-4">
+    <div className="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-3 gap-2 xs:gap-3 sm:gap-4 w-full">
       {/* Total Users */}
       <div className="bg-white rounded-lg p-2.5 xs:p-3 sm:p-4 md:p-6 flex flex-col w-full shadow-sm">
         <div className="flex justify-between items-start mb-1.5 xs:mb-2 sm:mb-4">

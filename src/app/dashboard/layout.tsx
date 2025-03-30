@@ -22,7 +22,7 @@ export default function DashboardLayout({
   };
 
   return (
-    <div className="flex h-screen bg-background-alt">
+    <div className="flex min-h-screen bg-background-alt overflow-hidden">
       {/* Overlay for mobile */}
       {isSidebarOpen && (
         <div
@@ -49,13 +49,12 @@ export default function DashboardLayout({
       <main
         className={`
           flex-1 transition-all duration-300 ease-in-out
-          ${isSidebarOpen ? "lg:ml-[275px]" : "lg:ml-0"}
-          w-full lg:ml-[275px]
+          w-full lg:pl-[275px]
         `}
       >
-        <div className="h-full">
+        <div className="flex flex-col h-full">
           <DBHeader onMenuClick={toggleSidebar} />
-          <div className="w-full p-4 md:p-8">{children}</div>
+          <div className="w-full p-4 md:p-8 flex-grow">{children}</div>
         </div>
       </main>
     </div>
