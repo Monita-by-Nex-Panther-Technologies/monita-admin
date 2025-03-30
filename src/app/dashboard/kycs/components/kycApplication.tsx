@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import {
   Table,
   TableBody,
@@ -9,8 +9,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-// import { Input } from "@/components/ui/input";
-import { Search, MoreHorizontal, ListFilter, X } from "lucide-react";
+import { Search, MoreHorizontal, ListFilter, X, Eye } from "lucide-react";
 import {
   Select,
   SelectTrigger,
@@ -30,7 +29,6 @@ import {
 import * as XLSX from "xlsx";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
-// import { format } from "date-fns";
 import FilterModal from "./KycFilterModal";
 import { kycApplications } from "./data"; // Import data from data.ts
 
@@ -58,9 +56,25 @@ const KycApplicationsTable = () => {
     endDate: undefined,
   });
   const [searchTerm, setSearchTerm] = useState<string>(""); // State for search term
+  const [isMobile, setIsMobile] = useState(false);
 
   const exportDropdownRef = useRef<HTMLDivElement>(null);
   const tableRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const checkIfMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    // Initial check
+    checkIfMobile();
+
+    // Add event listener for resize
+    window.addEventListener("resize", checkIfMobile);
+
+    // Cleanup
+    return () => window.removeEventListener("resize", checkIfMobile);
+  }, []);
 
   const filteredApplications = kycApplications.filter((application) => {
     // Search filter
@@ -77,11 +91,11 @@ const KycApplicationsTable = () => {
       : true;
 
     const matchesStatus = filters.status
-      ? application.kycStatus === filters.status
+      ? application.kycStatus === filters.status || filters.status === "all"
       : true;
 
     const matchesKycLevel = filters.kycLevel
-      ? application.kycLevel === filters.kycLevel
+      ? application.kycLevel === filters.kycLevel || filters.kycLevel === "all"
       : true;
 
     const matchesStartDate = filters.startDate
@@ -105,7 +119,7 @@ const KycApplicationsTable = () => {
   const totalPages = Math.ceil(filteredApplications.length / itemsPerPage);
   const paginatedData = filteredApplications.slice(
     (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage,
+    currentPage * itemsPerPage
   );
 
   const handleFilterApply = (newFilters: FilterCriteria) => {
@@ -154,17 +168,15 @@ const KycApplicationsTable = () => {
     setSelected((prev) =>
       prev.includes(id)
         ? prev.filter((selectedId) => selectedId !== id)
-        : [...prev, id],
+        : [...prev, id]
     );
   };
-
-  // const isSelected = (id: string) => selected.includes(id);
 
   const exportData = (format: string) => {
     const dataToExport =
       selected.length > 0
         ? filteredApplications.filter((application) =>
-            selected.includes(application.id),
+            selected.includes(application.id)
           )
         : filteredApplications;
 
@@ -172,7 +184,7 @@ const KycApplicationsTable = () => {
       const docContent = dataToExport
         .map(
           (a) =>
-            `${a.username}\t${a.kycLevel}\t${a.meansOfId}\t${a.kycStatus}\t${a.approvedDate}`,
+            `${a.username}\t${a.kycLevel}\t${a.meansOfId}\t${a.kycStatus}\t${a.approvedDate}`
         )
         .join("\n");
       const blob = new Blob([docContent], { type: "application/msword" });
@@ -247,7 +259,7 @@ const KycApplicationsTable = () => {
           `Generated on ${new Date().toLocaleString()} - Page ${i} of ${pageCount}`,
           doc.internal.pageSize.getWidth() / 2,
           doc.internal.pageSize.getHeight() - 10,
-          { align: "center" },
+          { align: "center" }
         );
       }
 
@@ -270,7 +282,7 @@ const KycApplicationsTable = () => {
         >
           1
         </PaginationLink>
-      </PaginationItem>,
+      </PaginationItem>
     );
     if (totalPages <= 7) {
       for (let i = 2; i <= totalPages; i++) {
@@ -287,7 +299,7 @@ const KycApplicationsTable = () => {
             >
               {i}
             </PaginationLink>
-          </PaginationItem>,
+          </PaginationItem>
         );
       }
     } else {
@@ -304,7 +316,7 @@ const KycApplicationsTable = () => {
         items.push(
           <PaginationItem key="ellipsis-1">
             <PaginationEllipsis />
-          </PaginationItem>,
+          </PaginationItem>
         );
       }
       for (let i = startPage; i <= endPage; i++) {
@@ -321,14 +333,14 @@ const KycApplicationsTable = () => {
             >
               {i}
             </PaginationLink>
-          </PaginationItem>,
+          </PaginationItem>
         );
       }
       if (endPage < totalPages - 1) {
         items.push(
           <PaginationItem key="ellipsis-2">
             <PaginationEllipsis />
-          </PaginationItem>,
+          </PaginationItem>
         );
       }
       if (totalPages > 1) {
@@ -345,14 +357,72 @@ const KycApplicationsTable = () => {
             >
               {totalPages}
             </PaginationLink>
-          </PaginationItem>,
+          </PaginationItem>
         );
       }
     }
     return items;
   };
 
-  // Check if any filters are active
+  const renderMobileCard = (application: any) => {
+    return (
+      <div
+        key={application.id}
+        className="bg-background p-4 rounded-lg mb-4 border border-border"
+      >
+        <div className="flex justify-between items-center mb-3">
+          <div className="flex items-center">
+            <input
+              type="checkbox"
+              className="w-5 h-5 mr-3"
+              checked={selected.includes(application.id)}
+              onChange={() => handleSelect(application.id)}
+            />
+            <span className="font-semibold text-text-title">
+              {application.username}
+            </span>
+          </div>
+          <span
+            className={`px-2 py-1 rounded-md text-sm ${
+              application.kycStatus === "Approved"
+                ? "text-green-500 bg-green-50"
+                : application.kycStatus === "Rejected"
+                ? "text-red-500 bg-red-50"
+                : "text-yellow-500 bg-yellow-50"
+            }`}
+          >
+            {application.kycStatus}
+          </span>
+        </div>
+
+        <div className="grid grid-cols-2 gap-2 mt-2 text-sm">
+          <div>
+            <p className="text-muted-foreground">KYC Level</p>
+            <p className="font-medium">{application.kycLevel}</p>
+          </div>
+          <div>
+            <p className="text-muted-foreground">Means of ID</p>
+            <p className="font-medium">{application.meansOfId}</p>
+          </div>
+          <div className="col-span-2">
+            <p className="text-muted-foreground">Approved Date</p>
+            <p className="font-medium">{application.approvedDate}</p>
+          </div>
+        </div>
+
+        <div className="flex justify-end mt-3">
+          <Button
+            variant="outline"
+            size="sm"
+            className="flex items-center text-xs gap-1 border-primary text-primary"
+          >
+            <Eye size={14} /> View Details
+          </Button>
+        </div>
+      </div>
+    );
+  };
+
   const areFiltersActive =
     filters.username !== "" ||
     filters.status !== "" ||
@@ -362,59 +432,62 @@ const KycApplicationsTable = () => {
 
   return (
     <>
-      <div className="w-full flex flex-row justify-between items-center bg-background p-4 rounded-[8px] mt-6">
-        <h1 className="text-text-title text-xl font-semibold font-poppins">
+      <div className="w-full flex flex-col md:flex-row justify-between items-start md:items-center bg-background p-4 rounded-[8px] mt-6">
+        <h1 className="text-text-title text-xl font-semibold font-poppins mb-3 md:mb-0">
           KYC Applications
         </h1>
-        <div className="flex flex-row gap-x-4 ">
-          <button className="justify-center items-center bg-background border border-primary-300 text-text-body font-poppins font-medium px-4 w-[132px] rounded-[12px] active:bg-primary-foreground">
+        <div className="flex flex-row gap-x-3 w-full md:w-auto">
+          <button className="justify-center items-center bg-background border border-primary-300 text-text-body font-poppins font-medium px-2 md:px-4 py-2 flex-1 md:w-[132px] rounded-[12px] active:bg-primary-foreground">
             Reject
           </button>
-          <button className="justify-center bg-primary items-center text-text-body font-poppins p-4 w-[132px] rounded-[12px] font-medium">
+          <button className="justify-center bg-primary items-center text-text-body font-poppins py-2 md:p-4 flex-1 md:w-[132px] rounded-[12px] font-medium">
             Approve
           </button>
         </div>
       </div>
 
       <div className="bg-background rounded-2xl my-6 py-4">
-        <div className="flex justify-between items-center my-4 px-6">
-          <div className="flex flex-row gap-5 ">
+        <div className="flex flex-col md:flex-row md:justify-between md:items-center my-4 px-3 md:px-6 gap-3">
+          <div className="flex flex-col md:flex-row gap-3 md:gap-5 w-full md:w-auto">
             <button
-              className=" border border-primary bg-background flex gap-3 justify-center items-center px-10 py-3 rounded-[8px]"
+              className="border border-primary bg-background flex gap-3 justify-center items-center px-4 md:px-10 py-3 rounded-[8px] w-full md:w-auto"
               onClick={() => setIsFilterModalOpen(true)}
             >
               <ListFilter size={16} />
-              <span className=" text-text-title font-poppins text-base">
+              <span className="text-text-title font-poppins text-base">
                 Filter
               </span>
             </button>
 
-            <div className=" flex flex-row justify-center items-center">
+            <div className="flex flex-row justify-center items-center w-full md:w-auto">
               <input
                 type="text"
                 placeholder="Search"
-                className=" bg-background-alt border-border rounded-l-[8px] p-4"
+                className="bg-background-alt border-border rounded-l-[8px] p-3 md:p-4 flex-1"
                 value={searchTerm}
                 onChange={handleSearchChange}
               />
-              <button className=" bg-primary rounded-r-[8px] p-4 px-6">
-                <Search size={24} className="text-text-body" />
+              <button className="bg-primary rounded-r-[8px] p-3 md:p-4 px-4 md:px-6">
+                <Search size={20} className="text-text-body" />
               </button>
               {areFiltersActive && (
                 <button
-                  className="bg-background-alt border-border rounded-[8px] p-4 ml-2"
+                  className="bg-background-alt border-border rounded-[8px] p-3 md:p-4 ml-2"
                   onClick={handleResetFilters}
                 >
-                  <X size={24} className="text-text-body" />
+                  <X size={20} className="text-text-body" />
                 </button>
               )}
             </div>
           </div>
 
           {/* Export Dropdown Menu */}
-          <div className="relative" ref={exportDropdownRef}>
+          <div
+            className="relative w-full md:w-auto mt-3 md:mt-0"
+            ref={exportDropdownRef}
+          >
             <button
-              className="bg-[#010101CC] flex gap-3 justify-center items-center px-6 py-3 rounded-[12px] text-white"
+              className="bg-[#010101CC] flex gap-3 justify-center items-center px-4 md:px-6 py-3 rounded-[12px] text-white w-full md:w-auto"
               onClick={() => setExportDropdownOpen(!exportDropdownOpen)}
             >
               <svg
@@ -474,102 +547,121 @@ const KycApplicationsTable = () => {
           </div>
         </div>
 
-        <div className="overflow-auto relative" ref={tableRef}>
-          <Table className="w-full rounded-2xl bg-background p-5">
-            <TableHeader className="bg-primary-fade text-muted-foreground hover:bg-primary-fade ml-5">
-              <TableRow>
-                <TableHead className="p-4">
-                  <input
-                    type="checkbox"
-                    className="w-6 h-6 mt-1 border-[#01010129] cursor-pointer"
-                    checked={
-                      selected.length === filteredApplications.length &&
-                      selected.length > 0
-                    }
-                    onChange={handleSelectAll}
-                  />
-                </TableHead>
-                <TableHead className="text-base font-poppins text-text-title">
-                  Username
-                </TableHead>
-                <TableHead className="text-base font-poppins text-text-title">
-                  KYC Level
-                </TableHead>
-                <TableHead className="text-base font-poppins text-text-title">
-                  Means of ID
-                </TableHead>
-                <TableHead className="text-base font-poppins text-text-title">
-                  KYC Status
-                </TableHead>
-                <TableHead className="text-base font-poppins text-text-title">
-                  Approved Date
-                </TableHead>
-                <TableHead className="text-base font-poppins text-text-title">
-                  Action
-                </TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {paginatedData.map((application) => (
-                <TableRow key={application.id} className="py-6">
-                  <TableCell className="p-4">
+        {/* Mobile View */}
+        {isMobile ? (
+          <div className="px-3 py-2">
+            {paginatedData.length > 0 ? (
+              paginatedData.map((application) => renderMobileCard(application))
+            ) : (
+              <div className="text-center py-10">
+                <p className="text-muted-foreground">
+                  No matching KYC applications found
+                </p>
+              </div>
+            )}
+          </div>
+        ) : (
+          // Desktop Table View
+          <div className="overflow-auto relative" ref={tableRef}>
+            <Table className="w-full rounded-2xl bg-background p-5">
+              <TableHeader className="bg-primary-fade text-muted-foreground hover:bg-primary-fade ml-5">
+                <TableRow>
+                  <TableHead className="p-4">
                     <input
                       type="checkbox"
-                      className="w-6 h-6 mt-1 cursor-pointer"
-                      checked={selected.includes(application.id)}
-                      onChange={() => handleSelect(application.id)}
+                      className="w-6 h-6 mt-1 border-[#01010129] cursor-pointer"
+                      checked={
+                        selected.length === filteredApplications.length &&
+                        selected.length > 0
+                      }
+                      onChange={handleSelectAll}
                     />
-                  </TableCell>
-                  <TableCell className="text-text-body font-poppins text-base py-6">
-                    {application.username}
-                  </TableCell>
-                  <TableCell className="text-text-body font-poppins text-base py-6">
-                    {application.kycLevel}
-                  </TableCell>
-                  <TableCell className="text-text-body font-poppins text-base py-6">
-                    {application.meansOfId}
-                  </TableCell>
-                  <TableCell className="text-text-body font-poppins text-base py-6">
-                    <span
-                      className={`px-2 py-1 rounded-md w-full ${
-                        application.kycStatus === "Approved"
-                          ? "text-green-500"
-                          : application.kycStatus === "Rejected"
+                  </TableHead>
+                  <TableHead className="text-base font-poppins text-text-title">
+                    Username
+                  </TableHead>
+                  <TableHead className="text-base font-poppins text-text-title">
+                    KYC Level
+                  </TableHead>
+                  <TableHead className="text-base font-poppins text-text-title">
+                    Means of ID
+                  </TableHead>
+                  <TableHead className="text-base font-poppins text-text-title">
+                    KYC Status
+                  </TableHead>
+                  <TableHead className="text-base font-poppins text-text-title">
+                    Approved Date
+                  </TableHead>
+                  <TableHead className="text-base font-poppins text-text-title">
+                    Action
+                  </TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {paginatedData.map((application) => (
+                  <TableRow key={application.id} className="py-6">
+                    <TableCell className="p-4">
+                      <input
+                        type="checkbox"
+                        className="w-6 h-6 mt-1 cursor-pointer"
+                        checked={selected.includes(application.id)}
+                        onChange={() => handleSelect(application.id)}
+                      />
+                    </TableCell>
+                    <TableCell className="text-text-body font-poppins text-base py-6">
+                      {application.username}
+                    </TableCell>
+                    <TableCell className="text-text-body font-poppins text-base py-6">
+                      {application.kycLevel}
+                    </TableCell>
+                    <TableCell className="text-text-body font-poppins text-base py-6">
+                      {application.meansOfId}
+                    </TableCell>
+                    <TableCell className="text-text-body font-poppins text-base py-6">
+                      <span
+                        className={`px-2 py-1 rounded-md w-full ${
+                          application.kycStatus === "Approved"
+                            ? "text-green-500"
+                            : application.kycStatus === "Rejected"
                             ? "text-red-500"
                             : "text-yellow-500"
-                      }`}
-                    >
-                      {application.kycStatus}
-                    </span>
-                  </TableCell>
-                  <TableCell className="text-text-body font-poppins text-base py-6">
-                    {application.approvedDate}
-                  </TableCell>
-                  <TableCell>
-                    <Button
-                      variant="ghost"
-                      className="cursor-pointer border border-primary-300 rounded-sm hover:bg-transparent"
-                    >
-                      <MoreHorizontal size={14} className="text-primary-300" />
-                    </Button>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </div>
+                        }`}
+                      >
+                        {application.kycStatus}
+                      </span>
+                    </TableCell>
+                    <TableCell className="text-text-body font-poppins text-base py-6">
+                      {application.approvedDate}
+                    </TableCell>
+                    <TableCell>
+                      <Button
+                        variant="ghost"
+                        className="cursor-pointer border border-primary-300 rounded-sm hover:bg-transparent"
+                      >
+                        <MoreHorizontal
+                          size={14}
+                          className="text-primary-300"
+                        />
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
+        )}
       </div>
 
-      <div className="flex justify-between items-center mt-4 p-8 ">
+      <div className="flex flex-col md:flex-row justify-between items-center mt-4 p-3 md:p-8 gap-4">
         <div className="flex items-center gap-2">
-          <span>Showing</span>
+          <span className="text-sm md:text-base">Showing</span>
           <Select
             onValueChange={(value) => {
               setItemsPerPage(Number(value));
               setCurrentPage(1);
             }}
           >
-            <SelectTrigger className="w-16 bg-background">
+            <SelectTrigger className="w-16 bg-background text-sm md:text-base">
               {itemsPerPage}
             </SelectTrigger>
             <SelectContent>
@@ -580,32 +672,89 @@ const KycApplicationsTable = () => {
               ))}
             </SelectContent>
           </Select>
-          <span>Entries</span>
+          <span className="text-sm md:text-base">Entries</span>
         </div>
 
-        <Pagination className=" justify-end">
-          <PaginationContent>
+        <Pagination className="justify-center md:justify-end w-full md:w-auto">
+          <PaginationContent className="flex-wrap gap-1">
             <PaginationItem>
               <PaginationPrevious
                 onClick={handlePrevPage}
-                className={
+                className={`${
                   currentPage === 1
                     ? "pointer-events-none opacity-50"
                     : "cursor-pointer"
-                }
+                } text-xs md:text-sm`}
               />
             </PaginationItem>
 
-            {renderPaginationItems()}
+            {isMobile ? (
+              <>
+                <PaginationItem>
+                  <PaginationLink
+                    isActive={currentPage === 1}
+                    onClick={() => setCurrentPage(1)}
+                    className={`text-xs md:text-sm ${
+                      currentPage === 1
+                        ? "bg-primary text-white hover:bg-primary/90"
+                        : ""
+                    }`}
+                  >
+                    1
+                  </PaginationLink>
+                </PaginationItem>
+
+                {currentPage > 3 && (
+                  <PaginationItem>
+                    <PaginationEllipsis className="text-xs md:text-sm" />
+                  </PaginationItem>
+                )}
+
+                {currentPage !== 1 && currentPage !== totalPages && (
+                  <PaginationItem>
+                    <PaginationLink
+                      isActive={true}
+                      className="bg-primary text-white hover:bg-primary/90 text-xs md:text-sm"
+                    >
+                      {currentPage}
+                    </PaginationLink>
+                  </PaginationItem>
+                )}
+
+                {currentPage < totalPages - 2 && (
+                  <PaginationItem>
+                    <PaginationEllipsis className="text-xs md:text-sm" />
+                  </PaginationItem>
+                )}
+
+                {totalPages > 1 && (
+                  <PaginationItem>
+                    <PaginationLink
+                      isActive={currentPage === totalPages}
+                      onClick={() => setCurrentPage(totalPages)}
+                      className={`text-xs md:text-sm ${
+                        currentPage === totalPages
+                          ? "bg-primary text-white hover:bg-primary/90"
+                          : ""
+                      }`}
+                    >
+                      {totalPages}
+                    </PaginationLink>
+                  </PaginationItem>
+                )}
+              </>
+            ) : (
+              renderPaginationItems()
+            )}
 
             <PaginationItem>
               <PaginationNext
                 onClick={handleNextPage}
-                className={
+                className={`${
                   currentPage === totalPages
                     ? "pointer-events-none opacity-50"
                     : "cursor-pointer"
-                }
+                } text-xs md:text-sm`}
               />
             </PaginationItem>
           </PaginationContent>

@@ -240,45 +240,45 @@ export default function VirtualAccountsList() {
 
   return (
     <>
-      <div className="w-full flex flex-row justify-between items-center bg-background p-4 rounded-[8px] mt-6">
+      <div className="w-full flex flex-col md:flex-row justify-between items-start md:items-center bg-background p-4 rounded-[8px] mt-6 gap-4">
         <h1 className="text-text-title text-xl font-semibold font-poppins">
           Virtual Accounts Lists
         </h1>
         <div className="flex flex-row gap-x-4">
-          <button className="justify-center items-center bg-background border border-destructive text-destructive font-poppins font-medium px-6 py-3 rounded-[12px]">
+          <button className="justify-center items-center bg-background border border-destructive text-destructive font-poppins font-medium px-4 sm:px-6 py-2 sm:py-3 rounded-[12px] text-sm sm:text-base">
             Block
           </button>
-          <button className="justify-center bg-[#22C55E] items-center text-white font-poppins font-medium px-6 py-3 rounded-[12px]">
+          <button className="justify-center bg-[#22C55E] items-center text-white font-poppins font-medium px-4 sm:px-6 py-2 sm:py-3 rounded-[12px] text-sm sm:text-base">
             Unblock
           </button>
         </div>
       </div>
 
       <div className="bg-background rounded-2xl my-6 py-4">
-        <div className="flex justify-between items-center my-4 px-6">
-          <div className="flex flex-row gap-5">
-            <button className="border border-primary bg-background flex gap-3 justify-center items-center px-10 py-3 rounded-[8px]">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center my-4 px-3 sm:px-6 gap-4">
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-5 w-full sm:w-auto">
+            <button className="border border-primary bg-background flex gap-3 justify-center items-center px-6 py-2 sm:py-3 rounded-[8px]">
               <ListFilter size={16} />
-              <span className="text-text-title font-poppins text-base">
+              <span className="text-text-title font-poppins text-sm sm:text-base">
                 Filter
               </span>
             </button>
 
-            <div className="flex flex-row justify-center items-center">
+            <div className="flex flex-row justify-center items-center w-full sm:w-auto">
               <input
                 type="text"
                 placeholder="Search"
-                className="bg-background-alt border-border rounded-l-[8px] p-4"
+                className="bg-background-alt border-border rounded-l-[8px] p-3 sm:p-4 flex-grow sm:flex-grow-0"
                 value={searchTerm}
                 onChange={handleSearchChange}
               />
-              <button className="bg-primary rounded-r-[8px] p-4 px-6">
-                <Search size={24} className="text-text-body" />
+              <button className="bg-primary rounded-r-[8px] p-3 sm:p-4 px-4 sm:px-6">
+                <Search size={20} className="text-text-body" />
               </button>
             </div>
           </div>
 
-          <button className="bg-[#010101CC] flex gap-3 justify-center items-center px-6 py-3 rounded-[12px] text-white">
+          <button className="bg-[#010101CC] flex gap-3 justify-center items-center px-4 sm:px-6 py-2 sm:py-3 rounded-[12px] text-white w-full sm:w-auto">
             <svg
               width="16"
               height="16"
@@ -308,13 +308,13 @@ export default function VirtualAccountsList() {
                 strokeLinejoin="round"
               />
             </svg>
-            <span className="font-poppins text-base">Export</span>
+            <span className="font-poppins text-sm sm:text-base">Export</span>
           </button>
         </div>
 
-        <div className="overflow-auto relative">
-          <Table className="w-full rounded-2xl bg-background p-5">
-            <TableHeader className="bg-primary-fade text-muted-foreground hover:bg-primary-fade ml-5">
+        <div className="overflow-x-auto relative">
+          <Table className="w-full rounded-2xl bg-background p-2 sm:p-5 min-w-[650px]">
+            <TableHeader className="bg-primary-fade text-muted-foreground hover:bg-primary-fade ml-2 sm:ml-5">
               <TableRow>
                 <TableHead className="p-4">
                   <input
@@ -397,8 +397,8 @@ export default function VirtualAccountsList() {
         </div>
       </div>
 
-      <div className="flex justify-between items-center mt-4 p-8">
-        <div className="flex items-center gap-2">
+      <div className="flex flex-col sm:flex-row justify-between items-center mt-4 p-4 sm:p-8 gap-4">
+        <div className="flex items-center gap-2 text-sm sm:text-base">
           <span>Showing</span>
           <Select
             onValueChange={(value) => {
@@ -421,7 +421,7 @@ export default function VirtualAccountsList() {
         </div>
 
         <Pagination className="justify-end">
-          <PaginationContent>
+          <PaginationContent className="flex-wrap">
             <PaginationItem>
               <PaginationPrevious
                 onClick={handlePrevPage}
@@ -433,7 +433,12 @@ export default function VirtualAccountsList() {
               />
             </PaginationItem>
 
-            {renderPaginationItems()}
+            <div className="hidden sm:flex">{renderPaginationItems()}</div>
+            <div className="flex sm:hidden items-center mx-2">
+              <span className="text-sm">
+                {currentPage} of {totalPages}
+              </span>
+            </div>
 
             <PaginationItem>
               <PaginationNext

@@ -126,8 +126,8 @@ const GiftCardDashboard = () => {
   const handleToggleDisable = (id: string) => {
     setCards(
       cards.map((card) =>
-        card.id === id ? { ...card, disabled: !card.disabled } : card,
-      ),
+        card.id === id ? { ...card, disabled: !card.disabled } : card
+      )
     );
   };
 
@@ -136,31 +136,37 @@ const GiftCardDashboard = () => {
   };
 
   const filteredCards = cards.filter((card) =>
-    card.type.toLowerCase().includes(searchTerm.toLowerCase()),
+    card.type.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
     <div className="w-full space-y-6">
       {/* Filter by Date */}
-      <div className="w-full flex flex-row justify-between items-center bg-background p-4 rounded-[8px]">
+      <div className="w-full flex flex-col md:flex-row justify-between items-start md:items-center bg-background p-4 rounded-[8px] gap-4">
         <h1 className="text-text-title text-xl font-semibold font-poppins">
           Filter by Date
         </h1>
-        <div className="flex flex-row bg-background-alt gap-x-1.5 px-3 py-2 rounded-[8px]">
+        <div className="flex flex-row flex-wrap w-full md:w-auto bg-background-alt gap-x-1.5 gap-y-1.5 px-3 py-2 rounded-[8px]">
           <button
-            className={`justify-center items-center ${dateFilter === "today" ? "bg-primary" : "bg-background"} text-text-body font-poppins px-4 py-3 w-[186px] rounded-[8px] active:bg-primary-foreground`}
+            className={`justify-center items-center ${
+              dateFilter === "today" ? "bg-primary" : "bg-background"
+            } text-text-body font-poppins px-4 py-3 w-full sm:w-[186px] rounded-[8px] active:bg-primary-foreground`}
             onClick={() => setDateFilter("today")}
           >
             Today
           </button>
           <button
-            className={`justify-center items-center ${dateFilter === "week" ? "bg-primary" : "bg-background"} text-text-body font-poppins px-4 py-3 w-[186px] rounded-[8px]`}
+            className={`justify-center items-center ${
+              dateFilter === "week" ? "bg-primary" : "bg-background"
+            } text-text-body font-poppins px-4 py-3 w-full sm:w-[186px] rounded-[8px]`}
             onClick={() => setDateFilter("week")}
           >
             This Week
           </button>
           <button
-            className={`justify-center items-center ${dateFilter === "year" ? "bg-primary" : "bg-background"} text-text-body font-poppins px-4 py-3 w-[186px] rounded-[8px]`}
+            className={`justify-center items-center ${
+              dateFilter === "year" ? "bg-primary" : "bg-background"
+            } text-text-body font-poppins px-4 py-3 w-full sm:w-[186px] rounded-[8px]`}
             onClick={() => setDateFilter("year")}
           >
             This Year
@@ -170,11 +176,11 @@ const GiftCardDashboard = () => {
 
       {/* Gift Card Metrics */}
       <div className="bg-background rounded-2xl p-4">
-        <div className="flex justify-between items-center mb-4">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 gap-2">
           <h2 className="text-text-title text-xl font-semibold font-poppins">
             Gift Card Metrics
           </h2>
-          <div className="flex items-center gap-6">
+          <div className="flex items-center gap-4 flex-wrap">
             <div className="flex items-center gap-2">
               <div className="w-3 h-3 rounded-full bg-[#556B2F]"></div>
               <span className="text-text-body font-poppins">Sales</span>
@@ -185,20 +191,20 @@ const GiftCardDashboard = () => {
             </div>
           </div>
         </div>
-        <div className="h-[300px] w-full">
+        <div className="h-[200px] sm:h-[250px] md:h-[300px] w-full">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart
               data={chartData}
               margin={{
                 top: 20,
                 right: 30,
-                left: 20,
+                left: 0,
                 bottom: 5,
               }}
               barGap={2}
             >
               <CartesianGrid strokeDasharray="3 3" vertical={false} />
-              <XAxis dataKey="name" />
+              <XAxis dataKey="name" tick={{ fontSize: 12 }} />
               <YAxis
                 tickFormatter={(value) => {
                   if (value === 0) return "0";
@@ -209,6 +215,8 @@ const GiftCardDashboard = () => {
                   if (value === 500000) return "500K";
                   return "";
                 }}
+                tick={{ fontSize: 12 }}
+                width={40}
               />
               <Tooltip formatter={(value) => `${value}`} />
               {/* <Legend display={false} /> */}
@@ -231,15 +239,15 @@ const GiftCardDashboard = () => {
 
       {/* Available Gift Cards */}
       <div className="bg-background rounded-2xl p-4">
-        <div className="flex justify-between items-center mb-4">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-4">
           <h2 className="text-text-title text-xl font-semibold font-poppins">
             Available Gift Cards
           </h2>
-          <div className="flex flex-row justify-center items-center">
+          <div className="flex flex-row justify-center items-center w-full sm:w-auto">
             <input
               type="text"
               placeholder="Search"
-              className="bg-background-alt border-border rounded-l-[8px] p-4"
+              className="bg-background-alt border-border rounded-l-[8px] p-4 w-full sm:w-auto"
               value={searchTerm}
               onChange={handleSearchChange}
             />
@@ -248,30 +256,30 @@ const GiftCardDashboard = () => {
             </button>
           </div>
         </div>
-        <div className="overflow-auto">
+        <div className="overflow-x-auto">
           <Table className="w-full rounded-2xl bg-background">
-            <TableHeader className="bg-primary-fade text-muted-foreground hover:bg-primary-fade ml-5">
+            <TableHeader className="bg-primary-fade text-muted-foreground hover:bg-primary-fade">
               <TableRow>
-                <TableHead className="text-base font-poppins text-text-title">
+                <TableHead className="text-sm md:text-base font-poppins text-text-title">
                   Card Type
                 </TableHead>
-                <TableHead className="text-base font-poppins text-text-title">
+                <TableHead className="text-sm md:text-base font-poppins text-text-title">
                   Disable
                 </TableHead>
-                <TableHead className="text-base font-poppins text-text-title">
+                <TableHead className="text-sm md:text-base font-poppins text-text-title">
                   Buy Rate
                 </TableHead>
-                <TableHead className="text-base font-poppins text-text-title text-right">
+                <TableHead className="text-sm md:text-base font-poppins text-text-title text-right">
                   Action
                 </TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {filteredCards.map((card) => (
-                <TableRow key={card.id} className="py-6">
-                  <TableCell className="text-text-body font-poppins text-base py-6 flex items-center gap-2">
+                <TableRow key={card.id} className="py-4 md:py-6">
+                  <TableCell className="text-text-body font-poppins text-sm md:text-base py-4 md:py-6 flex items-center gap-2">
                     {card.logo === "amazon" ? (
-                      <div className="w-8 h-8 flex items-center justify-center">
+                      <div className="w-6 h-6 md:w-8 md:h-8 flex items-center justify-center">
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
                           width="24"
@@ -282,7 +290,7 @@ const GiftCardDashboard = () => {
                         </svg>
                       </div>
                     ) : (
-                      <div className="w-8 h-8 flex items-center justify-center">
+                      <div className="w-6 h-6 md:w-8 md:h-8 flex items-center justify-center">
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
                           width="24"
@@ -295,16 +303,16 @@ const GiftCardDashboard = () => {
                     )}
                     {card.type}
                   </TableCell>
-                  <TableCell className="text-text-body font-poppins text-base py-6">
+                  <TableCell className="text-text-body font-poppins text-sm md:text-base py-4 md:py-6">
                     <Switch
                       checked={card.disabled}
                       onCheckedChange={() => handleToggleDisable(card.id)}
                     />
                   </TableCell>
-                  <TableCell className="text-text-body font-poppins text-base py-6">
+                  <TableCell className="text-text-body font-poppins text-sm md:text-base py-4 md:py-6">
                     {card.buyRate}
                   </TableCell>
-                  <TableCell className="py-6 text-right">
+                  <TableCell className="py-4 md:py-6 text-right">
                     <button className="border border-primary-300 rounded-sm p-1 inline-flex items-center justify-center">
                       <MoreHorizontal size={14} className="text-primary-300" />
                     </button>

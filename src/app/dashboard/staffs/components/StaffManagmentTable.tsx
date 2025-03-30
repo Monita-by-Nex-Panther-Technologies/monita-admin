@@ -102,7 +102,7 @@ const StaffManagementTable = () => {
   const totalPages = Math.ceil(filteredStaff.length / itemsPerPage);
   const paginatedData = filteredStaff.slice(
     (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage,
+    currentPage * itemsPerPage
   );
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -133,7 +133,7 @@ const StaffManagementTable = () => {
     setSelected((prev) =>
       prev.includes(id)
         ? prev.filter((selectedId) => selectedId !== id)
-        : [...prev, id],
+        : [...prev, id]
     );
   };
 
@@ -150,7 +150,7 @@ const StaffManagementTable = () => {
         >
           1
         </PaginationLink>
-      </PaginationItem>,
+      </PaginationItem>
     );
     if (totalPages <= 7) {
       for (let i = 2; i <= totalPages; i++) {
@@ -167,7 +167,7 @@ const StaffManagementTable = () => {
             >
               {i}
             </PaginationLink>
-          </PaginationItem>,
+          </PaginationItem>
         );
       }
     } else {
@@ -184,7 +184,7 @@ const StaffManagementTable = () => {
         items.push(
           <PaginationItem key="ellipsis-1">
             <PaginationEllipsis />
-          </PaginationItem>,
+          </PaginationItem>
         );
       }
       for (let i = startPage; i <= endPage; i++) {
@@ -201,14 +201,14 @@ const StaffManagementTable = () => {
             >
               {i}
             </PaginationLink>
-          </PaginationItem>,
+          </PaginationItem>
         );
       }
       if (endPage < totalPages - 1) {
         items.push(
           <PaginationItem key="ellipsis-2">
             <PaginationEllipsis />
-          </PaginationItem>,
+          </PaginationItem>
         );
       }
       if (totalPages > 1) {
@@ -225,7 +225,7 @@ const StaffManagementTable = () => {
             >
               {totalPages}
             </PaginationLink>
-          </PaginationItem>,
+          </PaginationItem>
         );
       }
     }
@@ -234,15 +234,15 @@ const StaffManagementTable = () => {
 
   return (
     <>
-      <div className="w-full flex flex-row justify-between items-center bg-background p-4 rounded-[8px] mt-6">
+      <div className="w-full flex flex-col sm:flex-row justify-between items-start sm:items-center bg-background p-4 rounded-[8px] mt-6 gap-4">
         <h1 className="text-text-title text-xl font-semibold font-poppins">
           Staff Management
         </h1>
-        <div className="flex flex-row gap-x-4">
-          <button className="justify-center items-center bg-background border border-primary-300 text-text-body font-poppins font-medium px-4 py-2 rounded-[12px] active:bg-primary-foreground">
+        <div className="flex flex-row gap-x-4 w-full sm:w-auto">
+          <button className="justify-center items-center bg-background border border-primary-300 text-text-body font-poppins font-medium px-3 sm:px-4 py-2 text-sm sm:text-base rounded-[12px] active:bg-primary-foreground w-1/2 sm:w-auto">
             Manage Roles
           </button>
-          <button className="justify-center bg-primary items-center text-text-body font-poppins px-4 py-2 rounded-[12px] font-medium flex gap-2">
+          <button className="justify-center bg-primary items-center text-text-body font-poppins px-3 sm:px-4 py-2 rounded-[12px] font-medium flex gap-2 text-sm sm:text-base w-1/2 sm:w-auto">
             <Plus size={16} />
             Add Staff
           </button>
@@ -250,20 +250,20 @@ const StaffManagementTable = () => {
       </div>
 
       <div className="bg-background rounded-2xl my-6 py-4">
-        <div className="flex justify-between items-center my-4 px-6">
-          <div className="flex flex-row gap-5">
-            <button className="border border-primary bg-background flex gap-3 justify-center items-center px-10 py-3 rounded-[8px]">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center my-4 px-3 sm:px-6 gap-4">
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-5 w-full sm:w-auto">
+            <button className="border border-primary bg-background flex gap-3 justify-center items-center px-4 sm:px-10 py-3 rounded-[8px] w-full sm:w-auto">
               <ListFilter size={16} />
-              <span className="text-text-title font-poppins text-base">
+              <span className="text-text-title font-poppins text-sm sm:text-base">
                 Filter
               </span>
             </button>
 
-            <div className="flex flex-row justify-center items-center">
+            <div className="flex flex-row justify-center items-center w-full sm:w-auto">
               <input
                 type="text"
                 placeholder="Search"
-                className="bg-background-alt border-border rounded-l-[8px] p-4"
+                className="bg-background-alt border-border rounded-l-[8px] p-4 flex-grow sm:flex-grow-0"
                 value={searchTerm}
                 onChange={handleSearchChange}
               />
@@ -273,24 +273,24 @@ const StaffManagementTable = () => {
             </div>
           </div>
 
-          <div className="flex gap-4">
-            <button className="border border-primary-300 bg-background text-text-body font-poppins px-6 py-3 rounded-[8px]">
+          <div className="flex gap-2 sm:gap-4 w-full sm:w-auto">
+            <button className="border border-primary-300 bg-background text-text-body font-poppins px-3 sm:px-6 py-3 rounded-[8px] flex-1 sm:flex-initial text-sm sm:text-base">
               Reinvite
             </button>
-            <button className="bg-[#010101] text-white font-poppins px-6 py-3 rounded-[8px]">
+            <button className="bg-[#010101] text-white font-poppins px-3 sm:px-6 py-3 rounded-[8px] flex-1 sm:flex-initial text-sm sm:text-base">
               Remove Staff
             </button>
           </div>
         </div>
 
-        <div className="overflow-auto relative" ref={tableRef}>
-          <Table className="w-full rounded-2xl bg-background p-5">
-            <TableHeader className="bg-primary-fade text-muted-foreground hover:bg-primary-fade ml-5">
+        <div className="overflow-x-auto relative" ref={tableRef}>
+          <Table className="w-full rounded-2xl bg-background p-2 sm:p-5 min-w-[650px]">
+            <TableHeader className="bg-primary-fade text-muted-foreground hover:bg-primary-fade ml-2 sm:ml-5">
               <TableRow>
-                <TableHead className="p-4">
+                <TableHead className="p-2 sm:p-4">
                   <input
                     type="checkbox"
-                    className="w-6 h-6 mt-1 border-[#01010129] cursor-pointer"
+                    className="w-4 h-4 sm:w-6 sm:h-6 border-[#01010129] cursor-pointer"
                     checked={
                       selected.length === filteredStaff.length &&
                       selected.length > 0
@@ -298,52 +298,52 @@ const StaffManagementTable = () => {
                     onChange={handleSelectAll}
                   />
                 </TableHead>
-                <TableHead className="text-base font-poppins text-text-title">
+                <TableHead className="text-sm sm:text-base font-poppins text-text-title">
                   Name
                 </TableHead>
-                <TableHead className="text-base font-poppins text-text-title">
+                <TableHead className="text-sm sm:text-base font-poppins text-text-title">
                   Email Address
                 </TableHead>
-                <TableHead className="text-base font-poppins text-text-title">
+                <TableHead className="text-sm sm:text-base font-poppins text-text-title">
                   Assigned Role
                 </TableHead>
-                <TableHead className="text-base font-poppins text-text-title">
+                <TableHead className="text-sm sm:text-base font-poppins text-text-title">
                   Action
                 </TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {paginatedData.map((staff) => (
-                <TableRow key={staff.id} className="py-6">
-                  <TableCell className="p-4">
+                <TableRow key={staff.id} className="py-4 sm:py-6">
+                  <TableCell className="p-2 sm:p-4">
                     <input
                       type="checkbox"
-                      className="w-6 h-6 mt-1 cursor-pointer"
+                      className="w-4 h-4 sm:w-6 sm:h-6 cursor-pointer"
                       checked={selected.includes(staff.id)}
                       onChange={() => handleSelect(staff.id)}
                     />
                   </TableCell>
-                  <TableCell className="text-text-body font-poppins text-base py-6">
+                  <TableCell className="text-text-body font-poppins text-sm sm:text-base py-3 sm:py-6">
                     {staff.name}
                   </TableCell>
-                  <TableCell className="text-text-body font-poppins text-base py-6">
+                  <TableCell className="text-text-body font-poppins text-sm sm:text-base py-3 sm:py-6">
                     {staff.email}
                   </TableCell>
-                  <TableCell className="text-text-body font-poppins text-base py-6">
+                  <TableCell className="text-text-body font-poppins text-sm sm:text-base py-3 sm:py-6">
                     {staff.role}
                   </TableCell>
-                  <TableCell className="py-6 flex gap-4">
+                  <TableCell className="py-3 sm:py-6 flex gap-2 sm:gap-4">
                     <Button
                       variant="ghost"
                       className="cursor-pointer hover:bg-transparent p-0"
                     >
-                      <Pencil size={18} className="text-gray-600" />
+                      <Pencil size={16} className="text-gray-600 sm:size-18" />
                     </Button>
                     <Button
                       variant="ghost"
                       className="cursor-pointer hover:bg-transparent p-0"
                     >
-                      <Trash2 size={18} className="text-red-500" />
+                      <Trash2 size={16} className="text-red-500 sm:size-18" />
                     </Button>
                   </TableCell>
                 </TableRow>
@@ -353,8 +353,8 @@ const StaffManagementTable = () => {
         </div>
       </div>
 
-      <div className="flex justify-between items-center mt-4 p-8">
-        <div className="flex items-center gap-2">
+      <div className="flex flex-col sm:flex-row justify-between items-center mt-4 p-4 sm:p-8 gap-4">
+        <div className="flex items-center gap-2 text-sm sm:text-base">
           <span>Showing</span>
           <Select
             onValueChange={(value) => {
@@ -378,7 +378,7 @@ const StaffManagementTable = () => {
         </div>
 
         <Pagination className="justify-end">
-          <PaginationContent>
+          <PaginationContent className="flex-wrap">
             <PaginationItem>
               <PaginationPrevious
                 onClick={handlePrevPage}

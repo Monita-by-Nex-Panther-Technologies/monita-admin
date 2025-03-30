@@ -32,8 +32,8 @@ interface FilterModalProps {
 }
 
 // Define valid status and KYC level types for better type safety
-type Status = "" | "Approved" | "Pending" | "Rejected";
-type KycLevel = "" | "Tier 1" | "Tier 2" | "Tier 3";
+type Status = "all" | "Approved" | "Pending" | "Rejected";
+type KycLevel = "all" | "Tier 1" | "Tier 2" | "Tier 3";
 
 const KycFilterModal: React.FC<FilterModalProps> = ({
   isOpen,
@@ -42,8 +42,8 @@ const KycFilterModal: React.FC<FilterModalProps> = ({
 }) => {
   const [filters, setFilters] = useState<FilterCriteria>({
     username: "",
-    status: "",
-    kycLevel: "",
+    status: "all",
+    kycLevel: "all",
     startDate: undefined,
     endDate: undefined,
   });
@@ -51,21 +51,27 @@ const KycFilterModal: React.FC<FilterModalProps> = ({
   // Type-safe handle change function with overloads
   const handleChange = <K extends keyof FilterCriteria>(
     field: K,
-    value: FilterCriteria[K],
+    value: FilterCriteria[K]
   ): void => {
     setFilters((prev) => ({ ...prev, [field]: value }));
   };
 
   const handleApply = (): void => {
-    onApply(filters);
+    // Convert "all" values to empty strings before passing to parent component
+    const adjustedFilters = {
+      ...filters,
+      status: filters.status === "all" ? "" : filters.status,
+      kycLevel: filters.kycLevel === "all" ? "" : filters.kycLevel,
+    };
+    onApply(adjustedFilters);
     onClose();
   };
 
   const handleResetFilters = (): void => {
     setFilters({
       username: "",
-      status: "",
-      kycLevel: "",
+      status: "all",
+      kycLevel: "all",
       startDate: undefined,
       endDate: undefined,
     });
@@ -74,8 +80,8 @@ const KycFilterModal: React.FC<FilterModalProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-      <div className="bg-background p-6 rounded-lg shadow-lg w-full max-w-md">
+    <div className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-sm">
+      <div className="bg-background p-4 sm:p-6 rounded-lg shadow-lg w-[95%] max-w-md mx-auto overflow-y-auto max-h-[90vh]">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-xl font-semibold">Filter KYC Applications</h2>
           <button
@@ -86,7 +92,7 @@ const KycFilterModal: React.FC<FilterModalProps> = ({
           </button>
         </div>
 
-        <div className="space-y-4">
+        <div className="space-y-3 sm:space-y-4">
           <div>
             <label className="block text-sm font-medium mb-1">Username</label>
             <Input
@@ -106,7 +112,7 @@ const KycFilterModal: React.FC<FilterModalProps> = ({
                 <SelectValue placeholder="Select status" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">All Statuses</SelectItem>
+                <SelectItem value="all">All Statuses</SelectItem>
                 <SelectItem value="Approved">Approved</SelectItem>
                 <SelectItem value="Pending">Pending</SelectItem>
                 <SelectItem value="Rejected">Rejected</SelectItem>
@@ -126,7 +132,7 @@ const KycFilterModal: React.FC<FilterModalProps> = ({
                 <SelectValue placeholder="Select KYC level" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">All Levels</SelectItem>
+                <SelectItem value="all">All Levels</SelectItem>
                 <SelectItem value="Tier 1">Tier 1</SelectItem>
                 <SelectItem value="Tier 2">Tier 2</SelectItem>
                 <SelectItem value="Tier 3">Tier 3</SelectItem>

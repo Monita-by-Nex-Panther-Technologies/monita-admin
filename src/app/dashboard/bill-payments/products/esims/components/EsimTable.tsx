@@ -56,12 +56,12 @@ const ESimTable = () => {
 
   return (
     <div className="w-full">
-      <div className="flex justify-between items-center mb-4 p-4">
-        <div className="flex flex-row justify-center items-center">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 p-4 gap-4">
+        <div className="flex flex-row justify-center items-center w-full md:w-auto">
           <input
             type="text"
             placeholder="Search"
-            className="bg-background-alt border-border rounded-l-[8px] p-4 w-[180px]"
+            className="bg-background-alt border-border rounded-l-[8px] p-4 w-full md:w-[180px]"
             value={searchTerm}
             onChange={handleSearchChange}
           />
@@ -70,27 +70,27 @@ const ESimTable = () => {
           </button>
         </div>
 
-        <div className="flex gap-4">
-          <button className="border border-primary-300 bg-background text-text-body font-poppins px-6 py-3 rounded-[12px]">
+        <div className="flex gap-3 w-full md:w-auto">
+          <button className="border border-primary-300 bg-background text-text-body font-poppins px-4 md:px-6 py-3 rounded-[12px] text-sm md:text-base flex-1 md:flex-none">
             Manage Product
           </button>
           <Dialog open={isAddProductOpen} onOpenChange={setIsAddProductOpen}>
             <DialogTrigger asChild>
-              <button className="bg-primary text-text-body font-poppins px-6 py-3 rounded-[12px] font-medium flex gap-2 items-center">
+              <button className="bg-primary text-text-body font-poppins px-4 md:px-6 py-3 rounded-[12px] font-medium flex gap-2 items-center text-sm md:text-base flex-1 md:flex-none">
                 <Plus size={16} />
                 Add Product
               </button>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-[500px] p-0 rounded-lg">
-              <div className="p-6">
+            <DialogContent className="sm:max-w-[500px] p-0 rounded-lg max-w-[90vw]">
+              <div className="p-4 md:p-6">
                 <div className="flex justify-between items-center">
-                  <DialogTitle className="text-xl font-semibold">
+                  <DialogTitle className="text-lg md:text-xl font-semibold">
                     Add Product
                   </DialogTitle>
                 </div>
-                <div className="h-px bg-gray-200 my-4 -mx-6"></div>
+                <div className="h-px bg-gray-200 my-4 -mx-4 md:-mx-6"></div>
                 <form onSubmit={handleAddProduct} className="space-y-6">
-                  <div className="bg-gray-50 p-6 rounded-lg space-y-4">
+                  <div className="bg-gray-50 p-4 md:p-6 rounded-lg space-y-4">
                     <div className="space-y-2">
                       <label className="font-medium">Country</label>
                       <Select>
@@ -127,7 +127,7 @@ const ESimTable = () => {
 
                   <Button
                     type="submit"
-                    className="w-full bg-primary hover:bg-primary/90 text-text-body font-medium py-6"
+                    className="w-full bg-primary hover:bg-primary/90 text-text-body font-medium py-4 md:py-6"
                   >
                     Add Product
                   </Button>
@@ -138,58 +138,62 @@ const ESimTable = () => {
         </div>
       </div>
 
-      <div className="overflow-auto">
-        <Table className="w-full">
-          <TableHeader className="bg-primary-fade text-muted-foreground hover:bg-primary-fade">
-            <TableRow>
-              <TableHead className="text-base font-poppins text-text-title">
-                Name
-              </TableHead>
-              <TableHead className="text-base font-poppins text-text-title">
-                Service
-              </TableHead>
-              <TableHead className="text-base font-poppins text-text-title">
-                Min Buy Amount
-              </TableHead>
-              <TableHead className="text-base font-poppins text-text-title">
-                Max Buy Amount
-              </TableHead>
-              <TableHead className="text-base font-poppins text-text-title">
-                Vending Medium
-              </TableHead>
-              <TableHead className="text-base font-poppins text-text-title">
-                Notice
-              </TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {esimProducts.map((product) => (
-              <TableRow key={product.id} className="py-6">
-                <TableCell className="text-text-body font-poppins text-base py-6 flex items-center gap-2">
-                  <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
-                    <span className="text-green-600 text-sm">🇳🇬</span>
-                  </div>
-                  {product.name}
-                </TableCell>
-                <TableCell className="text-text-body font-poppins text-base py-6">
-                  {product.service}
-                </TableCell>
-                <TableCell className="text-text-body font-poppins text-base py-6">
-                  {product.minBuyAmount}
-                </TableCell>
-                <TableCell className="text-text-body font-poppins text-base py-6">
-                  {product.maxBuyAmount}
-                </TableCell>
-                <TableCell className="text-text-body font-poppins text-base py-6">
-                  {product.vendingMedium}
-                </TableCell>
-                <TableCell className="text-text-body font-poppins text-base py-6">
-                  {product.notice}
-                </TableCell>
+      <div className="overflow-x-auto w-full">
+        <div className="min-w-full inline-block align-middle">
+          <Table className="min-w-full">
+            <TableHeader className="bg-primary-fade text-muted-foreground hover:bg-primary-fade">
+              <TableRow>
+                <TableHead className="text-sm md:text-base font-poppins text-text-title whitespace-nowrap">
+                  Name
+                </TableHead>
+                <TableHead className="text-sm md:text-base font-poppins text-text-title whitespace-nowrap">
+                  Service
+                </TableHead>
+                <TableHead className="text-sm md:text-base font-poppins text-text-title whitespace-nowrap">
+                  Min Buy Amount
+                </TableHead>
+                <TableHead className="text-sm md:text-base font-poppins text-text-title whitespace-nowrap">
+                  Max Buy Amount
+                </TableHead>
+                <TableHead className="text-sm md:text-base font-poppins text-text-title whitespace-nowrap">
+                  Vending Medium
+                </TableHead>
+                <TableHead className="text-sm md:text-base font-poppins text-text-title whitespace-nowrap">
+                  Notice
+                </TableHead>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+            </TableHeader>
+            <TableBody>
+              {esimProducts.map((product) => (
+                <TableRow key={product.id} className="py-4 md:py-6">
+                  <TableCell className="text-text-body font-poppins text-sm md:text-base py-4 md:py-6 flex items-center gap-2 whitespace-nowrap">
+                    <div className="w-6 h-6 md:w-8 md:h-8 bg-green-100 rounded-full flex items-center justify-center">
+                      <span className="text-green-600 text-xs md:text-sm">
+                        🇳🇬
+                      </span>
+                    </div>
+                    {product.name}
+                  </TableCell>
+                  <TableCell className="text-text-body font-poppins text-sm md:text-base py-4 md:py-6 whitespace-nowrap">
+                    {product.service}
+                  </TableCell>
+                  <TableCell className="text-text-body font-poppins text-sm md:text-base py-4 md:py-6 whitespace-nowrap">
+                    {product.minBuyAmount}
+                  </TableCell>
+                  <TableCell className="text-text-body font-poppins text-sm md:text-base py-4 md:py-6 whitespace-nowrap">
+                    {product.maxBuyAmount}
+                  </TableCell>
+                  <TableCell className="text-text-body font-poppins text-sm md:text-base py-4 md:py-6 whitespace-nowrap">
+                    {product.vendingMedium}
+                  </TableCell>
+                  <TableCell className="text-text-body font-poppins text-sm md:text-base py-4 md:py-6 whitespace-nowrap">
+                    {product.notice}
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </div>
       </div>
     </div>
   );

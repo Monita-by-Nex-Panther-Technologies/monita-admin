@@ -108,7 +108,7 @@ export default function UserDetailsClient({ id }: UserDetailsClientProps) {
     setSelected((prev) =>
       prev.includes(id)
         ? prev.filter((selectedId) => selectedId !== id)
-        : [...prev, id],
+        : [...prev, id]
     );
   };
 
@@ -147,9 +147,9 @@ export default function UserDetailsClient({ id }: UserDetailsClientProps) {
   };
 
   return (
-    <div className="container mx-auto p-4">
+    <div className="container mx-auto p-2 sm:p-4">
       {/* Header */}
-      <div className="w-full flex flex-row justify-between items-center bg-background p-4 rounded-[8px]">
+      <div className="w-full flex flex-col sm:flex-row justify-between items-start sm:items-center bg-background p-3 sm:p-4 rounded-[8px] gap-3 sm:gap-0">
         <div className="flex items-center gap-2">
           <Button
             variant="ghost"
@@ -159,17 +159,17 @@ export default function UserDetailsClient({ id }: UserDetailsClientProps) {
           >
             <ArrowLeft className="h-5 w-5" />
           </Button>
-          <h1 className="text-xl font-semibold">{userData.name}</h1>
+          <h1 className="text-lg sm:text-xl font-semibold">{userData.name}</h1>
         </div>
-        <div className="flex flex-row gap-x-4">
+        <div className="flex flex-row gap-x-2 sm:gap-x-4 w-full sm:w-auto">
           <button
-            className="justify-center items-center bg-white border border-green-500 text-green-500 font-medium px-4 py-2 rounded-[12px]"
+            className="justify-center items-center bg-white border border-green-500 text-green-500 font-medium px-3 sm:px-4 py-2 rounded-[12px] text-sm sm:text-base w-full sm:w-auto"
             onClick={handleResetPassword}
           >
             Reset Password
           </button>
           <button
-            className="justify-center bg-red-500 items-center text-white font-medium px-4 py-2 rounded-[12px]"
+            className="justify-center bg-red-500 items-center text-white font-medium px-3 sm:px-4 py-2 rounded-[12px] text-sm sm:text-base w-full sm:w-auto"
             onClick={() => setBlockDialogOpen(true)}
           >
             Block
@@ -178,8 +178,8 @@ export default function UserDetailsClient({ id }: UserDetailsClientProps) {
       </div>
 
       {/* User Info */}
-      <div className="bg-white rounded-lg mt-6 p-6">
-        <div className="flex justify-between items-start mb-6">
+      <div className="bg-white rounded-lg mt-4 sm:mt-6 p-4 sm:p-6">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 sm:mb-6 gap-3">
           <div className="flex items-center gap-4">
             <div className="relative">
               <div className="w-12 h-12 rounded-full bg-gray-300 overflow-hidden">
@@ -219,14 +219,14 @@ export default function UserDetailsClient({ id }: UserDetailsClientProps) {
             </div>
           </div>
           <button
-            className="bg-[#DDFF00] text-black font-medium px-4 py-2 rounded-[12px]"
+            className="bg-[#DDFF00] text-black font-medium px-4 py-2 rounded-[12px] w-full sm:w-auto"
             onClick={handleSaveChanges}
           >
             Save Changes
           </button>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-6 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 sm:gap-6">
           <div>
             <p className="text-gray-500 text-sm mb-1">Name</p>
             <input
@@ -265,21 +265,21 @@ export default function UserDetailsClient({ id }: UserDetailsClientProps) {
           </div>
           <div>
             <p className="text-gray-500 text-sm mb-1">Status</p>
-            <span className="px-4 py-2 rounded-md bg-[#E6F7EF] text-[#00A85A] inline-block">
+            <span className="px-3 py-2 rounded-md bg-[#E6F7EF] text-[#00A85A] inline-block text-sm">
               {userData.status}
             </span>
           </div>
           <div>
             <p className="text-gray-500 text-sm mb-1">Registration Date</p>
-            <p className="font-medium">{userData.registrationDate}</p>
+            <p className="font-medium text-sm">{userData.registrationDate}</p>
           </div>
         </div>
       </div>
 
       {/* Device Info */}
-      <div className="bg-white rounded-lg mt-6 p-6">
-        <h2 className="text-lg font-semibold mb-4">Device Info</h2>
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+      <div className="bg-white rounded-lg mt-4 sm:mt-6 p-4 sm:p-6">
+        <h2 className="text-base sm:text-lg font-semibold mb-4">Device Info</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
           <div>
             <p className="text-gray-500 text-sm mb-1">Name</p>
             <p className="font-medium">{userData.device.name}</p>
@@ -302,12 +302,14 @@ export default function UserDetailsClient({ id }: UserDetailsClientProps) {
       </div>
 
       {/* Other Details */}
-      <div className="bg-white rounded-lg mt-6 p-6">
-        <h2 className="text-lg font-semibold mb-4">Other Details</h2>
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+      <div className="bg-white rounded-lg mt-4 sm:mt-6 p-4 sm:p-6">
+        <h2 className="text-base sm:text-lg font-semibold mb-4">
+          Other Details
+        </h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
           <div>
             <p className="text-gray-500 text-sm mb-1">Provider response</p>
-            <span className="px-4 py-1 rounded-md bg-[#FFEBEB] text-[#FF0000] inline-block">
+            <span className="px-3 py-1 rounded-md bg-[#FFEBEB] text-[#FF0000] inline-block text-sm">
               {userData.provider.response}
             </span>
           </div>
@@ -327,10 +329,10 @@ export default function UserDetailsClient({ id }: UserDetailsClientProps) {
       </div>
 
       {/* Transactions */}
-      <div className="bg-white rounded-lg mt-6 p-6">
-        <div className="flex justify-between items-center my-4">
-          <div className="flex flex-row gap-5">
-            <button className="border border-[#CCCCCC] bg-background flex gap-3 justify-center items-center px-10 py-3 rounded-[8px]">
+      <div className="bg-white rounded-lg mt-4 sm:mt-6 p-4 sm:p-6">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center my-4 gap-3">
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-5 w-full sm:w-auto">
+            <button className="border border-[#CCCCCC] bg-background flex gap-3 justify-center items-center px-4 sm:px-10 py-2 sm:py-3 rounded-[8px] w-full sm:w-auto">
               <svg
                 width="20"
                 height="20"
@@ -360,27 +362,27 @@ export default function UserDetailsClient({ id }: UserDetailsClientProps) {
                   strokeLinejoin="round"
                 />
               </svg>
-              <span className="text-base">Filter</span>
+              <span className="text-sm sm:text-base">Filter</span>
             </button>
 
-            <div className="flex flex-row justify-center items-center">
+            <div className="flex flex-row justify-center items-center w-full sm:w-auto">
               <input
                 type="text"
                 placeholder="Search"
-                className="bg-[#F5F5F5] border border-[#CCCCCC] rounded-l-[8px] p-4"
+                className="bg-[#F5F5F5] border border-[#CCCCCC] rounded-l-[8px] p-2 sm:p-4 flex-1 min-w-0"
                 value={searchTerm}
                 onChange={handleSearchChange}
               />
-              <button className="bg-[#DDFF00] rounded-r-[8px] p-4 px-6">
-                <Search size={24} className="text-black" />
+              <button className="bg-[#DDFF00] rounded-r-[8px] p-2 sm:p-4 sm:px-6">
+                <Search size={20} className="text-black" />
               </button>
             </div>
           </div>
 
           {/* Export Button */}
-          <div className="relative">
+          <div className="relative w-full sm:w-auto mt-3 sm:mt-0">
             <button
-              className="bg-[#010101CC] flex gap-3 justify-center items-center px-6 py-3 rounded-[12px] text-white"
+              className="bg-[#010101CC] flex gap-3 justify-center items-center px-4 sm:px-6 py-2 sm:py-3 rounded-[12px] text-white w-full sm:w-auto"
               onClick={() => setExportDropdownOpen(!exportDropdownOpen)}
             >
               <svg
@@ -412,7 +414,7 @@ export default function UserDetailsClient({ id }: UserDetailsClientProps) {
                   strokeLinejoin="round"
                 />
               </svg>
-              <span className="font-medium text-base">Export</span>
+              <span className="font-medium text-sm sm:text-base">Export</span>
             </button>
 
             {exportDropdownOpen && (
@@ -440,84 +442,158 @@ export default function UserDetailsClient({ id }: UserDetailsClientProps) {
           </div>
         </div>
 
-        <div className="overflow-auto">
-          <Table className="w-full rounded-2xl bg-background p-5">
-            <TableHeader className="bg-[#F5F5F5] hover:bg-[#F5F5F5]">
-              <TableRow>
-                <TableHead className="p-4">
-                  <input
-                    type="checkbox"
-                    className="w-6 h-6 mt-1 border-[#01010129] cursor-pointer"
-                    checked={
-                      selected.length === userData.transactions.length &&
-                      selected.length > 0
-                    }
-                    onChange={handleSelectAll}
-                  />
-                </TableHead>
-                <TableHead className="text-base font-medium">
-                  Username
-                </TableHead>
-                <TableHead className="text-base font-medium">
-                  Transaction ID
-                </TableHead>
-                <TableHead className="text-base font-medium">Amount</TableHead>
-                <TableHead className="text-base font-medium">Type</TableHead>
-                <TableHead className="text-base font-medium">Status</TableHead>
-                <TableHead className="text-base font-medium">
-                  Date & Time
-                </TableHead>
-                <TableHead className="text-base font-medium">Action</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {userData.transactions.map((tx, index) => (
-                <TableRow key={index} className="py-6">
-                  <TableCell className="p-4">
+        <div className="overflow-x-auto">
+          <div className="block sm:hidden">
+            {/* Mobile view transactions - card style */}
+            {userData.transactions.map((tx, index) => (
+              <div
+                key={index}
+                className="border rounded-lg p-3 mb-3 bg-background"
+              >
+                <div className="flex justify-between items-center mb-2">
+                  <span className="font-medium">{tx.username}</span>
+                  <span
+                    className={`px-2 py-1 rounded-md text-xs ${getStatusColor(
+                      tx.status
+                    )}`}
+                  >
+                    {tx.status}
+                  </span>
+                </div>
+                <div className="grid grid-cols-2 gap-2 text-sm">
+                  <div>
+                    <p className="text-gray-500">Transaction ID</p>
+                    <div className="flex items-center">
+                      <span className="truncate max-w-[80px]">{tx.id}</span>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="h-6 w-6 p-0 ml-1"
+                        onClick={() => navigator.clipboard.writeText(tx.id)}
+                      >
+                        <Copy className="w-3 h-3" />
+                      </Button>
+                    </div>
+                  </div>
+                  <div>
+                    <p className="text-gray-500">Amount</p>
+                    <p>{tx.amount}</p>
+                  </div>
+                  <div>
+                    <p className="text-gray-500">Type</p>
+                    <p>{tx.type}</p>
+                  </div>
+                  <div>
+                    <p className="text-gray-500">Date & Time</p>
+                    <p>{tx.dateTime}</p>
+                  </div>
+                </div>
+                <div className="mt-2 flex justify-end">
+                  <Button
+                    variant="outline"
+                    className="cursor-pointer border border-[#DDFF00] rounded-sm hover:bg-transparent h-7"
+                  >
+                    <MoreHorizontal size={14} className="text-[#DDFF00]" />
+                  </Button>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="hidden sm:block">
+            {/* Desktop view transactions - table style */}
+            <Table className="w-full rounded-2xl bg-background p-5">
+              <TableHeader className="bg-[#F5F5F5] hover:bg-[#F5F5F5]">
+                <TableRow>
+                  <TableHead className="p-4">
                     <input
                       type="checkbox"
-                      className="w-6 h-6 mt-1 cursor-pointer"
-                      checked={selected.includes(tx.id)}
-                      onChange={() => handleSelect(tx.id)}
+                      className="w-5 h-5 mt-1 border-[#01010129] cursor-pointer"
+                      checked={
+                        selected.length === userData.transactions.length &&
+                        selected.length > 0
+                      }
+                      onChange={handleSelectAll}
                     />
-                  </TableCell>
-                  <TableCell className="text-base py-6">
-                    {tx.username}
-                  </TableCell>
-                  <TableCell className="text-base py-6 flex items-center gap-2">
-                    {tx.id}
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => navigator.clipboard.writeText(tx.id)}
-                    >
-                      <Copy className="w-4 h-4" />
-                    </Button>
-                  </TableCell>
-                  <TableCell className="text-base py-6">{tx.amount}</TableCell>
-                  <TableCell className="text-base py-6">{tx.type}</TableCell>
-                  <TableCell className="text-base py-6">
-                    <span
-                      className={`px-4 py-2 rounded-md ${getStatusColor(tx.status)}`}
-                    >
-                      {tx.status}
-                    </span>
-                  </TableCell>
-                  <TableCell className="text-base py-6">
-                    {tx.dateTime}
-                  </TableCell>
-                  <TableCell>
-                    <Button
-                      variant="outline"
-                      className="cursor-pointer border border-[#DDFF00] rounded-sm hover:bg-transparent"
-                    >
-                      <MoreHorizontal size={14} className="text-[#DDFF00]" />
-                    </Button>
-                  </TableCell>
+                  </TableHead>
+                  <TableHead className="text-sm sm:text-base font-medium">
+                    Username
+                  </TableHead>
+                  <TableHead className="text-sm sm:text-base font-medium">
+                    Transaction ID
+                  </TableHead>
+                  <TableHead className="text-sm sm:text-base font-medium">
+                    Amount
+                  </TableHead>
+                  <TableHead className="text-sm sm:text-base font-medium">
+                    Type
+                  </TableHead>
+                  <TableHead className="text-sm sm:text-base font-medium">
+                    Status
+                  </TableHead>
+                  <TableHead className="text-sm sm:text-base font-medium">
+                    Date & Time
+                  </TableHead>
+                  <TableHead className="text-sm sm:text-base font-medium">
+                    Action
+                  </TableHead>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+              </TableHeader>
+              <TableBody>
+                {userData.transactions.map((tx, index) => (
+                  <TableRow key={index} className="py-4 sm:py-6">
+                    <TableCell className="p-2 sm:p-4">
+                      <input
+                        type="checkbox"
+                        className="w-5 h-5 mt-1 cursor-pointer"
+                        checked={selected.includes(tx.id)}
+                        onChange={() => handleSelect(tx.id)}
+                      />
+                    </TableCell>
+                    <TableCell className="text-sm sm:text-base py-4 sm:py-6">
+                      {tx.username}
+                    </TableCell>
+                    <TableCell className="text-sm sm:text-base py-4 sm:py-6 flex items-center gap-2">
+                      <span className="truncate max-w-[100px]">{tx.id}</span>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => navigator.clipboard.writeText(tx.id)}
+                      >
+                        <Copy className="w-4 h-4" />
+                      </Button>
+                    </TableCell>
+                    <TableCell className="text-sm sm:text-base py-4 sm:py-6">
+                      {tx.amount}
+                    </TableCell>
+                    <TableCell className="text-sm sm:text-base py-4 sm:py-6">
+                      {tx.type}
+                    </TableCell>
+                    <TableCell className="text-sm sm:text-base py-4 sm:py-6">
+                      <span
+                        className={`px-3 py-1 sm:px-4 sm:py-2 text-xs sm:text-sm rounded-md ${getStatusColor(
+                          tx.status
+                        )}`}
+                      >
+                        {tx.status}
+                      </span>
+                    </TableCell>
+                    <TableCell className="text-sm sm:text-base py-4 sm:py-6">
+                      {tx.dateTime}
+                    </TableCell>
+                    <TableCell>
+                      <Button
+                        variant="outline"
+                        className="cursor-pointer border border-[#DDFF00] rounded-sm hover:bg-transparent"
+                      >
+                        <MoreHorizontal size={14} className="text-[#DDFF00]" />
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
         </div>
       </div>
 

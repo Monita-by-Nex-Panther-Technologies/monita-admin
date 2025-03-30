@@ -79,7 +79,7 @@ const SupportTicketTable = () => {
   const totalPages = Math.ceil(filteredTickets.length / itemsPerPage);
   const paginatedData = filteredTickets.slice(
     (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage,
+    currentPage * itemsPerPage
   );
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -108,7 +108,7 @@ const SupportTicketTable = () => {
     setSelected((prev) =>
       prev.includes(id)
         ? prev.filter((selectedId) => selectedId !== id)
-        : [...prev, id],
+        : [...prev, id]
     );
   };
 
@@ -204,7 +204,7 @@ const SupportTicketTable = () => {
         >
           1
         </PaginationLink>
-      </PaginationItem>,
+      </PaginationItem>
     );
 
     if (totalPages <= 7) {
@@ -222,7 +222,7 @@ const SupportTicketTable = () => {
             >
               {i}
             </PaginationLink>
-          </PaginationItem>,
+          </PaginationItem>
         );
       }
     } else {
@@ -241,7 +241,7 @@ const SupportTicketTable = () => {
         items.push(
           <PaginationItem key="ellipsis-1">
             <PaginationEllipsis />
-          </PaginationItem>,
+          </PaginationItem>
         );
       }
 
@@ -259,7 +259,7 @@ const SupportTicketTable = () => {
             >
               {i}
             </PaginationLink>
-          </PaginationItem>,
+          </PaginationItem>
         );
       }
 
@@ -267,7 +267,7 @@ const SupportTicketTable = () => {
         items.push(
           <PaginationItem key="ellipsis-2">
             <PaginationEllipsis />
-          </PaginationItem>,
+          </PaginationItem>
         );
       }
 
@@ -285,7 +285,7 @@ const SupportTicketTable = () => {
             >
               {totalPages}
             </PaginationLink>
-          </PaginationItem>,
+          </PaginationItem>
         );
       }
     }
@@ -299,7 +299,7 @@ const SupportTicketTable = () => {
 
   return (
     <>
-      <div className="w-full flex flex-row justify-between items-center bg-background p-4 rounded-[8px]">
+      <div className="w-full flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-background p-4 rounded-[8px]">
         <h1 className="text-xl font-semibold">Ticket Management</h1>
         <div className="flex flex-row gap-x-4">
           <button
@@ -318,10 +318,10 @@ const SupportTicketTable = () => {
       </div>
 
       <div className="bg-background rounded-2xl my-6 py-4">
-        <div className="flex justify-between items-center my-4 px-6">
-          <div className="flex flex-row gap-5">
+        <div className="flex flex-col md:flex-row md:justify-between items-start md:items-center my-4 px-4 md:px-6 gap-4">
+          <div className="flex flex-col sm:flex-row w-full md:w-auto gap-4 sm:gap-5">
             <button
-              className="border border-[#CCCCCC] bg-background flex gap-3 justify-center items-center px-10 py-3 rounded-[8px]"
+              className="border border-[#CCCCCC] bg-background flex gap-3 justify-center items-center px-6 sm:px-10 py-3 rounded-[8px] w-full sm:w-auto"
               onClick={() => setIsFilterModalOpen(true)}
             >
               <ListFilter size={16} />
@@ -330,24 +330,24 @@ const SupportTicketTable = () => {
 
             <div className={`${isFilterModalOpen ? "" : ""}`}></div>
 
-            <div className="flex flex-row justify-center items-center">
+            <div className="flex flex-row justify-center items-center w-full sm:w-auto">
               <input
                 type="text"
                 placeholder="Search"
-                className="bg-[#F5F5F5] border border-[#CCCCCC] rounded-l-[8px] p-4"
+                className="bg-[#F5F5F5] border border-[#CCCCCC] rounded-l-[8px] p-3 md:p-4 flex-grow sm:flex-grow-0"
                 value={searchTerm}
                 onChange={handleSearchChange}
               />
-              <button className="bg-[#DDFF00] rounded-r-[8px] p-4 px-6">
-                <Search size={24} className="text-black" />
+              <button className="bg-[#DDFF00] rounded-r-[8px] p-3 md:p-4 px-4 md:px-6">
+                <Search size={20} className="text-black" />
               </button>
             </div>
           </div>
 
           {/* Export Dropdown Menu */}
-          <div className="relative" ref={exportDropdownRef}>
+          <div className="relative w-full sm:w-auto" ref={exportDropdownRef}>
             <button
-              className="bg-[#010101CC] flex gap-3 justify-center items-center px-6 py-3 rounded-[12px] text-white"
+              className="bg-[#010101CC] flex gap-3 justify-center items-center px-6 py-3 rounded-[12px] text-white w-full sm:w-auto"
               onClick={() => setExportDropdownOpen(!exportDropdownOpen)}
             >
               <svg
@@ -407,8 +407,8 @@ const SupportTicketTable = () => {
           </div>
         </div>
 
-        <div className="overflow-auto relative" ref={tableRef}>
-          <Table className="w-full rounded-2xl bg-background p-5">
+        <div className="overflow-x-auto relative" ref={tableRef}>
+          <Table className="w-full rounded-2xl bg-background p-5 min-w-[650px]">
             <TableHeader className="bg-[#F5F5F5] hover:bg-[#F5F5F5]">
               <TableRow>
                 <TableHead className="p-4">
@@ -422,55 +422,62 @@ const SupportTicketTable = () => {
                     onChange={handleSelectAll}
                   />
                 </TableHead>
-                <TableHead className="text-base font-medium">Name</TableHead>
-                <TableHead className="text-base font-medium">
+                <TableHead className="text-sm md:text-base font-medium">
+                  Name
+                </TableHead>
+                <TableHead className="text-sm md:text-base font-medium">
                   Issue Summary
                 </TableHead>
-                <TableHead className="text-base font-medium">
+                <TableHead className="text-sm md:text-base font-medium">
                   Ticket Status
                 </TableHead>
-                <TableHead className="text-base font-medium">
+                <TableHead className="text-sm md:text-base font-medium">
                   Ticket ID
                 </TableHead>
-                <TableHead className="text-base font-medium">Action</TableHead>
+                <TableHead className="text-sm md:text-base font-medium">
+                  Action
+                </TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {paginatedData.map((ticket, index) => (
-                <TableRow key={index} className="py-6">
-                  <TableCell className="p-4">
+                <TableRow key={index} className="py-4 md:py-6">
+                  <TableCell className="p-2 md:p-4">
                     <input
                       type="checkbox"
-                      className="w-6 h-6 mt-1 cursor-pointer"
+                      className="w-5 h-5 md:w-6 md:h-6 mt-1 cursor-pointer"
                       checked={selected.includes(ticket.id)}
                       onChange={() => handleSelect(ticket.id)}
                     />
                   </TableCell>
-                  <TableCell className="text-base py-6">
+                  <TableCell className="text-sm md:text-base py-4 md:py-6">
                     {ticket.name}
                   </TableCell>
-                  <TableCell className="text-base py-6">
+                  <TableCell className="text-sm md:text-base py-4 md:py-6">
                     {ticket.issue}
                   </TableCell>
-                  <TableCell className="text-base py-6">
-                    <span className="px-4 py-2 rounded-md bg-[#E6F7EF] text-[#00A85A]">
+                  <TableCell className="text-sm md:text-base py-4 md:py-6">
+                    <span className="px-2 py-1 md:px-4 md:py-2 rounded-md bg-[#E6F7EF] text-[#00A85A] text-xs md:text-sm">
                       {ticket.status}
                     </span>
                   </TableCell>
-                  <TableCell className="text-base py-6 flex items-center gap-2">
-                    {ticket.id}
+                  <TableCell className="text-sm md:text-base py-4 md:py-6 flex items-center gap-1 md:gap-2">
+                    <span className="truncate max-w-[80px] md:max-w-none">
+                      {ticket.id}
+                    </span>
                     <Button
                       variant="ghost"
                       size="sm"
                       onClick={() => copyToClipboard(ticket.id)}
+                      className="p-1"
                     >
-                      <Copy className="w-4 h-4" />
+                      <Copy className="w-3 h-3 md:w-4 md:h-4" />
                     </Button>
                   </TableCell>
                   <TableCell>
                     <Button
                       variant="ghost"
-                      className="cursor-pointer border border-[#DDFF00] rounded-sm hover:bg-transparent"
+                      className="cursor-pointer border border-[#DDFF00] rounded-sm hover:bg-transparent p-1 md:p-2"
                       onClick={() => handleViewTicket(ticket.id)}
                     >
                       <MoreHorizontal size={14} className="text-[#DDFF00]" />
@@ -483,8 +490,8 @@ const SupportTicketTable = () => {
         </div>
       </div>
 
-      <div className="flex justify-between items-center mt-4 p-8">
-        <div className="flex items-center gap-2">
+      <div className="flex flex-col md:flex-row md:justify-between items-center mt-4 p-4 md:p-8 gap-4">
+        <div className="flex items-center gap-2 text-sm md:text-base">
           <span>Showing</span>
           <Select
             onValueChange={(value) => {
@@ -507,7 +514,7 @@ const SupportTicketTable = () => {
         </div>
 
         <Pagination className="justify-end">
-          <PaginationContent>
+          <PaginationContent className="flex-wrap">
             <PaginationItem>
               <PaginationPrevious
                 onClick={handlePrevPage}

@@ -48,11 +48,13 @@ const FilterModal: React.FC<FilterModalProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/30 bg-opacity-50 flex justify-center items-center z-50">
-      <div className="bg-white rounded-lg w-full max-w-md -mt-20 overflow-hidden shadow-xl">
+    <div className="fixed inset-0 bg-black/30 bg-opacity-50 flex justify-center items-center z-50 p-4">
+      <div className="bg-white rounded-lg w-full max-w-md max-h-[90vh] overflow-auto -mt-10 sm:-mt-20 shadow-xl">
         {/* Header */}
-        <div className="flex justify-between items-center p-6 border-b">
-          <h2 className="text-xl font-semibold">Filter Transaction</h2>
+        <div className="flex justify-between items-center p-4 sm:p-6 border-b sticky top-0 bg-white z-10">
+          <h2 className="text-lg sm:text-xl font-semibold">
+            Filter Transaction
+          </h2>
           <Button
             variant="outline"
             size="icon"
@@ -64,8 +66,8 @@ const FilterModal: React.FC<FilterModalProps> = ({
         </div>
 
         {/* Filter Form */}
-        <div className="p-6">
-          <div className="space-y-5">
+        <div className="p-4 sm:p-6">
+          <div className="space-y-4 sm:space-y-5">
             {/* Username Field */}
             <div className="space-y-2">
               <label className="block text-sm font-medium">Username</label>
@@ -73,7 +75,7 @@ const FilterModal: React.FC<FilterModalProps> = ({
                 placeholder="Enter username"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                className="w-full h-12 rounded-md border-gray-300"
+                className="w-full h-10 sm:h-12 rounded-md border-gray-300"
               />
             </div>
 
@@ -81,7 +83,7 @@ const FilterModal: React.FC<FilterModalProps> = ({
             <div className="space-y-2">
               <label className="block text-sm font-medium">Select Status</label>
               <Select value={status} onValueChange={setStatus}>
-                <SelectTrigger className="w-full h-12">
+                <SelectTrigger className="w-full h-10 sm:h-12">
                   <SelectValue placeholder="Select" />
                 </SelectTrigger>
                 <SelectContent>
@@ -101,7 +103,7 @@ const FilterModal: React.FC<FilterModalProps> = ({
                 value={transactionType}
                 onValueChange={setTransactionType}
               >
-                <SelectTrigger className="w-full h-12">
+                <SelectTrigger className="w-full h-10 sm:h-12">
                   <SelectValue placeholder="Select" />
                 </SelectTrigger>
                 <SelectContent>
@@ -114,7 +116,7 @@ const FilterModal: React.FC<FilterModalProps> = ({
             </div>
 
             {/* Date Range Fields */}
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {/* Start Date */}
               <div className="space-y-2">
                 <label className="block text-sm font-medium">Start Date</label>
@@ -122,7 +124,7 @@ const FilterModal: React.FC<FilterModalProps> = ({
                   <PopoverTrigger asChild>
                     <Button
                       variant="outline"
-                      className="w-full h-12 rounded-md border-gray-300 justify-start text-left font-normal pl-4 bg-white hover:bg-white"
+                      className="w-full h-10 sm:h-12 rounded-md border-gray-300 justify-start text-left font-normal pl-4 bg-white hover:bg-white"
                     >
                       {startDate ? format(startDate, "PP") : "Select"}
                       <CalendarIcon className="ml-auto h-4 w-4 text-gray-400" />
@@ -152,7 +154,7 @@ const FilterModal: React.FC<FilterModalProps> = ({
                   <PopoverTrigger asChild>
                     <Button
                       variant="outline"
-                      className="w-full h-12 rounded-md border-gray-300 justify-start text-left font-normal pl-4 bg-white hover:bg-white"
+                      className="w-full h-10 sm:h-12 rounded-md border-gray-300 justify-start text-left font-normal pl-4 bg-white hover:bg-white"
                     >
                       {endDate ? format(endDate, "PP") : "Select"}
                       <CalendarIcon className="ml-auto h-4 w-4 text-gray-400" />
@@ -179,10 +181,10 @@ const FilterModal: React.FC<FilterModalProps> = ({
         </div>
 
         {/* Button */}
-        <div className="p-6 pt-0">
+        <div className="p-4 sm:p-6 pt-0 sticky bottom-0 bg-white">
           <Button
             onClick={handleApply}
-            className="w-full h-12 rounded-md bg-yellow-100 hover:bg-yellow-200 text-black font-medium"
+            className="w-full h-10 sm:h-12 rounded-md bg-yellow-100 hover:bg-yellow-200 text-black font-medium"
             variant="ghost"
           >
             Filter Transaction

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { icons } from "@/constants/icons";
 import {
   Collapsible,
@@ -11,11 +11,10 @@ import { ChevronDown, ChevronUp } from "lucide-react";
 import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { ButtonProps } from "react-day-picker";
 
 export const SideBarSectionHeading = ({ title }: { title: string }) => {
   return (
-    <h1 className="text-sidebar-heading text-base font-light leading-6 py-3 px-4">
+    <h1 className="text-sm font-medium leading-6 py-2 px-4 text-text-title/80">
       {title}
     </h1>
   );
@@ -35,12 +34,13 @@ export const SidebarNavItem: React.FC<SidebarNavItemProps> = ({
   onClick,
 }) => {
   const pathname = usePathname();
+  // Exact match for active state
   const isActive = pathname === href;
 
   return (
     <Link
       href={href}
-      className={`flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer transition-colors w-full h-fit
+      className={`flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer transition-all w-full h-fit
         ${
           isActive
             ? "bg-sidebar-primary text-text-title"
@@ -50,13 +50,13 @@ export const SidebarNavItem: React.FC<SidebarNavItemProps> = ({
     >
       <div className="flex items-center justify-center w-6 h-6">
         <Icon
-          className={`w-6 h-6 ${
-            isActive ? "text-text-title" : "text-text-body opacity-60"
+          className={`w-5 h-5 ${
+            isActive ? "text-text-title" : "text-[#CEEF0A]"
           }`}
         />
       </div>
       <span
-        className={`text-[16px] font-normal font-poppins leading-none ${
+        className={`text-[15px] font-normal font-poppins leading-none ${
           isActive ? "text-text-title" : "text-text-body"
         }`}
       >
@@ -66,80 +66,76 @@ export const SidebarNavItem: React.FC<SidebarNavItemProps> = ({
   );
 };
 
-export const BillPayments = () => {
+interface BillPaymentsProps {
+  onItemClick?: () => void;
+}
+
+export const BillPayments = ({ onItemClick }: BillPaymentsProps) => {
   const pathname = usePathname();
   const [isBillPaymentsOpen, setIsBillPaymentsOpen] = useState(false);
 
-  const isActive = [
-    "/dashboard/bill-payments/products/airtime",
-    "/dashboard/bill-payments/water",
-    "/dashboard/bill-payments/internet",
-    "/dashboard/bill-payments/products/esims",
-    "/dashboard/bill-payments/plan/data-plan",
-    "/dashboard/bill-payments/plan/cable",
-  ].includes(pathname);
+  // Check if any bill payment route is active - but don't mark parent as active
+  const containsBillPayments = pathname.includes("/dashboard/bill-payments");
+
+  // Auto-expand when on a bill payments page
+  useEffect(() => {
+    if (containsBillPayments) {
+      setIsBillPaymentsOpen(true);
+    }
+  }, [containsBillPayments]);
 
   return (
     <Collapsible open={isBillPaymentsOpen} onOpenChange={setIsBillPaymentsOpen}>
       <CollapsibleTrigger asChild>
         <div
-          className={`flex items-center justify-between px-4 py-3 rounded-lg cursor-pointer transition-colors ${
-            isActive
-              ? "bg-sidebar-primary text-text-title"
-              : "text-sidebar-foreground hover:bg-[#CEEF0A1A]"
-          }`}
+          className={`flex items-center justify-between px-4 py-3 rounded-xl cursor-pointer transition-all 
+            text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground`}
         >
           <div className="flex items-center gap-3">
-            <span className="icon-color">
-              <icons.bilpayIcon
-                alt="Bill Payments"
-                width={24}
-                height={24}
-                className={
-                  isActive ? "text-text-title" : "text-text-body opacity-60"
-                }
-              />
+            <span className="flex items-center justify-center w-6 h-6">
+              <icons.bilpayIcon className="w-5 h-5 text-[#CEEF0A]" />
             </span>
-            <span
-              className={`text-[16px] font-normal font-poppins leading-none ${
-                isActive ? "text-white" : "text-white"
-              }`}
-            >
+            <span className="text-[15px] font-normal font-poppins leading-none text-text-body">
               Bill Payments
             </span>
           </div>
           {isBillPaymentsOpen ? (
-            <ChevronUp className="w-4 h-4 text-white" />
+            <ChevronUp className="w-4 h-4 text-text-body" />
           ) : (
-            <ChevronDown className="w-4 h-4 text-white" />
+            <ChevronDown className="w-4 h-4 text-text-body" />
           )}
         </div>
       </CollapsibleTrigger>
-      <CollapsibleContent className="pl-8 pt-2 gap-[10px] flex flex-col">
+      <CollapsibleContent className="pl-8 pt-2 gap-2 flex flex-col">
         <SidebarNavItem
-          icon={icons.bilpayIcon}
+          icon={icons.esimIcon}
           label="E-Sim"
           href="/dashboard/bill-payments/products/esims"
+          onClick={onItemClick}
         />
         <SidebarNavItem
           icon={icons.bilpayIcon}
           label="Airtime"
           href="/dashboard/bill-payments/products/airtime"
+          onClick={onItemClick}
         />
         <SidebarNavItem
-          icon={icons.cashbackIcon}
+          icon={icons.bilpayIcon}
           label="Data Plan"
           href="/dashboard/bill-payments/plan/data-plan"
+          onClick={onItemClick}
         />
         <SidebarNavItem
           icon={icons.esimIcon}
           label="Internet"
           href="/dashboard/bill-payments/plan/internet"
+          onClick={onItemClick}
         />
         <SidebarNavItem
           icon={icons.esimIcon}
           label="Cable TV"
           href="/dashboard/bill-payments/plan/cable"
+          onClick={onItemClick}
         />
       </CollapsibleContent>
     </Collapsible>
@@ -160,12 +156,12 @@ export const Button: React.FC<CustomButtonProps> = ({
   return (
     <button
       onClick={onClick}
-      className="flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer transition-colors w-full h-fit text-sidebar-foreground"
+      className="flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer transition-colors w-full h-fit text-sidebar-foreground hover:bg-destructive/10"
     >
       <div className="flex items-center justify-center w-6 h-6">
-        <Icon className="w-6 h-6 text-text-body" />
+        <Icon className="w-5 h-5 text-destructive" />
       </div>
-      <span className="text-[16px] font-normal font-poppins leading-none text-destructive">
+      <span className="text-[15px] font-normal font-poppins leading-none text-destructive">
         {label}
       </span>
     </button>

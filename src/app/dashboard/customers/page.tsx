@@ -2,9 +2,9 @@
 
 import type React from "react";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { Search, MoreHorizontal } from "lucide-react";
+import { Search, MoreHorizontal, Filter } from "lucide-react";
 import {
   Table,
   TableBody,
@@ -48,11 +48,25 @@ export default function UserManagement() {
   const [selected, setSelected] = useState<string[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [exportDropdownOpen, setExportDropdownOpen] = useState<boolean>(false);
+  const [isMobile, setIsMobile] = useState<boolean>(false);
 
   const exportDropdownRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
 
-  // Mock data for users
+  useEffect(() => {
+    const checkIfMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    checkIfMobile();
+
+    window.addEventListener("resize", checkIfMobile);
+
+    return () => {
+      window.removeEventListener("resize", checkIfMobile);
+    };
+  }, []);
+
   const users: User[] = Array(8)
     .fill(null)
     .map((_, index) => ({
@@ -64,12 +78,10 @@ export default function UserManagement() {
     }));
 
   const filteredUsers = users.filter((user) => {
-    // Filter by tab
     if (activeTab === "blocked") {
-      return false; // No blocked users in our mock data
+      return false;
     }
 
-    // Search filter
     const matchesSearch = searchTerm
       ? user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
         user.email.toLowerCase().includes(searchTerm.toLowerCase())
@@ -81,7 +93,7 @@ export default function UserManagement() {
   const totalPages = Math.ceil(filteredUsers.length / itemsPerPage);
   const paginatedData = filteredUsers.slice(
     (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage,
+    currentPage * itemsPerPage
   );
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -110,7 +122,7 @@ export default function UserManagement() {
     setSelected((prev) =>
       prev.includes(id)
         ? prev.filter((selectedId) => selectedId !== id)
-        : [...prev, id],
+        : [...prev, id]
     );
   };
 
@@ -123,7 +135,7 @@ export default function UserManagement() {
     if (format === "DOC") {
       const docContent = dataToExport
         .map(
-          (u) => `${u.name}\t${u.email}\t${u.kycStatus}\t${u.registrationDate}`,
+          (u) => `${u.name}\t${u.email}\t${u.kycStatus}\t${u.registrationDate}`
         )
         .join("\n");
       const blob = new Blob([docContent], { type: "application/msword" });
@@ -204,7 +216,7 @@ export default function UserManagement() {
         >
           1
         </PaginationLink>
-      </PaginationItem>,
+      </PaginationItem>
     );
 
     if (totalPages <= 7) {
@@ -222,7 +234,7 @@ export default function UserManagement() {
             >
               {i}
             </PaginationLink>
-          </PaginationItem>,
+          </PaginationItem>
         );
       }
     } else {
@@ -241,7 +253,7 @@ export default function UserManagement() {
         items.push(
           <PaginationItem key="ellipsis-1">
             <PaginationEllipsis />
-          </PaginationItem>,
+          </PaginationItem>
         );
       }
 
@@ -259,7 +271,7 @@ export default function UserManagement() {
             >
               {i}
             </PaginationLink>
-          </PaginationItem>,
+          </PaginationItem>
         );
       }
 
@@ -267,7 +279,7 @@ export default function UserManagement() {
         items.push(
           <PaginationItem key="ellipsis-2">
             <PaginationEllipsis />
-          </PaginationItem>,
+          </PaginationItem>
         );
       }
 
@@ -285,7 +297,7 @@ export default function UserManagement() {
             >
               {totalPages}
             </PaginationLink>
-          </PaginationItem>,
+          </PaginationItem>
         );
       }
     }
@@ -298,12 +310,12 @@ export default function UserManagement() {
   };
 
   return (
-    <div className="container mx-auto p-4">
-      <div className="w-full flex flex-row justify-between items-center bg-background p-4 rounded-[8px]">
+    <div className="container mx-auto p-2 md:p-4">
+      <div className="w-full flex flex-col md:flex-row justify-between items-start md:items-center gap-3 md:gap-0 bg-background p-3 md:p-4 rounded-[8px]">
         <h1 className="text-xl font-semibold">User Management</h1>
-        <div className="flex space-x-2">
+        <div className="flex w-full md:w-auto space-x-2">
           <button
-            className={`py-2 px-4 rounded-lg ${
+            className={`py-2 px-3 md:px-4 text-sm md:text-base rounded-lg ${
               activeTab === "all"
                 ? "bg-[#DDFF00] text-black font-medium"
                 : "bg-white text-gray-600"
@@ -313,7 +325,7 @@ export default function UserManagement() {
             All Users
           </button>
           <button
-            className={`py-2 px-4 rounded-lg ${
+            className={`py-2 px-3 md:px-4 text-sm md:text-base rounded-lg ${
               activeTab === "blocked"
                 ? "bg-[#DDFF00] text-black font-medium"
                 : "bg-white text-gray-600"
@@ -325,65 +337,36 @@ export default function UserManagement() {
         </div>
       </div>
 
-      <div className="bg-background rounded-2xl my-6 py-4">
-        <div className="flex justify-between items-center my-4 px-6">
-          <div className="flex flex-row gap-5">
-            <button className="border border-[#CCCCCC] bg-background flex gap-3 justify-center items-center px-10 py-3 rounded-[8px]">
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 20 20"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M5 10H15"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-                <path
-                  d="M2.5 5H17.5"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-                <path
-                  d="M7.5 15H12.5"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-              <span className="text-base">Filter</span>
+      <div className="bg-background rounded-2xl my-4 md:my-6 py-3 md:py-4">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-3 md:gap-0 my-2 md:my-4 px-3 md:px-6">
+          <div className="flex flex-col md:flex-row gap-3 md:gap-5 w-full md:w-auto">
+            <button className="border border-[#CCCCCC] bg-background flex gap-2 justify-center items-center px-4 md:px-10 py-2 md:py-3 rounded-[8px]">
+              <Filter size={isMobile ? 16 : 20} />
+              <span className="text-sm md:text-base">Filter</span>
             </button>
 
-            <div className="flex flex-row justify-center items-center">
+            <div className="flex flex-row justify-center items-center w-full md:w-auto">
               <input
                 type="text"
                 placeholder="Search"
-                className="bg-[#F5F5F5] border border-[#CCCCCC] rounded-l-[8px] p-4"
+                className="bg-[#F5F5F5] border border-[#CCCCCC] rounded-l-[8px] p-2 md:p-4 w-full md:w-auto text-sm md:text-base"
                 value={searchTerm}
                 onChange={handleSearchChange}
               />
-              <button className="bg-[#DDFF00] rounded-r-[8px] p-4 px-6">
-                <Search size={24} className="text-black" />
+              <button className="bg-[#DDFF00] rounded-r-[8px] p-2 md:p-4 px-3 md:px-6">
+                <Search size={isMobile ? 18 : 24} className="text-black" />
               </button>
             </div>
           </div>
 
-          {/* Export Button */}
-          <div className="relative" ref={exportDropdownRef}>
+          <div className="relative w-full md:w-auto" ref={exportDropdownRef}>
             <button
-              className="bg-[#010101CC] flex gap-3 justify-center items-center px-6 py-3 rounded-[12px] text-white"
+              className="bg-[#010101CC] flex gap-2 justify-center items-center px-4 md:px-6 py-2 md:py-3 rounded-[12px] text-white w-full md:w-auto"
               onClick={() => setExportDropdownOpen(!exportDropdownOpen)}
             >
               <svg
-                width="16"
-                height="16"
+                width={isMobile ? "14" : "16"}
+                height={isMobile ? "14" : "16"}
                 viewBox="0 0 16 16"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
@@ -410,7 +393,7 @@ export default function UserManagement() {
                   strokeLinejoin="round"
                 />
               </svg>
-              <span className="font-medium text-base">Export</span>
+              <span className="font-medium text-sm md:text-base">Export</span>
             </button>
 
             {exportDropdownOpen && (
@@ -438,14 +421,14 @@ export default function UserManagement() {
           </div>
         </div>
 
-        <div className="overflow-auto">
-          <Table className="w-full rounded-2xl bg-background p-5">
+        <div className="overflow-x-auto">
+          <Table className="w-full rounded-2xl bg-background p-2 md:p-5">
             <TableHeader className="bg-[#F5F5F5] hover:bg-[#F5F5F5]">
               <TableRow>
-                <TableHead className="p-4">
+                <TableHead className="p-2 md:p-4 hidden md:table-cell">
                   <input
                     type="checkbox"
-                    className="w-6 h-6 mt-1 border-[#01010129] cursor-pointer"
+                    className="w-4 h-4 md:w-6 md:h-6 mt-1 border-[#01010129] cursor-pointer"
                     checked={
                       selected.length === filteredUsers.length &&
                       selected.length > 0
@@ -453,47 +436,63 @@ export default function UserManagement() {
                     onChange={handleSelectAll}
                   />
                 </TableHead>
-                <TableHead className="text-base font-medium">Name</TableHead>
-                <TableHead className="text-base font-medium">
+                <TableHead className="text-sm md:text-base font-medium">
+                  Name
+                </TableHead>
+                <TableHead className="text-sm md:text-base font-medium hidden md:table-cell">
                   Email Address
                 </TableHead>
-                <TableHead className="text-base font-medium">
+                <TableHead className="text-sm md:text-base font-medium">
                   KYC Status
                 </TableHead>
-                <TableHead className="text-base font-medium">
+                <TableHead className="text-sm md:text-base font-medium hidden md:table-cell">
                   Registration Date
                 </TableHead>
-                <TableHead className="text-base font-medium">Action</TableHead>
+                <TableHead className="text-sm md:text-base font-medium">
+                  Action
+                </TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {paginatedData.map((user, index) => (
-                <TableRow key={index} className="py-6">
-                  <TableCell className="p-4">
+                <TableRow key={index} className="py-3 md:py-6">
+                  <TableCell className="p-2 md:p-4 hidden md:table-cell">
                     <input
                       type="checkbox"
-                      className="w-6 h-6 mt-1 cursor-pointer"
+                      className="w-4 h-4 md:w-6 md:h-6 mt-1 cursor-pointer"
                       checked={selected.includes(user.id)}
                       onChange={() => handleSelect(user.id)}
                     />
                   </TableCell>
-                  <TableCell className="text-base py-6">{user.name}</TableCell>
-                  <TableCell className="text-base py-6">{user.email}</TableCell>
-                  <TableCell className="text-base py-6">
-                    <span className="px-4 py-2 rounded-md bg-[#E6F7EF] text-[#00A85A]">
+                  <TableCell className="text-sm md:text-base py-3 md:py-6">
+                    <div>
+                      {user.name}
+                      <div className="md:hidden text-xs text-gray-500">
+                        {user.email}
+                      </div>
+                    </div>
+                  </TableCell>
+                  <TableCell className="text-sm md:text-base hidden md:table-cell py-3 md:py-6">
+                    {user.email}
+                  </TableCell>
+                  <TableCell className="text-sm md:text-base py-3 md:py-6">
+                    <span className="px-2 md:px-4 py-1 md:py-2 rounded-md bg-[#E6F7EF] text-[#00A85A] text-xs md:text-sm">
                       {user.kycStatus}
                     </span>
                   </TableCell>
-                  <TableCell className="text-base py-6">
+                  <TableCell className="text-sm md:text-base py-3 md:py-6 hidden md:table-cell">
                     {user.registrationDate}
                   </TableCell>
                   <TableCell>
                     <Button
                       variant="outline"
-                      className="cursor-pointer border border-[#DDFF00] rounded-sm hover:bg-transparent"
+                      className="cursor-pointer border border-[#DDFF00] rounded-sm hover:bg-transparent p-1 md:p-2 h-auto"
                       onClick={() => handleViewUser(user.id)}
                     >
-                      <MoreHorizontal size={14} className="text-[#DDFF00]" />
+                      <MoreHorizontal
+                        size={isMobile ? 12 : 14}
+                        className="text-[#DDFF00]"
+                      />
                     </Button>
                   </TableCell>
                 </TableRow>
@@ -503,8 +502,8 @@ export default function UserManagement() {
         </div>
       </div>
 
-      <div className="flex justify-between items-center mt-4 p-8">
-        <div className="flex items-center gap-2">
+      <div className="flex flex-col md:flex-row justify-between items-center mt-2 md:mt-4 p-3 md:p-8 gap-3 md:gap-0">
+        <div className="flex items-center gap-1 md:gap-2 text-sm md:text-base">
           <span>Showing</span>
           <Select
             onValueChange={(value) => {
@@ -512,7 +511,7 @@ export default function UserManagement() {
               setCurrentPage(1);
             }}
           >
-            <SelectTrigger className="w-16 bg-background">
+            <SelectTrigger className="w-12 md:w-16 bg-background h-8 md:h-10">
               {itemsPerPage}
             </SelectTrigger>
             <SelectContent>
@@ -525,28 +524,40 @@ export default function UserManagement() {
         </div>
 
         <Pagination className="justify-end">
-          <PaginationContent>
+          <PaginationContent className="flex-wrap">
             <PaginationItem>
               <PaginationPrevious
                 onClick={handlePrevPage}
-                className={
+                className={`${
                   currentPage === 1
                     ? "pointer-events-none opacity-50"
                     : "cursor-pointer"
-                }
+                } h-8 md:h-10 w-8 md:w-10 p-0 flex items-center justify-center`}
               />
             </PaginationItem>
 
-            {renderPaginationItems()}
+            {isMobile ? (
+              <PaginationItem>
+                <PaginationLink
+                  isActive={true}
+                  className="bg-primary text-white hover:bg-primary/90 h-8 md:h-10 w-8 md:w-10 p-0 flex items-center justify-center"
+                >
+                  {currentPage}{" "}
+                  <span className="ml-1 text-xs">of {totalPages}</span>
+                </PaginationLink>
+              </PaginationItem>
+            ) : (
+              renderPaginationItems()
+            )}
 
             <PaginationItem>
               <PaginationNext
                 onClick={handleNextPage}
-                className={
+                className={`${
                   currentPage === totalPages
                     ? "pointer-events-none opacity-50"
                     : "cursor-pointer"
-                }
+                } h-8 md:h-10 w-8 md:w-10 p-0 flex items-center justify-center`}
               />
             </PaginationItem>
           </PaginationContent>

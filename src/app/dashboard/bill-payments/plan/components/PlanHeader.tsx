@@ -19,19 +19,25 @@ const ProductNavItem: React.FC<ProductNavItemProps> = ({
   isActive,
 }) => {
   return (
-    <Link href={route} className="block">
+    <Link href={route} className="block w-full">
       <div
         className={`
-      p-4 rounded-lg cursor-pointer w-[1/3] transition-all duration-200 flex flex-row items-center justify-start gap-2
-      ${isActive ? "bg-white border-2 border-primary" : "bg-white border border-gray-100 hover:border-gray-200 hover:shadow-sm"}
+      p-3 sm:p-4 rounded-lg cursor-pointer transition-all duration-200 flex flex-row items-center justify-start gap-2
+      ${
+        isActive
+          ? "bg-white border-2 border-primary"
+          : "bg-white border border-gray-100 hover:border-gray-200 hover:shadow-sm"
+      }
     `}
       >
         <div
-          className={`w-10 h-10 rounded-full flex justify-center items-center ${isActive ? "bg-white" : "bg-background-alt"}`}
+          className={`w-8 h-8 sm:w-10 sm:h-10 rounded-full flex justify-center items-center ${
+            isActive ? "bg-white" : "bg-background-alt"
+          }`}
         >
           <div className="text-gray-700">{icon}</div>
         </div>
-        <span className="text-[16px] font-poppins font-normal text-gray-700">
+        <span className="text-[14px] sm:text-[16px] font-poppins font-normal text-gray-700">
           {label}
         </span>
       </div>
@@ -65,11 +71,11 @@ const PlanHeadder = () => {
   ];
 
   return (
-    <div className="w-full flex flex-row justify-between items-center bg-background p-4 rounded-[8px] mt-4">
-      <h1 className="text-text-title text-xl font-semibold font-poppins">
+    <div className="w-full flex flex-col sm:flex-row justify-between items-center gap-4 bg-background p-4 rounded-[8px] mt-4">
+      <h1 className="text-text-title text-xl font-semibold font-poppins mb-2 sm:mb-0">
         Plan
       </h1>
-      <div className="grid grid-cols-3 bg-background-alt w-[70%] gap-x-1.5 px-3 py-2 justify-center items-center rounded-[8px]">
+      <div className="grid grid-cols-1 sm:grid-cols-3 bg-background-alt w-full sm:w-[70%] gap-y-2 sm:gap-y-0 gap-x-0 sm:gap-x-1.5 px-3 py-2 justify-center items-center rounded-[8px]">
         {categories.map((category) => (
           <ProductNavItem
             key={category.id}

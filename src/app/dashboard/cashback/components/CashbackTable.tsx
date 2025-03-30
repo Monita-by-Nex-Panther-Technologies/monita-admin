@@ -241,32 +241,32 @@ const CashbackRecipientsTable = () => {
 
   return (
     <>
-      <div className="w-full flex flex-row justify-between items-center bg-background p-4 rounded-[8px] mt-6">
+      <div className="w-full flex flex-col sm:flex-row justify-between items-start sm:items-center bg-background p-4 rounded-[8px] mt-6 gap-4">
         <h1 className="text-text-title text-xl font-semibold font-poppins">
           Cashback Recipients
         </h1>
         <div className="flex flex-row gap-x-4">
-          <button className="justify-center items-center bg-primary text-text-body font-poppins font-medium px-4  py-4 w-[202px] rounded-[12px] active:bg-primary-foreground">
+          <button className="justify-center items-center bg-primary text-text-body font-poppins font-medium px-3 sm:px-4 py-3 sm:py-4 w-full sm:w-[202px] rounded-[12px] active:bg-primary-foreground whitespace-nowrap">
             Cashback Settings
           </button>
         </div>
       </div>
 
       <div className="bg-background rounded-2xl my-6 py-4">
-        <div className="flex justify-between items-center my-4 px-6">
-          <div className="flex flex-row gap-5">
-            <button className="border border-primary bg-background flex gap-3 justify-center items-center px-10 py-3 rounded-[8px]">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center my-4 px-3 sm:px-6 gap-4">
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-5 w-full sm:w-auto">
+            <button className="border border-primary bg-background flex gap-3 justify-center items-center px-6 py-3 rounded-[8px]">
               <ListFilter size={16} />
               <span className="text-text-title font-poppins text-base">
                 Filter
               </span>
             </button>
 
-            <div className="flex flex-row justify-center items-center">
+            <div className="flex flex-row justify-center items-center w-full sm:w-auto">
               <input
                 type="text"
                 placeholder="Search"
-                className="bg-background-alt border-border rounded-l-[8px] p-4"
+                className="bg-background-alt border-border rounded-l-[8px] p-4 w-full sm:w-auto"
                 value={searchTerm}
                 onChange={handleSearchChange}
               />
@@ -277,7 +277,7 @@ const CashbackRecipientsTable = () => {
           </div>
 
           {/* Export Dropdown Menu */}
-          <div className="relative" ref={exportDropdownRef}>
+          <div className="relative ml-auto sm:ml-0" ref={exportDropdownRef}>
             <button
               className="bg-[#010101CC] flex gap-3 justify-center items-center px-6 py-3 rounded-[12px] text-white"
               onClick={() => setExportDropdownOpen(!exportDropdownOpen)}
@@ -339,7 +339,7 @@ const CashbackRecipientsTable = () => {
           </div>
         </div>
 
-        <div className="overflow-auto relative" ref={tableRef}>
+        <div className="overflow-x-auto relative" ref={tableRef}>
           <Table className="w-full rounded-2xl bg-background p-5">
             <TableHeader className="bg-primary-fade text-muted-foreground hover:bg-primary-fade ml-5">
               <TableRow>
@@ -354,16 +354,16 @@ const CashbackRecipientsTable = () => {
                     onChange={handleSelectAll}
                   />
                 </TableHead>
-                <TableHead className="text-base font-poppins text-text-title">
+                <TableHead className="text-base font-poppins text-text-title whitespace-nowrap">
                   Name
                 </TableHead>
-                <TableHead className="text-base font-poppins text-text-title">
+                <TableHead className="text-base font-poppins text-text-title whitespace-nowrap">
                   Email Address
                 </TableHead>
-                <TableHead className="text-base font-poppins text-text-title">
+                <TableHead className="text-base font-poppins text-text-title whitespace-nowrap">
                   Cashback Earned
                 </TableHead>
-                <TableHead className="text-base font-poppins text-text-title">
+                <TableHead className="text-base font-poppins text-text-title whitespace-nowrap">
                   Action
                 </TableHead>
               </TableRow>
@@ -379,16 +379,16 @@ const CashbackRecipientsTable = () => {
                       onChange={() => handleSelect(recipient.id)}
                     />
                   </TableCell>
-                  <TableCell className="text-text-body font-poppins text-base py-6">
+                  <TableCell className="text-text-body font-poppins text-base py-6 whitespace-nowrap">
                     {recipient.name}
                   </TableCell>
-                  <TableCell className="text-text-body font-poppins text-base py-6">
+                  <TableCell className="text-text-body font-poppins text-base py-6 whitespace-nowrap">
                     {recipient.email}
                   </TableCell>
-                  <TableCell className="text-text-body font-poppins text-base py-6">
+                  <TableCell className="text-text-body font-poppins text-base py-6 whitespace-nowrap">
                     {recipient.cashbackEarned}
                   </TableCell>
-                  <TableCell>
+                  <TableCell className="whitespace-nowrap">
                     <Button
                       variant="ghost"
                       className="cursor-pointer border border-primary-300 rounded-sm hover:bg-transparent"
@@ -403,8 +403,8 @@ const CashbackRecipientsTable = () => {
         </div>
       </div>
 
-      <div className="flex justify-between items-center mt-4 p-8">
-        <div className="flex items-center gap-2">
+      <div className="flex flex-col md:flex-row justify-between items-center mt-4 p-4 sm:p-8 gap-4">
+        <div className="flex items-center gap-2 text-sm sm:text-base">
           <span>Showing</span>
           <Select
             onValueChange={(value) => {
@@ -426,8 +426,8 @@ const CashbackRecipientsTable = () => {
           <span>Entries</span>
         </div>
 
-        <Pagination className="justify-end">
-          <PaginationContent>
+        <Pagination className="justify-center md:justify-end w-full md:w-auto overflow-auto">
+          <PaginationContent className="flex-wrap">
             <PaginationItem>
               <PaginationPrevious
                 onClick={handlePrevPage}

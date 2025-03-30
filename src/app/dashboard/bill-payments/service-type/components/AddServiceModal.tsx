@@ -65,7 +65,7 @@ const AddServiceModal = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="p-0 overflow-hidden max-w-md rounded-lg">
+      <DialogContent className="p-0 overflow-hidden max-w-md rounded-lg w-[95%] sm:w-full">
         <DialogHeader className="p-4 border-b">
           <div className="flex justify-between items-center w-full">
             <DialogTitle className="text-base font-medium">
@@ -88,7 +88,7 @@ const AddServiceModal = ({
               </Label>
               <div className="relative">
                 <button
-                  className="w-full flex justify-between items-center px-3 py-2 border rounded-md text-left"
+                  className="w-full flex justify-between items-center px-3 py-2 border rounded-md text-left text-sm sm:text-base"
                   onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                 >
                   {selectedService || "Select"}
@@ -102,18 +102,20 @@ const AddServiceModal = ({
                     strokeWidth="2"
                     strokeLinecap="round"
                     strokeLinejoin="round"
-                    className={`transition-transform ${isDropdownOpen ? "rotate-180" : ""}`}
+                    className={`transition-transform ${
+                      isDropdownOpen ? "rotate-180" : ""
+                    }`}
                   >
                     <polyline points="6 9 12 15 18 9"></polyline>
                   </svg>
                 </button>
 
                 {isDropdownOpen && (
-                  <div className="absolute z-10 mt-1 w-full bg-white border rounded-md shadow-lg max-h-60 overflow-auto">
+                  <div className="absolute z-10 mt-1 w-full bg-white border rounded-md shadow-lg max-h-[200px] sm:max-h-60 overflow-auto">
                     {serviceOptions.map((service) => (
                       <div
                         key={service}
-                        className="flex justify-between items-center px-3 py-2 hover:bg-gray-50 cursor-pointer"
+                        className="flex justify-between items-center px-3 py-2 hover:bg-gray-50 cursor-pointer text-sm sm:text-base"
                         onClick={() => {
                           setSelectedService(service);
                           setIsDropdownOpen(false);
@@ -155,7 +157,7 @@ const AddServiceModal = ({
         <div className="px-4 pb-4">
           <Button
             onClick={handleSubmit}
-            className="w-full py-2 bg-[#f8ffa3] hover:bg-[#f1f88e] text-black rounded-md"
+            className="w-full py-2 bg-[#f8ffa3] hover:bg-[#f1f88e] text-black rounded-md text-sm sm:text-base"
           >
             Create Service
           </Button>

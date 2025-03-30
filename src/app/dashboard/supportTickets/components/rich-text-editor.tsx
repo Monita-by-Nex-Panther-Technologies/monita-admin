@@ -71,7 +71,7 @@ export function RichTextEditor({
       textarea.focus();
       textarea.setSelectionRange(
         start + formattedText.length,
-        start + formattedText.length,
+        start + formattedText.length
       );
     }, 0);
   };

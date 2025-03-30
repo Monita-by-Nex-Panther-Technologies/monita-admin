@@ -106,7 +106,7 @@ const TransactionsTable = () => {
   const totalPages = Math.ceil(filteredTransactions.length / itemsPerPage);
   const paginatedData = filteredTransactions.slice(
     (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage,
+    currentPage * itemsPerPage
   );
 
   const handleFilterApply = (newFilters: FilterCriteria) => {
@@ -155,7 +155,7 @@ const TransactionsTable = () => {
     setSelected((prev) =>
       prev.includes(id)
         ? prev.filter((selectedId) => selectedId !== id)
-        : [...prev, id],
+        : [...prev, id]
     );
   };
 
@@ -174,7 +174,7 @@ const TransactionsTable = () => {
     const dataToExport =
       selected.length > 0
         ? filteredTransactions.filter((transaction) =>
-            selected.includes(transaction.id),
+            selected.includes(transaction.id)
           )
         : filteredTransactions;
 
@@ -182,7 +182,7 @@ const TransactionsTable = () => {
       const docContent = dataToExport
         .map(
           (t) =>
-            `${t.username}\t${t.id}\t${t.amount}\t${t.type}\t${t.status}\t${t.date} ${t.time}`,
+            `${t.username}\t${t.id}\t${t.amount}\t${t.type}\t${t.status}\t${t.date} ${t.time}`
         )
         .join("\n");
       const blob = new Blob([docContent], { type: "application/msword" });
@@ -276,7 +276,7 @@ const TransactionsTable = () => {
           `Generated on ${new Date().toLocaleString()} - Page ${i} of ${pageCount}`,
           doc.internal.pageSize.getWidth() / 2,
           doc.internal.pageSize.getHeight() - 10,
-          { align: "center" },
+          { align: "center" }
         );
       }
 
@@ -299,7 +299,7 @@ const TransactionsTable = () => {
         >
           1
         </PaginationLink>
-      </PaginationItem>,
+      </PaginationItem>
     );
     if (totalPages <= 7) {
       for (let i = 2; i <= totalPages; i++) {
@@ -316,7 +316,7 @@ const TransactionsTable = () => {
             >
               {i}
             </PaginationLink>
-          </PaginationItem>,
+          </PaginationItem>
         );
       }
     } else {
@@ -333,7 +333,7 @@ const TransactionsTable = () => {
         items.push(
           <PaginationItem key="ellipsis-1">
             <PaginationEllipsis />
-          </PaginationItem>,
+          </PaginationItem>
         );
       }
       for (let i = startPage; i <= endPage; i++) {
@@ -350,14 +350,14 @@ const TransactionsTable = () => {
             >
               {i}
             </PaginationLink>
-          </PaginationItem>,
+          </PaginationItem>
         );
       }
       if (endPage < totalPages - 1) {
         items.push(
           <PaginationItem key="ellipsis-2">
             <PaginationEllipsis />
-          </PaginationItem>,
+          </PaginationItem>
         );
       }
       if (totalPages > 1) {
@@ -374,7 +374,7 @@ const TransactionsTable = () => {
             >
               {totalPages}
             </PaginationLink>
-          </PaginationItem>,
+          </PaginationItem>
         );
       }
     }
@@ -391,59 +391,62 @@ const TransactionsTable = () => {
 
   return (
     <>
-      <div className="w-full flex flex-row justify-between items-center bg-background p-4 rounded-[8px] mt-6">
+      <div className="w-full flex flex-col sm:flex-row justify-between items-start sm:items-center bg-background p-4 rounded-[8px] mt-6 gap-4">
         <h1 className="text-text-title text-xl font-semibold font-poppins">
           Transaction History
         </h1>
-        <div className="flex flex-row gap-x-4 ">
-          <button className="justify-center items-center bg-background border border-primary-300 text-text-body font-poppins font-medium px-4 w-[132px] rounded-[12px] active:bg-primary-foreground">
+        <div className="flex flex-row gap-x-4 w-full sm:w-auto">
+          <button className="justify-center items-center bg-background border border-primary-300 text-text-body font-poppins font-medium px-4 w-full sm:w-[132px] py-2 rounded-[12px] active:bg-primary-foreground">
             Retry
           </button>
-          <button className="justify-center bg-primary items-center text-text-body font-poppins p-4 w-[132px] rounded-[12px] font-medium">
+          <button className="justify-center bg-primary items-center text-text-body font-poppins p-2 sm:p-4 w-full sm:w-[132px] rounded-[12px] font-medium">
             Approve
           </button>
         </div>
       </div>
 
       <div className="bg-background rounded-2xl my-6 py-4">
-        <div className="flex justify-between items-center my-4 px-6">
-          <div className="flex flex-row gap-5 ">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 my-4 px-4 sm:px-6">
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-5 w-full sm:w-auto">
             <button
-              className=" border border-primary bg-background flex gap-3 justify-center items-center px-10 py-3 rounded-[8px]"
+              className="border border-primary bg-background flex gap-3 justify-center items-center px-6 sm:px-10 py-3 rounded-[8px]"
               onClick={() => setIsFilterModalOpen(true)}
             >
               <ListFilter size={16} />
-              <span className=" text-text-title font-poppins text-base">
+              <span className="text-text-title font-poppins text-base">
                 Filter
               </span>
             </button>
 
-            <div className=" flex flex-row justify-center items-center">
+            <div className="flex flex-row justify-center items-center w-full sm:w-auto">
               <input
                 type="text"
                 placeholder="Search"
-                className=" bg-background-alt border-border rounded-l-[8px] p-4"
+                className="bg-background-alt border-border rounded-l-[8px] p-3 sm:p-4 w-full"
                 value={searchTerm}
                 onChange={handleSearchChange}
               />
-              <button className=" bg-primary rounded-r-[8px] p-4 px-6">
-                <Search size={24} className="text-text-body" />
+              <button className="bg-primary rounded-r-[8px] p-3 sm:p-4 px-4 sm:px-6">
+                <Search size={20} className="text-text-body" />
               </button>
               {areFiltersActive && (
                 <button
-                  className="bg-background-alt border-border rounded-[8px] p-4 ml-2"
+                  className="bg-background-alt border-border rounded-[8px] p-3 sm:p-4 ml-2"
                   onClick={handleResetFilters}
                 >
-                  <X size={24} className="text-text-body" />
+                  <X size={20} className="text-text-body" />
                 </button>
               )}
             </div>
           </div>
 
           {/* Export Dropdown Menu */}
-          <div className="relative" ref={exportDropdownRef}>
+          <div
+            className="relative mt-3 sm:mt-0 w-full sm:w-auto"
+            ref={exportDropdownRef}
+          >
             <button
-              className="bg-[#010101CC] flex gap-3 justify-center items-center px-6 py-3 rounded-[12px] text-white"
+              className="bg-[#010101CC] flex gap-3 justify-center items-center px-6 py-3 rounded-[12px] text-white w-full sm:w-auto"
               onClick={() => setExportDropdownOpen(!exportDropdownOpen)}
             >
               <icons.exportIcon size={16} className="text-white" />
@@ -475,8 +478,8 @@ const TransactionsTable = () => {
           </div>
         </div>
 
-        <div className="overflow-auto relative" ref={tableRef}>
-          <Table className="w-full rounded-2xl bg-background p-5">
+        <div className="overflow-x-auto w-full relative" ref={tableRef}>
+          <Table className="w-full rounded-2xl bg-background p-5 min-w-[800px]">
             <TableHeader className="bg-primary-fade text-muted-foreground hover:bg-primary-fade ml-5">
               <TableRow>
                 <TableHead className="p-4">
@@ -490,25 +493,25 @@ const TransactionsTable = () => {
                     onChange={handleSelectAll}
                   />
                 </TableHead>
-                <TableHead className="text-base font-poppins text-text-title">
+                <TableHead className="text-sm sm:text-base font-poppins text-text-title">
                   Username
                 </TableHead>
-                <TableHead className="text-base font-poppins text-text-title">
+                <TableHead className="text-sm sm:text-base font-poppins text-text-title">
                   Transaction ID
                 </TableHead>
-                <TableHead className="text-base font-poppins text-text-title">
+                <TableHead className="text-sm sm:text-base font-poppins text-text-title">
                   Amount
                 </TableHead>
-                <TableHead className="text-base font-poppins text-text-title">
+                <TableHead className="text-sm sm:text-base font-poppins text-text-title">
                   Type
                 </TableHead>
-                <TableHead className="text-base font-poppins text-text-title">
+                <TableHead className="text-sm sm:text-base font-poppins text-text-title">
                   Status
                 </TableHead>
-                <TableHead className="text-base font-poppins text-text-title">
+                <TableHead className="text-sm sm:text-base font-poppins text-text-title">
                   Date & Time
                 </TableHead>
-                <TableHead className="text-base font-poppins text-text-title">
+                <TableHead className="text-sm sm:text-base font-poppins text-text-title">
                   Actions
                 </TableHead>
               </TableRow>
@@ -549,8 +552,8 @@ const TransactionsTable = () => {
                         transaction.status === "Successful"
                           ? "status-success"
                           : transaction.status === "Failed"
-                            ? "status-error"
-                            : "status-pending"
+                          ? "status-error"
+                          : "status-pending"
                       }`}
                     >
                       {transaction.status}
@@ -574,8 +577,8 @@ const TransactionsTable = () => {
         </div>
       </div>
 
-      <div className="flex justify-between items-center mt-4 p-8 ">
-        <div className="flex items-center gap-2">
+      <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mt-4 p-4 sm:p-8">
+        <div className="flex items-center gap-2 text-sm">
           <span>Showing</span>
           <Select
             onValueChange={(value) => {
@@ -597,8 +600,8 @@ const TransactionsTable = () => {
           <span>Entries</span>
         </div>
 
-        <Pagination className=" justify-end">
-          <PaginationContent>
+        <Pagination className="justify-center sm:justify-end">
+          <PaginationContent className="flex-wrap gap-y-2">
             <PaginationItem>
               <PaginationPrevious
                 onClick={handlePrevPage}

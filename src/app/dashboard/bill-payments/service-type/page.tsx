@@ -1,9 +1,6 @@
 "use client";
 import { useState } from "react";
-// import { Button } from "@/components/ui/button";
-// import { Plus } from "lucide-react";
 import { toast } from "sonner";
-// import NavigationTabs from "./NavigationTabs";
 import ServiceTypeTable, { Service } from "./components/ServiceTypeTable";
 import AddServiceModal from "./components/AddServiceModal";
 
@@ -26,8 +23,8 @@ const ServiceManagement = () => {
   const handleToggleService = (id: string, enabled: boolean) => {
     setServices(
       services.map((service) =>
-        service.id === id ? { ...service, enabled } : service,
-      ),
+        service.id === id ? { ...service, enabled } : service
+      )
     );
   };
 
@@ -53,7 +50,7 @@ const ServiceManagement = () => {
   };
 
   return (
-    <div className="dashboard-container">
+    <div className="dashboard-container px-4 md:px-6 w-full max-w-full overflow-x-hidden">
       <ServiceTypeTable
         services={services}
         setServices={setServices}

@@ -10,13 +10,13 @@ export default function SettingsPage() {
   const [activeTab, setActiveTab] = useState("personal");
 
   return (
-    <div className="min-h-screen bg-[#F5F5F5] p-4">
+    <div className="min-h-screen bg-[#F5F5F5] p-2 sm:p-4">
       <div className="max-w-5xl mx-auto">
-        <div className="mb-8">
-          <div className="grid grid-cols-4 bg-[#F5F5F5] p-1.5 rounded-lg">
+        <div className="mb-6 sm:mb-8">
+          <div className="grid grid-cols-2 md:grid-cols-4 bg-[#F5F5F5] p-1 sm:p-1.5 rounded-lg gap-1 sm:gap-0">
             <button
               onClick={() => setActiveTab("personal")}
-              className={`rounded-md py-3 px-4 text-sm font-medium transition-colors ${
+              className={`rounded-md py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm font-medium transition-colors ${
                 activeTab === "personal"
                   ? "bg-[#CEEF0A]/20 text-text-title"
                   : "bg-white text-text-body"
@@ -26,7 +26,7 @@ export default function SettingsPage() {
             </button>
             <button
               onClick={() => setActiveTab("security")}
-              className={`rounded-md py-3 px-4 text-sm font-medium transition-colors ${
+              className={`rounded-md py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm font-medium transition-colors ${
                 activeTab === "security"
                   ? "bg-[#CEEF0A]/20 text-text-title"
                   : "bg-white text-text-body"
@@ -36,7 +36,7 @@ export default function SettingsPage() {
             </button>
             <button
               onClick={() => setActiveTab("2fa")}
-              className={`rounded-md py-3 px-4 text-sm font-medium transition-colors ${
+              className={`rounded-md py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm font-medium transition-colors ${
                 activeTab === "2fa"
                   ? "bg-[#CEEF0A]/20 text-text-title"
                   : "bg-white text-text-body"
@@ -46,7 +46,7 @@ export default function SettingsPage() {
             </button>
             <button
               onClick={() => setActiveTab("notification")}
-              className={`rounded-md py-3 px-4 text-sm font-medium transition-colors ${
+              className={`rounded-md py-2 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm font-medium transition-colors ${
                 activeTab === "notification"
                   ? "bg-[#CEEF0A]/20 text-text-title"
                   : "bg-white text-text-body"
@@ -58,12 +58,10 @@ export default function SettingsPage() {
         </div>
 
         <div className="w-full">
-          {/* Custom tabs navigation is above */}
-
           {/* Personal Info Tab */}
           {activeTab === "personal" && (
-            <div className="bg-white rounded-xl p-8">
-              <div className="flex justify-between items-start mb-8">
+            <div className="bg-white rounded-xl p-4 sm:p-8">
+              <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4 sm:gap-0 mb-6 sm:mb-8">
                 <div className="flex items-center">
                   <Image
                     src="/placeholder.svg?height=60&width=60"
@@ -73,7 +71,7 @@ export default function SettingsPage() {
                     className="rounded-full mr-4"
                   />
                 </div>
-                <Button className="bg-[#CEEF0A] hover:bg-[#BBD423] text-black font-medium">
+                <Button className="bg-[#CEEF0A] hover:bg-[#BBD423] text-black font-medium w-full sm:w-auto">
                   Save Changes
                 </Button>
               </div>
@@ -130,9 +128,13 @@ export default function SettingsPage() {
                     Phone Number
                   </label>
                   <div className="flex">
-                    <div className="flex items-center bg-input px-3 rounded-l-md border-r">
-                      <span className="text-sm text-text-body">🇳🇬</span>
-                      <span className="ml-1 text-sm text-text-body">+234</span>
+                    <div className="flex items-center bg-input px-2 sm:px-3 rounded-l-md border-r">
+                      <span className="text-xs sm:text-sm text-text-body">
+                        🇳🇬
+                      </span>
+                      <span className="ml-1 text-xs sm:text-sm text-text-body">
+                        +234
+                      </span>
                     </div>
                     <Input
                       id="phone"
@@ -147,12 +149,12 @@ export default function SettingsPage() {
 
           {/* Security Tab */}
           {activeTab === "security" && (
-            <div className="bg-white rounded-xl p-8">
-              <div className="flex justify-between items-start mb-8">
-                <h2 className="text-xl font-semibold text-text-title">
+            <div className="bg-white rounded-xl p-4 sm:p-8">
+              <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4 sm:gap-0 mb-6 sm:mb-8">
+                <h2 className="text-lg sm:text-xl font-semibold text-text-title">
                   Security
                 </h2>
-                <Button className="bg-[#CEEF0A] hover:bg-[#BBD423] text-black font-medium">
+                <Button className="bg-[#CEEF0A] hover:bg-[#BBD423] text-black font-medium w-full sm:w-auto">
                   Save Changes
                 </Button>
               </div>
@@ -191,23 +193,23 @@ export default function SettingsPage() {
 
           {/* 2FA Tab */}
           {activeTab === "2fa" && (
-            <div className="bg-white rounded-xl p-8">
-              <h2 className="text-xl font-semibold text-text-title mb-8">
+            <div className="bg-white rounded-xl p-4 sm:p-8">
+              <h2 className="text-lg sm:text-xl font-semibold text-text-title mb-6 sm:mb-8">
                 2FA
               </h2>
 
               <div className="space-y-6">
                 <div className="flex items-center justify-between">
-                  <div className="space-y-1">
-                    <h3 className="text-base font-medium text-text-title">
+                  <div className="space-y-1 pr-4">
+                    <h3 className="text-sm sm:text-base font-medium text-text-title">
                       Email Verification
                     </h3>
-                    <p className="text-sm text-text-body">
+                    <p className="text-xs sm:text-sm text-text-body">
                       Ensure account security by requiring email verification
                       for login attempts.
                     </p>
                   </div>
-                  <Switch className="data-[state=checked]:bg-[#CEEF0A]" />
+                  <Switch className="data-[state=checked]:bg-[#CEEF0A] flex-shrink-0" />
                 </div>
               </div>
             </div>
@@ -215,79 +217,100 @@ export default function SettingsPage() {
 
           {/* Notification Tab */}
           {activeTab === "notification" && (
-            <div className="bg-white rounded-xl p-8">
-              <h2 className="text-xl font-semibold text-text-title mb-8">
+            <div className="bg-white rounded-xl p-4 sm:p-8">
+              <h2 className="text-lg sm:text-xl font-semibold text-text-title mb-6 sm:mb-8">
                 Notifications
               </h2>
 
-              <div className="space-y-8">
-                <div className="space-y-4">
-                  <h3 className="text-base font-medium text-text-title">
+              <div className="space-y-6 sm:space-y-8">
+                {/* First notification section */}
+                <div className="space-y-3 sm:space-y-4">
+                  <h3 className="text-sm sm:text-base font-medium text-text-title">
                     Reminders
                   </h3>
-                  <p className="text-sm text-text-body">
+                  <p className="text-xs sm:text-sm text-text-body">
                     These notifications keep you informed about important Monita
                     updates and any updates you may have missed.
                   </p>
                   <div className="space-y-3">
                     <div className="flex items-center justify-between">
-                      <span className="text-sm text-text-body">Push</span>
+                      <span className="text-xs sm:text-sm text-text-body">
+                        Push
+                      </span>
                       <Switch className="data-[state=checked]:bg-[#CEEF0A]" />
                     </div>
                     <div className="flex items-center justify-between">
-                      <span className="text-sm text-text-body">Email</span>
+                      <span className="text-xs sm:text-sm text-text-body">
+                        Email
+                      </span>
                       <Switch className="data-[state=checked]:bg-[#CEEF0A]" />
                     </div>
                     <div className="flex items-center justify-between">
-                      <span className="text-sm text-text-body">SMS</span>
-                      <Switch className="data-[state=checked]:bg-[#CEEF0A]" />
-                    </div>
-                  </div>
-                </div>
-
-                <div className="space-y-4">
-                  <h3 className="text-base font-medium text-text-title">
-                    Reminders
-                  </h3>
-                  <p className="text-sm text-text-body">
-                    These are notifications to remind you on any updates
-                    pertaining to Monita which you might have missed.
-                  </p>
-                  <div className="space-y-3">
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm text-text-body">Push</span>
-                      <Switch className="data-[state=checked]:bg-[#CEEF0A]" />
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm text-text-body">Email</span>
-                      <Switch className="data-[state=checked]:bg-[#CEEF0A]" />
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm text-text-body">SMS</span>
+                      <span className="text-xs sm:text-sm text-text-body">
+                        SMS
+                      </span>
                       <Switch className="data-[state=checked]:bg-[#CEEF0A]" />
                     </div>
                   </div>
                 </div>
 
-                <div className="space-y-4">
-                  <h3 className="text-base font-medium text-text-title">
+                {/* Second notification section */}
+                <div className="space-y-3 sm:space-y-4">
+                  <h3 className="text-sm sm:text-base font-medium text-text-title">
                     Reminders
                   </h3>
-                  <p className="text-sm text-text-body">
+                  <p className="text-xs sm:text-sm text-text-body">
                     These are notifications to remind you on any updates
                     pertaining to Monita which you might have missed.
                   </p>
                   <div className="space-y-3">
                     <div className="flex items-center justify-between">
-                      <span className="text-sm text-text-body">Push</span>
+                      <span className="text-xs sm:text-sm text-text-body">
+                        Push
+                      </span>
                       <Switch className="data-[state=checked]:bg-[#CEEF0A]" />
                     </div>
                     <div className="flex items-center justify-between">
-                      <span className="text-sm text-text-body">Email</span>
+                      <span className="text-xs sm:text-sm text-text-body">
+                        Email
+                      </span>
                       <Switch className="data-[state=checked]:bg-[#CEEF0A]" />
                     </div>
                     <div className="flex items-center justify-between">
-                      <span className="text-sm text-text-body">SMS</span>
+                      <span className="text-xs sm:text-sm text-text-body">
+                        SMS
+                      </span>
+                      <Switch className="data-[state=checked]:bg-[#CEEF0A]" />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Third notification section */}
+                <div className="space-y-3 sm:space-y-4">
+                  <h3 className="text-sm sm:text-base font-medium text-text-title">
+                    Reminders
+                  </h3>
+                  <p className="text-xs sm:text-sm text-text-body">
+                    These are notifications to remind you on any updates
+                    pertaining to Monita which you might have missed.
+                  </p>
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs sm:text-sm text-text-body">
+                        Push
+                      </span>
+                      <Switch className="data-[state=checked]:bg-[#CEEF0A]" />
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs sm:text-sm text-text-body">
+                        Email
+                      </span>
+                      <Switch className="data-[state=checked]:bg-[#CEEF0A]" />
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs sm:text-sm text-text-body">
+                        SMS
+                      </span>
                       <Switch className="data-[state=checked]:bg-[#CEEF0A]" />
                     </div>
                   </div>
