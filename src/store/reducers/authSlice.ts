@@ -3,21 +3,7 @@ import { axiosInstance } from "@/lib/api";
 import { toast } from "sonner";
 import { ErrorResponse } from "@/interfaces";
 import axios, { AxiosError } from "axios";
-
-interface Profile {
-  id: string;
-  email: string | null;
-  firstName: string;
-  lastName: string;
-  monitag: string;
-}
-
-interface AuthState {
-  profile: Profile | null;
-  token: string | null;
-  loading: boolean;
-  error: string | null;
-}
+import { AuthState } from "@/interfaces/store";
 
 const initialState: AuthState = {
   profile: null,
@@ -38,28 +24,13 @@ export const signIn = createAsyncThunk(
         passcode: credentials.password,
       };
 
-      console.log("Attempting login with payload:", {
-        phoneNumber: payload.phoneNumber,
-        passcode: "****",
-      });
-
-      if (typeof window !== "undefined" && (window as any).mockAuthResponse) {
-        await new Promise((resolve) => setTimeout(resolve, 2000));
-        console.log("Using mock response for login");
-        const response = (window as any).mockAuthResponse;
-
-        toast.success("Login successful!");
-
-        return response;
-      }
-
-      // Now using the local API route that proxies to the real API
       const response = await axiosInstance.post("/auth/login", payload);
-      console.log("Login successful, response:", response.data);
       toast.success("Login successful!");
       return response.data.data;
     } catch (error) {
-      console.error("Login error:", error);
+      if (axios.isAxiosError(error) && !error.response) {
+        return rejectWithValue("Connection error. Please check your network.");
+      }
       if (axios.isAxiosError(error)) {
         const axiosError = error as AxiosError<ErrorResponse>;
         return rejectWithValue(
@@ -99,7 +70,6 @@ const authSlice = createSlice({
         state.loading = false;
         state.profile = action.payload.profile;
         state.token = action.payload.token;
-
         if (typeof window !== "undefined") {
           localStorage.setItem("authToken", JSON.stringify(state.token));
           localStorage.setItem("profile", JSON.stringify(state.profile));

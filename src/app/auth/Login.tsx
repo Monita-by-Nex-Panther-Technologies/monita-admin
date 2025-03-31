@@ -16,6 +16,7 @@ const Login = () => {
   const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [formError, setFormError] = useState<string | null>(null);
 
   useEffect(() => {
     if (profile) {
@@ -25,6 +26,17 @@ const Login = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setFormError(null);
+
+    if (!phone) {
+      setFormError("Phone number is required");
+      return;
+    }
+    if (!password) {
+      setFormError("Passcode is required");
+      return;
+    }
+
     dispatch(signIn({ phone, password }));
   };
 
@@ -114,6 +126,12 @@ const Login = () => {
                 </button>
               </div>
             </div>
+
+            {formError && (
+              <div className="text-red-500 text-sm font-poppins">
+                {formError}
+              </div>
+            )}
 
             {error && (
               <div className="text-red-500 text-sm font-poppins">{error}</div>
