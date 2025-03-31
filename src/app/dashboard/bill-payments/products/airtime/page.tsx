@@ -362,32 +362,32 @@ const ProductsTable: React.FC = () => {
   return (
     <div className="w-full bg-background py-6 rounded-sm">
       {/* Header with search and buttons */}
-      <div className="flex justify-between items-center mb-6 w-full px-8">
-        <div className="flex flex-row justify-center items-center">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6 w-full px-4 md:px-8">
+        <div className="flex flex-row justify-center items-center w-full md:w-auto">
           <input
             type="text"
             placeholder="Search"
-            className="bg-background-alt border-border rounded-l-[8px] p-4"
+            className="bg-background-alt border-border rounded-l-[8px] p-4 w-full md:w-auto"
             value={searchTerm}
             onChange={handleSearchChange}
           />
-          <button className="bg-primary rounded-r-[8px] p-4 px-6">
+          <button className="bg-primary rounded-r-[8px] p-4 px-6 shrink-0">
             <Search size={24} className="text-text-body" />
           </button>
         </div>
-        <div className="flex gap-4 items-center">
+        <div className="flex gap-2 md:gap-4 items-center w-full md:w-auto">
           <Button
-            className="bg-white text-text-title border border-primary rounded-lg px-6 py-6 font-medium hover:bg-primary-fade"
+            className="bg-white text-text-title border border-primary rounded-lg px-3 md:px-6 py-6 font-medium hover:bg-primary-fade text-sm md:text-base flex-1 md:flex-none"
             onClick={() => setManageProductOpen(true)}
           >
             Manage Product
           </Button>
           <Button
-            className="bg-primary text-text-body rounded-lg px-6 py-6 font-medium hover:bg-primary/90 flex items-center gap-2"
+            className="bg-primary text-text-body rounded-lg px-3 md:px-6 py-6 font-medium hover:bg-primary/90 flex items-center gap-1 md:gap-2 flex-1 md:flex-none"
             onClick={() => setAddProductOpen(true)}
           >
-            <Plus size={20} />
-            Add Product
+            <Plus size={18} />
+            <span className="text-sm md:text-base">Add Product</span>
           </Button>
         </div>
       </div>

@@ -334,11 +334,11 @@ const SupportTicketTable = () => {
               <input
                 type="text"
                 placeholder="Search"
-                className="bg-[#F5F5F5] border border-[#CCCCCC] rounded-l-[8px] p-3 md:p-4 flex-grow sm:flex-grow-0"
+                className="bg-[#F5F5F5] border border-[#CCCCCC] rounded-l-[8px] p-3 md:p-4 w-full max-w-[calc(100%-50px)]"
                 value={searchTerm}
                 onChange={handleSearchChange}
               />
-              <button className="bg-[#DDFF00] rounded-r-[8px] p-3 md:p-4 px-4 md:px-6">
+              <button className="bg-[#DDFF00] rounded-r-[8px] p-3 md:p-4 px-4 md:px-6 flex-shrink-0">
                 <Search size={20} className="text-black" />
               </button>
             </div>

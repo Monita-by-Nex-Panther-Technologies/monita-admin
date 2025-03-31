@@ -311,24 +311,24 @@ export default function UserManagement() {
 
   return (
     <div className="container mx-auto p-2 md:p-4">
-      <div className="w-full flex flex-col md:flex-row justify-between items-start md:items-center gap-3 md:gap-0 bg-background p-3 md:p-4 rounded-[8px]">
+      <div className="w-full flex flex-col md:flex-row justify-between items-start md:items-center gap-3 md:gap-0 bg-white p-3 md:p-4 rounded-[8px] shadow-sm border border-gray-100">
         <h1 className="text-xl font-semibold">User Management</h1>
         <div className="flex w-full md:w-auto space-x-2">
           <button
-            className={`py-2 px-3 md:px-4 text-sm md:text-base rounded-lg ${
+            className={`py-2 px-3 md:px-4 text-sm md:text-base rounded-lg shadow-sm ${
               activeTab === "all"
                 ? "bg-[#DDFF00] text-black font-medium"
-                : "bg-white text-gray-600"
+                : "bg-white text-gray-600 border border-gray-200"
             }`}
             onClick={() => setActiveTab("all")}
           >
             All Users
           </button>
           <button
-            className={`py-2 px-3 md:px-4 text-sm md:text-base rounded-lg ${
+            className={`py-2 px-3 md:px-4 text-sm md:text-base rounded-lg shadow-sm ${
               activeTab === "blocked"
                 ? "bg-[#DDFF00] text-black font-medium"
-                : "bg-white text-gray-600"
+                : "bg-white text-gray-600 border border-gray-200"
             }`}
             onClick={() => setActiveTab("blocked")}
           >
@@ -337,10 +337,10 @@ export default function UserManagement() {
         </div>
       </div>
 
-      <div className="bg-background rounded-2xl my-4 md:my-6 py-3 md:py-4">
+      <div className="bg-white rounded-2xl my-4 md:my-6 py-3 md:py-4 shadow-md border border-gray-100">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-3 md:gap-0 my-2 md:my-4 px-3 md:px-6">
           <div className="flex flex-col md:flex-row gap-3 md:gap-5 w-full md:w-auto">
-            <button className="border border-[#CCCCCC] bg-background flex gap-2 justify-center items-center px-4 md:px-10 py-2 md:py-3 rounded-[8px]">
+            <button className="border border-gray-300 bg-white flex gap-2 justify-center items-center px-4 md:px-10 py-2 md:py-3 rounded-[8px] shadow-sm hover:bg-gray-50">
               <Filter size={isMobile ? 16 : 20} />
               <span className="text-sm md:text-base">Filter</span>
             </button>
@@ -349,11 +349,11 @@ export default function UserManagement() {
               <input
                 type="text"
                 placeholder="Search"
-                className="bg-[#F5F5F5] border border-[#CCCCCC] rounded-l-[8px] p-2 md:p-4 w-full md:w-auto text-sm md:text-base"
+                className="bg-white border border-gray-300 rounded-l-[8px] p-2 md:p-4 w-full md:w-auto text-sm md:text-base"
                 value={searchTerm}
                 onChange={handleSearchChange}
               />
-              <button className="bg-[#DDFF00] rounded-r-[8px] p-2 md:p-4 px-3 md:px-6">
+              <button className="bg-[#DDFF00] rounded-r-[8px] p-2 md:p-4 px-3 md:px-6 hover:bg-[#C8E600] shadow-sm">
                 <Search size={isMobile ? 18 : 24} className="text-black" />
               </button>
             </div>
@@ -361,7 +361,7 @@ export default function UserManagement() {
 
           <div className="relative w-full md:w-auto" ref={exportDropdownRef}>
             <button
-              className="bg-[#010101CC] flex gap-2 justify-center items-center px-4 md:px-6 py-2 md:py-3 rounded-[12px] text-white w-full md:w-auto"
+              className="bg-[#010101] flex gap-2 justify-center items-center px-4 md:px-6 py-2 md:py-3 rounded-[12px] text-white w-full md:w-auto shadow-sm hover:bg-gray-800"
               onClick={() => setExportDropdownOpen(!exportDropdownOpen)}
             >
               <svg
@@ -397,21 +397,21 @@ export default function UserManagement() {
             </button>
 
             {exportDropdownOpen && (
-              <div className="absolute right-0 mt-2 w-32 rounded-md shadow-xl py-1 bg-white z-10">
+              <div className="absolute right-0 mt-2 w-32 rounded-md shadow-xl py-1 bg-white z-10 border border-gray-200">
                 <button
-                  className="block px-4 py-2 text-sm text-gray-700 w-full border-border hover:bg-gray-100 text-left border-b"
+                  className="block px-4 py-2 text-sm text-gray-700 w-full border-gray-200 hover:bg-gray-100 text-left border-b"
                   onClick={() => exportData("PDF")}
                 >
                   Export as PDF
                 </button>
                 <button
-                  className="block px-4 py-2 text-sm text-gray-700 w-full border-border hover:bg-gray-100 text-left border-b"
+                  className="block px-4 py-2 text-sm text-gray-700 w-full border-gray-200 hover:bg-gray-100 text-left border-b"
                   onClick={() => exportData("XLS")}
                 >
                   Export as XLS
                 </button>
                 <button
-                  className="block px-4 py-2 text-sm text-nowrap text-gray-700 w-full border-border hover:bg-gray-100 text-left border-b"
+                  className="block px-4 py-2 text-sm text-nowrap text-gray-700 w-full hover:bg-gray-100 text-left"
                   onClick={() => exportData("DOC")}
                 >
                   Export as DOC
@@ -422,13 +422,13 @@ export default function UserManagement() {
         </div>
 
         <div className="overflow-x-auto">
-          <Table className="w-full rounded-2xl bg-background p-2 md:p-5">
+          <Table className="w-full rounded-2xl bg-white p-2 md:p-5">
             <TableHeader className="bg-[#F5F5F5] hover:bg-[#F5F5F5]">
-              <TableRow>
+              <TableRow className="border-b border-gray-200">
                 <TableHead className="p-2 md:p-4 hidden md:table-cell">
                   <input
                     type="checkbox"
-                    className="w-4 h-4 md:w-6 md:h-6 mt-1 border-[#01010129] cursor-pointer"
+                    className="w-4 h-4 md:w-6 md:h-6 mt-1 border-gray-300 cursor-pointer accent-[#DDFF00]"
                     checked={
                       selected.length === filteredUsers.length &&
                       selected.length > 0
@@ -436,35 +436,38 @@ export default function UserManagement() {
                     onChange={handleSelectAll}
                   />
                 </TableHead>
-                <TableHead className="text-sm md:text-base font-medium">
+                <TableHead className="text-sm md:text-base font-semibold text-gray-800">
                   Name
                 </TableHead>
-                <TableHead className="text-sm md:text-base font-medium hidden md:table-cell">
+                <TableHead className="text-sm md:text-base font-semibold text-gray-800 hidden md:table-cell">
                   Email Address
                 </TableHead>
-                <TableHead className="text-sm md:text-base font-medium">
+                <TableHead className="text-sm md:text-base font-semibold text-gray-800">
                   KYC Status
                 </TableHead>
-                <TableHead className="text-sm md:text-base font-medium hidden md:table-cell">
+                <TableHead className="text-sm md:text-base font-semibold text-gray-800 hidden md:table-cell">
                   Registration Date
                 </TableHead>
-                <TableHead className="text-sm md:text-base font-medium">
+                <TableHead className="text-sm md:text-base font-semibold text-gray-800">
                   Action
                 </TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {paginatedData.map((user, index) => (
-                <TableRow key={index} className="py-3 md:py-6">
+                <TableRow
+                  key={index}
+                  className="py-3 md:py-6 hover:bg-gray-50 border-b border-gray-100"
+                >
                   <TableCell className="p-2 md:p-4 hidden md:table-cell">
                     <input
                       type="checkbox"
-                      className="w-4 h-4 md:w-6 md:h-6 mt-1 cursor-pointer"
+                      className="w-4 h-4 md:w-6 md:h-6 mt-1 cursor-pointer accent-[#DDFF00] border-gray-300"
                       checked={selected.includes(user.id)}
                       onChange={() => handleSelect(user.id)}
                     />
                   </TableCell>
-                  <TableCell className="text-sm md:text-base py-3 md:py-6">
+                  <TableCell className="text-sm md:text-base py-3 md:py-6 font-medium">
                     <div>
                       {user.name}
                       <div className="md:hidden text-xs text-gray-500">
@@ -476,7 +479,7 @@ export default function UserManagement() {
                     {user.email}
                   </TableCell>
                   <TableCell className="text-sm md:text-base py-3 md:py-6">
-                    <span className="px-2 md:px-4 py-1 md:py-2 rounded-md bg-[#E6F7EF] text-[#00A85A] text-xs md:text-sm">
+                    <span className="px-2 md:px-4 py-1 md:py-2 rounded-md bg-[#E6F7EF] text-[#00A85A] text-xs md:text-sm font-medium border border-[#00A85A]/20">
                       {user.kycStatus}
                     </span>
                   </TableCell>
@@ -486,12 +489,12 @@ export default function UserManagement() {
                   <TableCell>
                     <Button
                       variant="outline"
-                      className="cursor-pointer border border-[#DDFF00] rounded-sm hover:bg-transparent p-1 md:p-2 h-auto"
+                      className="cursor-pointer border border-[#DDFF00] rounded-md hover:bg-[#DDFF00]/10 p-1 md:p-2 h-auto"
                       onClick={() => handleViewUser(user.id)}
                     >
                       <MoreHorizontal
                         size={isMobile ? 12 : 14}
-                        className="text-[#DDFF00]"
+                        className="text-black"
                       />
                     </Button>
                   </TableCell>
@@ -502,7 +505,7 @@ export default function UserManagement() {
         </div>
       </div>
 
-      <div className="flex flex-col md:flex-row justify-between items-center mt-2 md:mt-4 p-3 md:p-8 gap-3 md:gap-0">
+      <div className="flex flex-col md:flex-row justify-between items-center mt-2 md:mt-4 p-3 md:p-8 gap-3 md:gap-0 bg-white rounded-lg shadow-sm border border-gray-100">
         <div className="flex items-center gap-1 md:gap-2 text-sm md:text-base">
           <span>Showing</span>
           <Select
@@ -511,7 +514,7 @@ export default function UserManagement() {
               setCurrentPage(1);
             }}
           >
-            <SelectTrigger className="w-12 md:w-16 bg-background h-8 md:h-10">
+            <SelectTrigger className="w-12 md:w-16 bg-white h-8 md:h-10 border border-gray-300">
               {itemsPerPage}
             </SelectTrigger>
             <SelectContent>
@@ -532,7 +535,7 @@ export default function UserManagement() {
                   currentPage === 1
                     ? "pointer-events-none opacity-50"
                     : "cursor-pointer"
-                } h-8 md:h-10 w-8 md:w-10 p-0 flex items-center justify-center`}
+                } h-8 md:h-10 w-8 md:w-10 p-0 flex items-center justify-center bg-white border border-gray-200 shadow-sm`}
               />
             </PaginationItem>
 
@@ -540,7 +543,7 @@ export default function UserManagement() {
               <PaginationItem>
                 <PaginationLink
                   isActive={true}
-                  className="bg-primary text-white hover:bg-primary/90 h-8 md:h-10 w-8 md:w-10 p-0 flex items-center justify-center"
+                  className="bg-[#DDFF00] text-black hover:bg-[#DDFF00]/90 h-8 md:h-10 w-8 md:w-10 p-0 flex items-center justify-center font-medium shadow-sm"
                 >
                   {currentPage}{" "}
                   <span className="ml-1 text-xs">of {totalPages}</span>
@@ -557,7 +560,7 @@ export default function UserManagement() {
                   currentPage === totalPages
                     ? "pointer-events-none opacity-50"
                     : "cursor-pointer"
-                } h-8 md:h-10 w-8 md:w-10 p-0 flex items-center justify-center`}
+                } h-8 md:h-10 w-8 md:w-10 p-0 flex items-center justify-center bg-white border border-gray-200 shadow-sm`}
               />
             </PaginationItem>
           </PaginationContent>

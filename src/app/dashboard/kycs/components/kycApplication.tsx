@@ -463,19 +463,19 @@ const KycApplicationsTable = () => {
               <input
                 type="text"
                 placeholder="Search"
-                className="bg-background-alt border-border rounded-l-[8px] p-3 md:p-4 flex-1"
+                className="bg-background-alt border-border rounded-l-[8px] p-3 md:p-4 flex-1 w-full text-sm"
                 value={searchTerm}
                 onChange={handleSearchChange}
               />
-              <button className="bg-primary rounded-r-[8px] p-3 md:p-4 px-4 md:px-6">
-                <Search size={20} className="text-text-body" />
+              <button className="bg-primary rounded-r-[8px] p-3 md:p-4 px-3 md:px-6 flex-shrink-0">
+                <Search size={18} className="text-text-body" />
               </button>
               {areFiltersActive && (
                 <button
-                  className="bg-background-alt border-border rounded-[8px] p-3 md:p-4 ml-2"
+                  className="bg-background-alt border-border rounded-[8px] p-3 md:p-4 ml-2 flex-shrink-0"
                   onClick={handleResetFilters}
                 >
-                  <X size={20} className="text-text-body" />
+                  <X size={18} className="text-text-body" />
                 </button>
               )}
             </div>

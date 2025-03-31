@@ -120,16 +120,18 @@ export default function UserCardsSection({
           </Button>
 
           <div className="flex flex-row justify-center items-center w-full sm:w-auto">
-            <input
-              type="text"
-              placeholder="Search"
-              className="bg-background-alt border-border rounded-l-[8px] p-2 sm:p-4 flex-grow"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-            <button className="bg-primary rounded-r-[8px] p-2 sm:p-4 px-3 sm:px-6">
-              <Search size={20} className="text-text-body" />
-            </button>
+            <div className="flex flex-row w-full">
+              <input
+                type="text"
+                placeholder="Search"
+                className="bg-background-alt border-border rounded-l-[8px] p-2 sm:p-4 flex-1 min-w-0"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+              <button className="bg-primary rounded-r-[8px] p-2 sm:p-4 px-3 sm:px-6 flex-shrink-0">
+                <Search size={20} className="text-text-body" />
+              </button>
+            </div>
           </div>
         </div>
 

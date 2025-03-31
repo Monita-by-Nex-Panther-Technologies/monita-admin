@@ -4,28 +4,24 @@ import { toast } from "sonner";
 import { ErrorResponse } from "@/interfaces";
 import axios, { AxiosError } from "axios";
 
-interface User {
+interface Profile {
   id: string;
-  email: string;
-  name: string;
-  role: "ADMIN" | "USER";
-}
-
-interface Tokens {
-  accessToken: string;
-  refreshToken: string;
+  email: string | null;
+  firstName: string;
+  lastName: string;
+  monitag: string;
 }
 
 interface AuthState {
-  user: User | null;
-  tokens: Tokens | null;
+  profile: Profile | null;
+  token: string | null;
   loading: boolean;
   error: string | null;
 }
 
 const initialState: AuthState = {
-  user: null,
-  tokens: null,
+  profile: null,
+  token: null,
   loading: false,
   error: null,
 };
@@ -33,12 +29,23 @@ const initialState: AuthState = {
 export const signIn = createAsyncThunk(
   "auth/signIn",
   async (
-    credentials: { email: string; password: string },
+    credentials: { phone: string; password: string },
     { rejectWithValue }
   ) => {
     try {
+      const payload = {
+        phoneNumber: credentials.phone,
+        passcode: credentials.password,
+      };
+
+      console.log("Attempting login with payload:", {
+        phoneNumber: payload.phoneNumber,
+        passcode: "****",
+      });
+
       if (typeof window !== "undefined" && (window as any).mockAuthResponse) {
         await new Promise((resolve) => setTimeout(resolve, 2000));
+        console.log("Using mock response for login");
         const response = (window as any).mockAuthResponse;
 
         toast.success("Login successful!");
@@ -46,9 +53,13 @@ export const signIn = createAsyncThunk(
         return response;
       }
 
-      const response = await axiosInstance.post("/auth/login", credentials);
+      // Now using the local API route that proxies to the real API
+      const response = await axiosInstance.post("/auth/login", payload);
+      console.log("Login successful, response:", response.data);
+      toast.success("Login successful!");
       return response.data.data;
     } catch (error) {
+      console.error("Login error:", error);
       if (axios.isAxiosError(error)) {
         const axiosError = error as AxiosError<ErrorResponse>;
         return rejectWithValue(
@@ -65,17 +76,17 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     logout(state) {
-      state.user = null;
-      state.tokens = null;
+      state.profile = null;
+      state.token = null;
       state.error = null;
       if (typeof window !== "undefined") {
-        localStorage.removeItem("authTokens");
-        localStorage.removeItem("user");
+        localStorage.removeItem("authToken");
+        localStorage.removeItem("profile");
       }
     },
     rehydrate(state, action) {
-      state.tokens = action.payload.tokens;
-      state.user = action.payload.user;
+      state.token = action.payload.token;
+      state.profile = action.payload.profile;
     },
   },
   extraReducers: (builder) => {
@@ -86,14 +97,12 @@ const authSlice = createSlice({
       })
       .addCase(signIn.fulfilled, (state, action) => {
         state.loading = false;
-        state.user = action.payload.user;
-        state.tokens = {
-          accessToken: action.payload.tokens.accessToken,
-          refreshToken: action.payload.tokens.refreshToken,
-        };
+        state.profile = action.payload.profile;
+        state.token = action.payload.token;
+
         if (typeof window !== "undefined") {
-          localStorage.setItem("authTokens", JSON.stringify(state.tokens));
-          localStorage.setItem("user", JSON.stringify(state.user));
+          localStorage.setItem("authToken", JSON.stringify(state.token));
+          localStorage.setItem("profile", JSON.stringify(state.profile));
         }
       })
       .addCase(signIn.rejected, (state, action) => {

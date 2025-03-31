@@ -18,11 +18,11 @@ const ProtectedRoute = ({
   children,
   adminOnly = false,
 }: ProtectedRouteProps) => {
-  const { user, tokens, loading } = useAppSelector((state) => state.auth);
+  const { profile, token, loading } = useAppSelector((state) => state.auth);
   const router = useRouter();
 
-  const isAuthenticated = !!user && !!tokens?.accessToken;
-  const isAdmin = user?.role === "ADMIN";
+  const isAuthenticated = !!profile && !!token;
+  const isAdmin = !!profile;
 
   useEffect(() => {
     if (!isAuthenticated) {

@@ -259,15 +259,15 @@ const StaffManagementTable = () => {
               </span>
             </button>
 
-            <div className="flex flex-row justify-center items-center w-full sm:w-auto">
+            <div className="relative flex flex-row w-full sm:w-auto">
               <input
                 type="text"
                 placeholder="Search"
-                className="bg-background-alt border-border rounded-l-[8px] p-4 flex-grow sm:flex-grow-0"
+                className="bg-background-alt border-border rounded-l-[8px] p-4 w-full"
                 value={searchTerm}
                 onChange={handleSearchChange}
               />
-              <button className="bg-primary rounded-r-[8px] p-4 px-6">
+              <button className="bg-primary rounded-r-[8px] p-4 px-6 min-w-[60px] flex-shrink-0">
                 <Search size={24} className="text-text-body" />
               </button>
             </div>

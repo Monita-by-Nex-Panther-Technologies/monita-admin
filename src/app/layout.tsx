@@ -47,11 +47,11 @@ export default function RootLayout({
 function AppContent({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const pathname = usePathname();
-  const { user, tokens } = useAppSelector((state) => state.auth);
+  const { profile, token } = useAppSelector((state) => state.auth);
   const publicPaths = ["/auth", "/forgot-password", "/reset-password"];
 
   const isPublicPath = publicPaths.some((path) => pathname?.startsWith(path));
-  const isAuthenticated = !!user && !!tokens?.accessToken;
+  const isAuthenticated = !!profile && !!token;
 
   useEffect(() => {
     if (isAuthenticated && isPublicPath) {

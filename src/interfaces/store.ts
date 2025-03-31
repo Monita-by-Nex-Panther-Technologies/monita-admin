@@ -1,8 +1,16 @@
 import { store } from "@/store";
 
+export interface Profile {
+  id: string;
+  email: string | null;
+  firstName: string;
+  lastName: string;
+  monitag: string;
+}
+
 export interface AuthState {
-  user: any | null;
-  tokens: any | null;
+  profile: Profile | null;
+  token: string | null;
   loading: boolean;
   error: string | null;
 }

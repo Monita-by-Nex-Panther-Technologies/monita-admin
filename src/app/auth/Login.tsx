@@ -9,47 +9,23 @@ import Image from "next/image";
 import LoadingSpinner from "@/components/ui/LoadingSpinner";
 import Link from "next/link";
 
-// Mock API response for testing
-const MOCK_USER = {
-  id: "usr_123456789",
-  email: "admin@monita.com",
-  name: "Admin User",
-  role: "ADMIN" as const,
-};
-
-const MOCK_TOKENS = {
-  accessToken:
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c3JfMTIzNDU2Nzg5Iiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNjE2MTQ4MzY0fQ.dummy_token",
-  refreshToken:
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c3JfMTIzNDU2Nzg5Iiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNjE2MTQ4MzY0fQ.dummy_refresh_token",
-};
-
 const Login = () => {
   const router = useRouter();
   const dispatch = useAppDispatch();
-  const { loading, error, user } = useAppSelector((state) => state.auth);
-  const [email, setEmail] = useState("");
+  const { loading, error, profile } = useAppSelector((state) => state.auth);
+  const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
   useEffect(() => {
-    if (user) {
+    if (profile) {
       router.push("/dashboard");
     }
-  }, [user, router]);
+  }, [profile, router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    // For simulation purposes
-    // @ts-ignore - Ignore TypeScript error for the mock implementation
-    window.mockAuthResponse = {
-      user: MOCK_USER,
-      tokens: MOCK_TOKENS,
-    };
-
-    // Dispatch the signIn action
-    dispatch(signIn({ email, password }));
+    dispatch(signIn({ phone, password }));
   };
 
   const togglePassword = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -68,6 +44,7 @@ const Login = () => {
                 alt="Monita Logo"
                 width={120}
                 height={40}
+                style={{ height: "auto" }}
                 className="h-auto"
               />
             </div>
@@ -82,18 +59,18 @@ const Login = () => {
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
               <label
-                htmlFor="email"
+                htmlFor="phone"
                 className="block text-sm font-medium text-gray-700 mb-2 font-poppins"
               >
-                Email Address
+                Phone Number
               </label>
               <input
-                id="email"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                id="phone"
+                type="tel"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
                 className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#CEEF0A] font-poppins"
-                placeholder="Enter your email"
+                placeholder="Enter your phone number"
                 required
               />
             </div>
@@ -104,13 +81,13 @@ const Login = () => {
                   htmlFor="password"
                   className="block text-sm font-medium text-gray-700 font-poppins"
                 >
-                  Password
+                  Passcode
                 </label>
                 <Link
                   href="/auth/forget-password"
                   className="text-sm text-[#CEEF0A] hover:text-[#c0df00] font-poppins"
                 >
-                  Forgot password?
+                  Forgot passcode?
                 </Link>
               </div>
               <div className="relative group">
@@ -120,14 +97,14 @@ const Login = () => {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   className="w-full px-4 py-3 pr-12 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#CEEF0A] font-poppins"
-                  placeholder="Enter your password"
+                  placeholder="Enter your passcode"
                   required
                 />
                 <button
                   type="button"
                   onClick={togglePassword}
                   className="absolute right-3 top-1/2 transform -translate-y-1/2 p-1.5 rounded-md text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-[#CEEF0A] transition-colors"
-                  aria-label={showPassword ? "Hide password" : "Show password"}
+                  aria-label={showPassword ? "Hide passcode" : "Show passcode"}
                 >
                   {showPassword ? (
                     <EyeOffIcon className="h-4 w-4" />
