@@ -3,57 +3,141 @@
 import { images } from "@/constants/images";
 import Image from "next/image";
 import React from "react";
-import { BillPayments, Button, SidebarNavItem, SideBarSectionHeading } from "./SidebarComponents";
+import {
+  BillPayments,
+  Button,
+  SidebarNavItem,
+  SideBarSectionHeading,
+} from "./SidebarComponents";
 import { icons } from "@/constants/icons";
+import { X } from "lucide-react";
 
+interface SidebarProps {
+  onCloseMobile?: () => void;
+}
 
-const Sidebar = () => {
-    return (
-        <div className="w-full bg-[#262C05] justify-start items-start flex flex-col px-6 py-10 gap-14 pb-20 ">
-            <Image src={images.image.monitaLogo} alt="monitaLogo" width={164} height={39.96} />
+const Sidebar = ({ onCloseMobile }: SidebarProps) => {
+  return (
+    <div className="w-full bg-[#262C05] flex flex-col px-6 py-8 gap-6 md:gap-10 h-full">
+      <div className="flex w-full items-center justify-between">
+        <Image
+          src={images.image.monitaLogo}
+          alt="monitaLogo"
+          width={164}
+          height={39.96}
+        />
 
-            <nav className="w-full">
-                <div className="w-full flex flex-col gap-[10px]">
-                    <SideBarSectionHeading title="Overview" />
-                    <SidebarNavItem icon={icons.home} label="Dashboard" href="/dashboard" />
-                    <SidebarNavItem icon={icons.transact} label="Transactions" href="/dashboard/transactions" />
-                    <SidebarNavItem icon={icons.statisticsIcon} label="Statistics" href="/dashboard/statistics" />
-                </div>
+        <button
+          onClick={onCloseMobile}
+          className="lg:hidden text-white p-1"
+          aria-label="Close sidebar"
+        >
+          <X size={24} />
+        </button>
+      </div>
 
-                <div className="w-full flex flex-col gap-[10px]">
-                    <SideBarSectionHeading title="Users" />
-                    <SidebarNavItem icon={icons.customersIcon} label="Customers" href="/dashboard/customers" />
-                    <SidebarNavItem icon={icons.kycIcon} label="KYC Applications" href="/dashboard/kycs" />
-                    <SidebarNavItem icon={icons.staffIcon} label="Staff" href="/dashboard/staffs" />
-                </div>
-
-                <div className="w-full flex flex-col gap-[10px]">
-                    <SideBarSectionHeading title="Financial Services" />
-
-                    {/* Use the BillPayments component */}
-                    <BillPayments />
-
-                    <SidebarNavItem icon={icons.giftcardIcon} label="GiftCards" href="/dashboard/giffCard" />
-                    <SidebarNavItem icon={icons.virtAccIcon} label="Virtual Accounts" href="/dashboard/virtualAcccount" />
-                    <SidebarNavItem icon={icons.cashbackIcon} label="Cashback" href="/dashboard/cashback" />
-                </div>
-
-                <div className="w-full flex flex-col gap-[10px]">
-                    <SideBarSectionHeading title="Products & Support" />
-                    <SidebarNavItem icon={icons.cardIcon} label="One Card" href="/dashboard/oneCard" />
-                    <SidebarNavItem icon={icons.esimIcon} label="eSIMs" href="/dashboard/bill-payments/products/esims" />
-                    <SidebarNavItem icon={icons.settingsIcon} label="Settings" href="/dashboard/settings" />
-                    <SidebarNavItem icon={icons.supportIcon} label="Support Tickets" href="/dashboard/supportTickets" />
-                </div>
-            </nav>
-
-            <div className="">
-                <Button icon={icons.logoutIcon} label="Logout" onClick={() => { }} />
-            </div>
-
-
+      <nav className="w-full flex-grow overflow-y-auto scrollbar-hide">
+        <div className="w-full flex flex-col gap-[10px] pb-6">
+          <SideBarSectionHeading title="Overview" />
+          <SidebarNavItem
+            icon={icons.home}
+            label="Dashboard"
+            href="/dashboard"
+            onClick={onCloseMobile}
+          />
+          <SidebarNavItem
+            icon={icons.transact}
+            label="Transactions"
+            href="/dashboard/transactions"
+            onClick={onCloseMobile}
+          />
+          <SidebarNavItem
+            icon={icons.statisticsIcon}
+            label="Statistics"
+            href="/dashboard/statistics"
+            onClick={onCloseMobile}
+          />
         </div>
-    );
+
+        <div className="w-full flex flex-col gap-[10px]">
+          <SideBarSectionHeading title="Users" />
+          <SidebarNavItem
+            icon={icons.customersIcon}
+            label="Customers"
+            href="/dashboard/customers"
+            onClick={onCloseMobile}
+          />
+          <SidebarNavItem
+            icon={icons.kycIcon}
+            label="KYC Applications"
+            href="/dashboard/kycs"
+            onClick={onCloseMobile}
+          />
+          <SidebarNavItem
+            icon={icons.staffIcon}
+            label="Staff"
+            href="/dashboard/staffs"
+            onClick={onCloseMobile}
+          />
+        </div>
+
+        <div className="w-full flex flex-col gap-[10px]">
+          <SideBarSectionHeading title="Financial Services" />
+          <BillPayments onMobileItemClick={onCloseMobile} />
+          <SidebarNavItem
+            icon={icons.giftcardIcon}
+            label="GiftCards"
+            href="/dashboard/giffCard"
+            onClick={onCloseMobile}
+          />
+          <SidebarNavItem
+            icon={icons.virtAccIcon}
+            label="Virtual Accounts"
+            href="/dashboard/virtualAcccount"
+            onClick={onCloseMobile}
+          />
+          <SidebarNavItem
+            icon={icons.cashbackIcon}
+            label="Cashback"
+            href="/dashboard/cashback"
+            onClick={onCloseMobile}
+          />
+        </div>
+
+        <div className="w-full flex flex-col gap-[10px]">
+          <SideBarSectionHeading title="Products & Support" />
+          <SidebarNavItem
+            icon={icons.cardIcon}
+            label="One Card"
+            href="/dashboard/oneCard"
+            onClick={onCloseMobile}
+          />
+          <SidebarNavItem
+            icon={icons.esimIcon}
+            label="eSIMs"
+            href="/dashboard/bill-payments/products/esims"
+            onClick={onCloseMobile}
+          />
+          <SidebarNavItem
+            icon={icons.settingsIcon}
+            label="Settings"
+            href="/dashboard/settings"
+            onClick={onCloseMobile}
+          />
+          <SidebarNavItem
+            icon={icons.supportIcon}
+            label="Support Tickets"
+            href="/dashboard/supportTickets"
+            onClick={onCloseMobile}
+          />
+        </div>
+      </nav>
+
+      <div className="mt-auto">
+        <Button icon={icons.logoutIcon} label="Logout" onClick={() => {}} />
+      </div>
+    </div>
+  );
 };
 
 export default Sidebar;
