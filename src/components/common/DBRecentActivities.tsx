@@ -93,7 +93,7 @@ const DBRecentActivities: React.FC = () => {
         <h1 className="text-text-title text-xl font-semibold font-poppins mb-3 lg:mb-0">
           Recent Activities
         </h1>
-        <div className="flex w-full lg:w-auto overflow-x-auto bg-background-alt gap-x-1.5 px-3 py-2 rounded-[8px]">
+        <div className="flex flex-col lg:flex-row w-full lg:w-auto overflow-x-auto bg-background-alt gap-y-2 lg:gap-x-1.5 px-3 py-2 rounded-[8px]">
           <button className="bg-background text-text-body px-4 py-3 w-full lg:w-[186px] min-w-[100px] rounded-[8px] active:bg-primary-foreground">
             Transactions
           </button>

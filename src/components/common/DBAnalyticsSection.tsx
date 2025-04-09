@@ -31,18 +31,18 @@ const DBAnalyticsSection = () => {
   return (
     <div className="w-full py-6 px-4">
       {/* Filter by Date Section */}
-      <div className="w-full flex flex-col justify-between items-start bg-background p-4 rounded-[8px] gap-4 sm:gap-0">
-        <h1 className="text-text-title text-xl font-semibold font-poppins">
+      <div className="w-full flex flex-col sm:flex-row justify-between items-start sm:items-center bg-background p-4 rounded-[8px]">
+        <h1 className="text-text-title text-xl font-semibold font-poppins mb-2 sm:mb-0">
           Filter by Date
         </h1>
-        <div className="flex w-full overflow-x-auto no-scrollbar bg-background-alt gap-1.5 p-1 rounded-[8px]">
-          <button className="flex-shrink-0 justify-center items-center bg-background text-text-body font-poppins px-4 py-3 w-auto min-w-[100px] rounded-[8px] active:bg-primary-foreground sm:w-[186px]">
+        <div className="flex flex-row sm:flex-row bg-background-alt gap-x-1.5 gap-y-2 px-3 py-2 rounded-[8px]">
+          <button className="justify-center items-center bg-background text-text-body font-poppins px-4 py-3 w-full sm:w-[186px] rounded-[8px] active:bg-primary-foreground">
             Today
           </button>
-          <button className="flex-shrink-0 justify-center items-center bg-background text-text-body font-poppins px-4 py-3 w-auto min-w-[100px] rounded-[8px] sm:w-[186px]">
+          <button className="justify-center items-center bg-background text-text-body font-poppins px-4 py-3 w-full sm:w-[186px] rounded-[8px]">
             This Week
           </button>
-          <button className="flex-shrink-0 justify-center items-center bg-background text-text-body font-poppins px-4 py-3 w-auto min-w-[100px] rounded-[8px] sm:w-[186px]">
+          <button className="justify-center items-center bg-background text-text-body font-poppins px-4 py-3 w-full sm:w-[186px] rounded-[8px]">
             This Year
           </button>
         </div>
