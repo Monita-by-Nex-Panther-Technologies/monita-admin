@@ -8,20 +8,28 @@ import Image from "next/image";
 import Link from "next/link";
 import { toast, Toaster } from "sonner";
 import { maskEmail } from "@/utils/masks";
+import { useAuthStore } from "@/store/authStore";
+import { ResetPasswordPayload } from "@/interfaces/auth";
 
 const ResetPassword = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const email = searchParams.get("email") || "";
   const maskedEmail = maskEmail(email);
+  const {
+    resetPassword,
+    isLoading: authLoading,
+    error: authError,
+    otpReference,
+  } = useAuthStore();
 
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [passwordStrength, setPasswordStrength] = useState("weak");
+  const [otp, setOtp] = useState("");
 
   const togglePassword = (field: "password" | "confirmPassword") => {
     if (field === "password") {
@@ -63,21 +71,36 @@ const ResetPassword = () => {
       return;
     }
 
-    setLoading(true);
+    if (!otp) {
+      toast.error("OTP is required");
+      return;
+    }
+
+    if (!otpReference) {
+      toast.error(
+        "OTP reference is missing. Please request a new password reset"
+      );
+      return;
+    }
+
+    const payload: ResetPasswordPayload = {
+      email,
+      otp,
+      otpReference,
+      password,
+    };
 
     try {
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-
-      console.log(`Password reset for ${email} successful`);
+      await resetPassword(payload);
       toast.success("Password reset successful!");
       setSuccess(true);
       setPassword("");
       setConfirmPassword("");
-    } catch (error) {
-      console.error("Error resetting password:", error);
-      toast.error("Failed to reset password. Please try again.");
-    } finally {
-      setLoading(false);
+      setOtp("");
+    } catch (error: any) {
+      toast.error(
+        error.message || "Failed to reset password. Please try again."
+      );
     }
   };
 
@@ -131,6 +154,24 @@ const ResetPassword = () => {
           </div>
         ) : (
           <form onSubmit={handleResetPassword} className="space-y-7">
+            <div>
+              <label
+                htmlFor="otp"
+                className="block text-sm font-medium text-gray-700 mb-2 font-poppins"
+              >
+                OTP Code
+              </label>
+              <input
+                id="otp"
+                type="text"
+                value={otp}
+                onChange={(e) => setOtp(e.target.value)}
+                className="w-full px-4 py-3.5 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#262C05] font-poppins"
+                placeholder="Enter the OTP code sent to your email"
+                required
+              />
+            </div>
+
             <div>
               <label
                 htmlFor="password"
@@ -227,12 +268,18 @@ const ResetPassword = () => {
               )}
             </div>
 
+            {authError && (
+              <div className="text-red-500 text-sm font-poppins">
+                {authError}
+              </div>
+            )}
+
             <button
               type="submit"
-              disabled={loading}
+              disabled={authLoading}
               className="w-full bg-[#262C05] hover:bg-[#1a2003] text-white font-semibold py-3.5 px-4 rounded-lg transition duration-200 font-poppins shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {loading ? (
+              {authLoading ? (
                 <span className="flex items-center justify-center">
                   <LoadingSpinner className="-ml-1 mr-3 h-5 w-5 text-white" />
                   Resetting Password...
@@ -244,7 +291,7 @@ const ResetPassword = () => {
 
             <div className="text-center">
               <Link
-                href="/"
+                href="/signin"
                 className="text-[#262C05] hover:text-[#1a2003] text-sm font-poppins"
               >
                 Back to Sign In
