@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
-import { api, setAuthToken, removeAuthToken } from "@/lib/api";
+import { api, setAuthToken, removeAuthToken } from "@/utilities/api";
 import {
   AuthState,
   LoginCredentials,
