@@ -1,11 +1,7 @@
 "use client";
-import { Providers } from "@/store/provider";
 import { Poppins } from "next/font/google";
 import "./globals.css";
-import ProtectedRoute from "@/components/ProtectedRoute";
-import { useAppSelector } from "@/hooks/useStore";
-import { usePathname, useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { Toaster } from "sonner";
 
 const poppins = Poppins({
   variable: "--font-poppins",
@@ -21,32 +17,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${poppins.variable} antialiased`}>
-        <Providers>
-          <AppContent>{children}</AppContent>
-        </Providers>
+        {children}
+        <Toaster position="top-right" richColors />
       </body>
     </html>
   );
-}
-
-function AppContent({ children }: { children: React.ReactNode }) {
-  const router = useRouter();
-  const pathname = usePathname();
-  const { profile, token } = useAppSelector((state) => state.auth);
-  const publicPaths = ["/", "/forgot-password", "/reset-password"];
-
-  const isPublicPath = publicPaths.some((path) => pathname?.startsWith(path));
-  const isAuthenticated = !!profile && !!token;
-
-  useEffect(() => {
-    if (isAuthenticated && isPublicPath) {
-      router.push("/dashboard");
-    }
-  }, [isAuthenticated, isPublicPath, router]);
-
-  if (isPublicPath) {
-    return <>{children}</>;
-  }
-
-  return <ProtectedRoute>{children}</ProtectedRoute>;
 }

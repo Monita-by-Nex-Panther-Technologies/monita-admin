@@ -6,18 +6,20 @@ import LoadingSpinner from "@/components/LoadingSpinner";
 import MonitaLogo from "@/assets/images/MonitaLogo.png";
 import Image from "next/image";
 import Link from "next/link";
+import { toast, Toaster } from "sonner";
+import { maskEmail } from "@/utils/masks";
 
 const ResetPassword = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const email = searchParams.get("email") || "";
+  const maskedEmail = maskEmail(email);
 
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
   const [passwordStrength, setPasswordStrength] = useState("weak");
 
@@ -50,41 +52,39 @@ const ResetPassword = () => {
 
   const handleResetPassword = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError("");
 
     if (password !== confirmPassword) {
-      setError("Passwords do not match");
+      toast.error("Passwords do not match");
       return;
     }
 
     if (password.length < 8) {
-      setError("Password must be at least 8 characters long");
+      toast.error("Password must be at least 8 characters long");
       return;
     }
 
     setLoading(true);
 
     try {
-      // Simulating API call delay
       await new Promise((resolve) => setTimeout(resolve, 2000));
 
       console.log(`Password reset for ${email} successful`);
+      toast.success("Password reset successful!");
       setSuccess(true);
       setPassword("");
       setConfirmPassword("");
     } catch (error) {
       console.error("Error resetting password:", error);
-      setError("Failed to reset password. Please try again.");
+      toast.error("Failed to reset password. Please try again.");
     } finally {
       setLoading(false);
     }
   };
 
-  // Redirect to login
   useEffect(() => {
     if (success) {
       const timer = setTimeout(() => {
-        router.push("/auth");
+        router.push("/");
       }, 3000);
       return () => clearTimeout(timer);
     }
@@ -92,191 +92,171 @@ const ResetPassword = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-background-primary p-4 sm:p-6 md:p-8">
+      <Toaster position="top-center" richColors />
       <div className="w-full max-w-[420px] mx-auto">
-        <div className="bg-white rounded-xl shadow-xl p-6 sm:p-8 border border-gray-100">
-          <div className="text-center mb-8">
-            <div className="flex justify-center mb-4">
-              <Image
-                src={MonitaLogo}
-                alt="Monita Logo"
-                width={120}
-                height={40}
-                className="h-auto"
-              />
-            </div>
-            <h1 className="text-2xl sm:text-3xl font-bold font-poppins mb-2 text-gray-800">
-              Reset Password
-            </h1>
-            <p className="text-text-body text-sm sm:text-base font-poppins">
-              {success
-                ? "Your password has been reset successfully!"
-                : "Create a new password for your account"}
-            </p>
+        <div className="text-center mb-10">
+          <div className="flex justify-center mb-6">
+            <Image
+              src={MonitaLogo}
+              alt="Monita Logo"
+              width={140}
+              height={50}
+              className="h-auto"
+            />
           </div>
+          <h1 className="text-2xl sm:text-3xl font-bold font-poppins mb-3 text-gray-800">
+            Reset Password
+          </h1>
+          <p className="text-text-body text-sm sm:text-base font-poppins">
+            {success
+              ? "Your password has been reset successfully!"
+              : `Create a new password for ${maskedEmail}`}
+          </p>
+        </div>
 
-          {success ? (
-            <div className="text-center space-y-6">
-              <div className="flex justify-center">
-                <CheckCircleIcon className="h-16 w-16 text-green-500" />
-              </div>
-              <p className="text-gray-700 font-poppins">
-                You will be redirected to the login page shortly.
-              </p>
-              <Link
-                href="/auth"
-                className="block w-full bg-[#262C05] hover:bg-[#1a2003] text-white font-semibold py-3.5 px-4 rounded-lg transition duration-200 font-poppins shadow-md text-center"
+        {success ? (
+          <div className="text-center space-y-7">
+            <div className="flex justify-center">
+              <CheckCircleIcon className="h-16 w-16 text-green-500" />
+            </div>
+            <p className="text-gray-700 font-poppins">
+              You will be redirected to the login page shortly.
+            </p>
+            <Link
+              href="/"
+              className="block w-full bg-[#262C05] hover:bg-[#1a2003] text-white font-semibold py-3.5 px-4 rounded-lg transition duration-200 font-poppins shadow-md text-center"
+            >
+              Go to Login
+            </Link>
+          </div>
+        ) : (
+          <form onSubmit={handleResetPassword} className="space-y-7">
+            <div>
+              <label
+                htmlFor="password"
+                className="block text-sm font-medium text-gray-700 mb-2 font-poppins"
               >
-                Go to Login
+                New Password
+              </label>
+              <div className="relative group">
+                <input
+                  id="password"
+                  type={showPassword ? "text" : "password"}
+                  value={password}
+                  onChange={handlePasswordChange}
+                  className="w-full px-4 py-3.5 pr-12 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#262C05] font-poppins"
+                  placeholder="Enter new password"
+                  required
+                  minLength={8}
+                />
+                <button
+                  type="button"
+                  onClick={() => togglePassword("password")}
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 p-1.5 rounded-md text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-[#262C05]"
+                  aria-label={showPassword ? "Hide password" : "Show password"}
+                >
+                  {showPassword ? (
+                    <EyeOffIcon className="h-4 w-4" />
+                  ) : (
+                    <EyeIcon className="h-4 w-4" />
+                  )}
+                </button>
+              </div>
+              {password && (
+                <div className="mt-2">
+                  <div className="flex items-center gap-2">
+                    <div className="h-1.5 flex-1 rounded-full bg-gray-200 overflow-hidden">
+                      <div
+                        className={`h-full ${
+                          passwordStrength === "weak"
+                            ? "w-1/3 bg-red-500"
+                            : passwordStrength === "medium"
+                            ? "w-2/3 bg-yellow-500"
+                            : "w-full bg-green-500"
+                        }`}
+                      ></div>
+                    </div>
+                    <span className="text-xs font-medium capitalize text-gray-500 font-poppins">
+                      {passwordStrength}
+                    </span>
+                  </div>
+                  <p className="text-xs text-gray-500 mt-1 font-poppins">
+                    Use at least 8 characters with a mix of uppercase,
+                    lowercase, numbers, and symbols.
+                  </p>
+                </div>
+              )}
+            </div>
+
+            <div>
+              <label
+                htmlFor="confirmPassword"
+                className="block text-sm font-medium text-gray-700 mb-2 font-poppins"
+              >
+                Confirm Password
+              </label>
+              <div className="relative group">
+                <input
+                  id="confirmPassword"
+                  type={showConfirmPassword ? "text" : "password"}
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  className="w-full px-4 py-3.5 pr-12 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#262C05] font-poppins"
+                  placeholder="Confirm new password"
+                  required
+                />
+                <button
+                  type="button"
+                  onClick={() => togglePassword("confirmPassword")}
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 p-1.5 rounded-md text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-[#262C05]"
+                  aria-label={
+                    showConfirmPassword ? "Hide password" : "Show password"
+                  }
+                >
+                  {showConfirmPassword ? (
+                    <EyeOffIcon className="h-4 w-4" />
+                  ) : (
+                    <EyeIcon className="h-4 w-4" />
+                  )}
+                </button>
+              </div>
+              {password && confirmPassword && password !== confirmPassword && (
+                <p className="text-red-500 text-xs mt-1 font-poppins">
+                  Passwords do not match
+                </p>
+              )}
+            </div>
+
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full bg-[#262C05] hover:bg-[#1a2003] text-white font-semibold py-3.5 px-4 rounded-lg transition duration-200 font-poppins shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {loading ? (
+                <span className="flex items-center justify-center">
+                  <LoadingSpinner className="-ml-1 mr-3 h-5 w-5 text-white" />
+                  Resetting Password...
+                </span>
+              ) : (
+                "Reset Password"
+              )}
+            </button>
+
+            <div className="text-center">
+              <Link
+                href="/"
+                className="text-[#262C05] hover:text-[#1a2003] text-sm font-poppins"
+              >
+                Back to Sign In
               </Link>
             </div>
-          ) : (
-            <form onSubmit={handleResetPassword} className="space-y-6">
-              {email && (
-                <div className="mb-4">
-                  <label className="block text-sm font-medium text-gray-700 mb-2 font-poppins">
-                    Email Address
-                  </label>
-                  <div className="w-full px-4 py-3 rounded-lg border border-gray-300 bg-gray-50 text-gray-700 font-poppins">
-                    {email}
-                  </div>
-                </div>
-              )}
+          </form>
+        )}
 
-              <div>
-                <label
-                  htmlFor="password"
-                  className="block text-sm font-medium text-gray-700 mb-2 font-poppins"
-                >
-                  New Password
-                </label>
-                <div className="relative group">
-                  <input
-                    id="password"
-                    type={showPassword ? "text" : "password"}
-                    value={password}
-                    onChange={handlePasswordChange}
-                    className="w-full px-4 py-3 pr-12 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#262C05] font-poppins"
-                    placeholder="Enter new password"
-                    required
-                    minLength={8}
-                  />
-                  <button
-                    type="button"
-                    onClick={() => togglePassword("password")}
-                    className="absolute right-3 top-1/2 transform -translate-y-1/2 p-1.5 rounded-md text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-[#262C05]"
-                    aria-label={
-                      showPassword ? "Hide password" : "Show password"
-                    }
-                  >
-                    {showPassword ? (
-                      <EyeOffIcon className="h-4 w-4" />
-                    ) : (
-                      <EyeIcon className="h-4 w-4" />
-                    )}
-                  </button>
-                </div>
-                {password && (
-                  <div className="mt-2">
-                    <div className="flex items-center gap-2">
-                      <div className="h-1.5 flex-1 rounded-full bg-gray-200 overflow-hidden">
-                        <div
-                          className={`h-full ${
-                            passwordStrength === "weak"
-                              ? "w-1/3 bg-red-500"
-                              : passwordStrength === "medium"
-                              ? "w-2/3 bg-yellow-500"
-                              : "w-full bg-green-500"
-                          }`}
-                        ></div>
-                      </div>
-                      <span className="text-xs font-medium capitalize text-gray-500 font-poppins">
-                        {passwordStrength}
-                      </span>
-                    </div>
-                    <p className="text-xs text-gray-500 mt-1 font-poppins">
-                      Use at least 8 characters with a mix of uppercase,
-                      lowercase, numbers, and symbols.
-                    </p>
-                  </div>
-                )}
-              </div>
-
-              <div>
-                <label
-                  htmlFor="confirmPassword"
-                  className="block text-sm font-medium text-gray-700 mb-2 font-poppins"
-                >
-                  Confirm Password
-                </label>
-                <div className="relative group">
-                  <input
-                    id="confirmPassword"
-                    type={showConfirmPassword ? "text" : "password"}
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                    className="w-full px-4 py-3 pr-12 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#262C05] font-poppins"
-                    placeholder="Confirm new password"
-                    required
-                  />
-                  <button
-                    type="button"
-                    onClick={() => togglePassword("confirmPassword")}
-                    className="absolute right-3 top-1/2 transform -translate-y-1/2 p-1.5 rounded-md text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-[#262C05]"
-                    aria-label={
-                      showConfirmPassword ? "Hide password" : "Show password"
-                    }
-                  >
-                    {showConfirmPassword ? (
-                      <EyeOffIcon className="h-4 w-4" />
-                    ) : (
-                      <EyeIcon className="h-4 w-4" />
-                    )}
-                  </button>
-                </div>
-                {password &&
-                  confirmPassword &&
-                  password !== confirmPassword && (
-                    <p className="text-red-500 text-xs mt-1 font-poppins">
-                      Passwords do not match
-                    </p>
-                  )}
-              </div>
-
-              {error && (
-                <div className="text-red-500 text-sm font-poppins">{error}</div>
-              )}
-
-              <button
-                type="submit"
-                disabled={loading}
-                className="w-full bg-[#262C05] hover:bg-[#1a2003] text-white font-semibold py-3.5 px-4 rounded-lg transition duration-200 font-poppins shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {loading ? (
-                  <span className="flex items-center justify-center">
-                    <LoadingSpinner className="-ml-1 mr-3 h-5 w-5 text-white" />
-                    Resetting Password...
-                  </span>
-                ) : (
-                  "Reset Password"
-                )}
-              </button>
-
-              <div className="text-center">
-                <Link
-                  href="/auth"
-                  className="text-[#262C05] hover:text-[#1a2003] text-sm font-poppins"
-                >
-                  Back to Sign In
-                </Link>
-              </div>
-            </form>
-          )}
-
-          <div className="text-center mt-8">
-            <p className="text-xs sm:text-sm text-gray-500 font-poppins">
-              © {new Date().getFullYear()} Monita Admin. All rights reserved.
-            </p>
-          </div>
+        <div className="text-center mt-10">
+          <p className="text-xs sm:text-sm text-gray-500 font-poppins">
+            © {new Date().getFullYear()} Monita Admin. All rights reserved.
+          </p>
         </div>
       </div>
     </div>
