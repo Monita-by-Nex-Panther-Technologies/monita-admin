@@ -7,8 +7,8 @@ import Image from "next/image";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import Link from "next/link";
 import { toast } from "sonner";
-import { useAuthStore } from "@/store/authStore";
-import { LoginCredentials } from "@/interfaces/auth";
+import { useAuthStore } from "@/store";
+import { LoginCredentials } from "@/interfaces";
 
 const Login = () => {
   const router = useRouter();

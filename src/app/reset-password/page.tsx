@@ -8,8 +8,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { toast, Toaster } from "sonner";
 import { maskEmail } from "@/utils/masks";
-import { useAuthStore } from "@/store/authStore";
-import { ResetPasswordPayload } from "@/interfaces/auth";
+import { useAuthStore } from "@/store";
+import { ResetPasswordPayload } from "@/interfaces";
 
 const ResetPassword = () => {
   const router = useRouter();

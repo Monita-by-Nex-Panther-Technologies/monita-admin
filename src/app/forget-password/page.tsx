@@ -6,8 +6,8 @@ import Image from "next/image";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import Link from "next/link";
 import { toast, Toaster } from "sonner";
-import { useAuthStore } from "@/store/authStore";
-import { ForgotPasswordPayload } from "@/interfaces/auth";
+import { useAuthStore } from "@/store";
+import { ForgotPasswordPayload } from "@/interfaces";
 
 const ForgetPassword = () => {
   const router = useRouter();
