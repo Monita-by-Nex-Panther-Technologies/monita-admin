@@ -20,6 +20,7 @@ export interface UserProfile {
   firstName: string;
   lastName: string;
   phone: string;
+  role?: string;
 }
 
 export interface LoginResponse {
