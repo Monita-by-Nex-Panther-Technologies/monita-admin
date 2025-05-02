@@ -1,3 +1,4 @@
+import { appname } from "@/constants/string";
 import axios, { AxiosError, AxiosResponse } from "axios";
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
@@ -41,13 +42,13 @@ api.interceptors.response.use(
 
 export const setAuthToken = (token: string): void => {
   if (typeof window !== "undefined") {
-    localStorage.setItem("auth_token", token);
+    localStorage.setItem(`${appname}-authdata`, token);
   }
 };
 
 export const removeAuthToken = (): void => {
   if (typeof window !== "undefined") {
-    localStorage.removeItem("auth_token");
+    localStorage.removeItem(`${appname}-authdata`);
   }
 };
 
