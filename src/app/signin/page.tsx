@@ -9,7 +9,7 @@ import { z } from 'zod'
 import { loginSchema } from './validation' // make sure this path is correct
 import { useHydrated } from '@/hooks/useHydrated'
 import LoginForm from './LoginForm'
-import { token } from '@/utilities/axios'
+import { useUserStore } from '@/store/userStore'
 
 export  type LoginFormInputs = z.infer<typeof loginSchema>
 
@@ -24,8 +24,13 @@ const LoginScreen = () => {
     isLoading: authLoading,
   } = useAuthStore()
 
+  const {
+    getUser,
+  } = useUserStore()
+
   useEffect(() => {
     if (isAuthenticated && token) {
+      getUser()
       router.push('/dashboard')
     }
   }, [isAuthenticated, token, router])
@@ -33,9 +38,6 @@ const LoginScreen = () => {
   const onSubmit = async (data: LoginFormInputs) => {
     try {
       await login(data)
-      console.log(isAuthenticated);
-      console.log(token);
-      
       toast.success('Login successful! Redirecting...')
     } catch (error: any) {
       toast.error(error?.message || 'Invalid email or password')

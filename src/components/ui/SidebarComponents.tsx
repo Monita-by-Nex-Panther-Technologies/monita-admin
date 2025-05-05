@@ -10,6 +10,7 @@ import {
 import { ChevronDown, ChevronUp } from "lucide-react";
 import React from "react";
 import Link from "next/link";
+import Image, { StaticImageData } from "next/image";
 import { usePathname } from "next/navigation";
 
 export const SideBarSectionHeading = ({ title }: { title: string }) => {
@@ -21,14 +22,14 @@ export const SideBarSectionHeading = ({ title }: { title: string }) => {
 };
 
 interface SidebarNavItemProps {
-  icon: React.FC<React.SVGProps<SVGSVGElement>>;
+  icon: StaticImageData;
   label: string;
   href: string;
   onClick?: () => void;
 }
 
 export const SidebarNavItem: React.FC<SidebarNavItemProps> = ({
-  icon: Icon,
+  icon,
   label,
   href,
   onClick,
@@ -48,8 +49,12 @@ export const SidebarNavItem: React.FC<SidebarNavItemProps> = ({
                 }`}
     >
       <div className="flex items-center justify-center w-6 h-6">
-        <Icon
-          className={`w-6 h-6 text-white ${
+        <Image
+          src={icon}
+          alt={`${label} icon`}
+          width={24}
+          height={24}
+          className={`w-6 h-6 ${
             isActive ? "text-white" : "text-text-body opacity-60"
           }`}
         />
@@ -94,20 +99,17 @@ export const BillPayments: React.FC<BillPaymentsProps> = ({
         >
           <div className="flex items-center gap-3">
             <span className="icon-color">
-              <icons.bilpayIcon
+              <Image
+                src={icons.bilpayIcon}
                 alt="Bill Payments"
                 width={24}
                 height={24}
-                className={
+                className={`${
                   isActive ? "text-text-title" : "text-text-body opacity-60"
-                }
+                }`}
               />
             </span>
-            <span
-              className={`text-sm text-[16px] font-normal font-poppins leading-none ${
-                isActive ? "text-white" : "text-white"
-              }`}
-            >
+            <span className="text-sm text-[16px] font-normal font-poppins leading-none text-white">
               Bill Payments
             </span>
           </div>
@@ -155,25 +157,20 @@ export const BillPayments: React.FC<BillPaymentsProps> = ({
 };
 
 interface ButtonProps {
-  icon: React.FC<React.SVGProps<SVGSVGElement>>;
+  icon: StaticImageData;
   label: string;
   onClick?: () => void;
 }
 
-export const Button: React.FC<ButtonProps> = ({
-  icon: Icon,
-  label,
-  onClick,
-}) => {
+export const Button: React.FC<ButtonProps> = ({ icon, label, onClick }) => {
   return (
     <button
       onClick={onClick}
       className="flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer transition-colors w-full h-fit text-sidebar-foreground"
     >
       <div className="flex items-center justify-center w-6 h-6">
-        <Icon className="w-6 h-6 text-text-body" />
+        <Image src={icon} alt={`${label} icon`} width={24} height={24} className="w-6 h-6" />
       </div>
-
       <span className="text-[16px] font-normal font-poppins leading-none text-destructive">
         {label}
       </span>

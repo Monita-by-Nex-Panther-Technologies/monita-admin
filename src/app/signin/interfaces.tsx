@@ -26,7 +26,6 @@ export interface LoginCredentials {
   export interface AuthState {
     isAuthenticated: boolean;
     token: string | null ;
-    refreshToken: string | null;
     isLoading: boolean;
     login: (credentials: LoginCredentials) => Promise<ApiResponse<LoginResponse>>;
     logout: () => void;

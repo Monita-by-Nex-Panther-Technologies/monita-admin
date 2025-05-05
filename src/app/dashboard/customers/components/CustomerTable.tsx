@@ -1,21 +1,20 @@
 "use client";
 import React, { useState, useRef } from "react";
-import FilterModal, { FilterCriteria } from "./TransactionFilterModal";
-import { useTransactionStore } from "@/store/transactionStore";
+import FilterModal, { FilterCriteria } from "./CustomerFilterModal";
+import { CustomerQueryParams, useCustomerStore } from "@/store/customerStore";
 import TableLoading from "@/components/table/TableLoading";
 import GetPagination from "@/components/table/pagination";
 import Empty from "@/components/table/Empty";
-import TransactionTableContent from "./TransactionTableContent";
+import CustomerTableContent from "./CustomerTableContent";
 import TableActions from "@/components/table/TableActions";
 import { toast } from "sonner";
-import { formatDate } from "date-fns";
-import { formatedDate } from "@/utilities/utils";
+import { formatedDate, isEmail, replacePrefix } from "@/utilities/utils";
 
 
 
-const TransactionsTable = () => {
+const CustomersTable = () => {
     const {
-        transactions,
+        customers,
         page,
         totalPages,
         isFilterResult,
@@ -24,8 +23,8 @@ const TransactionsTable = () => {
         isLoading,
         setField,
         isQueryResult,
-        getTransactions,
-    } = useTransactionStore()
+        getCustomers,
+    } = useCustomerStore()
 
 
     const [selected, setSelected] = useState<string[]>([]);
@@ -35,14 +34,14 @@ const TransactionsTable = () => {
 
     const handleFilterApply = (newFilters: Partial<FilterCriteria>) => {
         setField("filterData", newFilters);
-        getTransactions({ page, limit, ...newFilters });
+        getCustomers({ page, limit, ...newFilters });
       
     };
 
     const handleSelectAll = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.checked) {
-            // Select all transactions in the current filtered view
-            const allIds = transactions.map((transaction) => transaction.id);
+            // Select all customers in the current filtered view
+            const allIds = customers.map((customer) => customer.id);
             setSelected(allIds);
         } else {
             // Deselect all
@@ -72,12 +71,24 @@ const TransactionsTable = () => {
 
     const onChangePage = (page: number, limit: number) => {
 
-        getTransactions({ page, limit ,...filterData});
+        getCustomers({ page, limit ,...filterData});
 
     };
 
     const handleSearchChange = () => {
-        getTransactions({ page, limit, reference: searchValue });
+
+        const payload:CustomerQueryParams  = { page, limit }
+
+        if (isEmail(searchValue)) {
+            payload.email = searchValue
+        }else{
+            payload.phone = replacePrefix(searchValue)
+        }
+
+
+
+
+        getCustomers(payload);
     };
 
     const onResetSearch = () => {
@@ -85,29 +96,14 @@ const TransactionsTable = () => {
         setField("isQueryResult", false);
         setField("filterData", null);
         setField("isFilterResult", false);
-        setField("transactions", []);
-        getTransactions({ page:1, limit });
+        setField("customers", []);
+        getCustomers({ page:1, limit });
     };
 
 
     return (
         <>
-            <div className='w-full flex flex-row justify-between items-center bg-background p-4 rounded-[8px] mt-6'>
-                <h1 className=' hidden md:flex text-text-title text-xl font-semibold font-poppins'>
-                    Transaction History
-                </h1>
-                <div className='flex flex-row gap-x-4 '>
-                    <button className='justify-center items-center bg-background border border-primary-300 text-text-body font-poppins font-medium px-3 w-[132px] rounded-[12px] active:bg-primary-foreground'>
-                        Retry
-                    </button>
-                    <button className='justify-center bg-primary items-center text-text-body font-poppins py-3 w-[132px] rounded-[12px] font-medium'>
-                        Approve
-                    </button>
-                </div>
-            </div>
-
-        
-
+         
                         <div className="bg-background rounded-2xl my-6 py-4">
 
                           
@@ -168,15 +164,15 @@ const TransactionsTable = () => {
                     col={20}
                 /> :
 
-                    transactions.length === 0 ? (
+                    customers.length === 0 ? (
                         <Empty
-                            title="No Transactions"
-                            description="Once a transaction is made, it will appear here with all the details you need to track and manage it easily."
+                            title="No Customers"
+                            description="Once a customer is made, it will appear here with all the details you need to track and manage it easily."
                         />
                     ) : (
 
-                            <TransactionTableContent
-                                transactions={transactions}
+                            <CustomerTableContent
+                                customers={customers}
                                 selected={selected}
                                 handleSelectAll={handleSelectAll}
                                 handleSelect={handleSelect}
@@ -189,7 +185,7 @@ const TransactionsTable = () => {
             }
  </div>
 
-                        {transactions.length > 0 && <GetPagination
+                        {customers.length > 0 && <GetPagination
                             page={page}
                             totalPages={totalPages}
                             limit={limit}
@@ -207,14 +203,14 @@ const TransactionsTable = () => {
     );
 };
 
-export default TransactionsTable;
+export default CustomersTable;
 
 
 
 
 // const dataToExport = selected.length > 0
-//     ? filteredTransactions.filter((transaction) => selected.includes(transaction.id))
-//     : filteredTransactions;
+//     ? filteredCustomers.filter((customer) => selected.includes(customer.id))
+//     : filteredCustomers;
 
 // if (format === "DOC") {
 //     const docContent = dataToExport.map(t => `${t.username}\t${t.id}\t${t.amount}\t${t.type}\t${t.status}\t${t.date} ${t.time}`).join("\n");
@@ -222,35 +218,35 @@ export default TransactionsTable;
 //     const url = URL.createObjectURL(blob);
 //     const a = document.createElement("a");
 //     a.href = url;
-//     a.download = "transactions.doc";
+//     a.download = "customers.doc";
 //     a.click();
 //     URL.revokeObjectURL(url);
 // } else if (format === "XLS") {
 //     const worksheet = XLSX.utils.json_to_sheet(dataToExport);
 //     const workbook = XLSX.utils.book_new();
-//     XLSX.utils.book_append_sheet(workbook, worksheet, "Transactions");
-//     XLSX.writeFile(workbook, "transactions.xlsx");
+//     XLSX.utils.book_append_sheet(workbook, worksheet, "Customers");
+//     XLSX.writeFile(workbook, "customers.xlsx");
 // } else if (format === "PDF") {
 //     const doc = new jsPDF();
 //     doc.setFontSize(18);
 //     doc.setFont("helvetica", "bold");
-//     doc.text("Transaction History", 14, 22);
+//     doc.text("Customer History", 14, 22);
 
-//     const cleanedData = dataToExport.map(transaction => ({
-//         ...transaction,
-//         amount: cleanAmount(transaction.amount)
+//     const cleanedData = dataToExport.map(customer => ({
+//         ...customer,
+//         amount: cleanAmount(customer.amount)
 //     }));
 
 //     autoTable(doc, {
-//         head: [['Username', 'Transaction ID', 'Amount', 'Type', 'Status', 'Date', 'Time']],
-//         body: cleanedData.map(transaction => [
-//             transaction.username,
-//             transaction.id,
-//             transaction.amount,
-//             transaction.type,
-//             transaction.status,
-//             transaction.date,
-//             transaction.time
+//         head: [['Username', 'Customer ID', 'Amount', 'Type', 'Status', 'Date', 'Time']],
+//         body: cleanedData.map(customer => [
+//             customer.username,
+//             customer.id,
+//             customer.amount,
+//             customer.type,
+//             customer.status,
+//             customer.date,
+//             customer.time
 //         ]),
 //         startY: 30,
 //         styles: {
@@ -303,7 +299,7 @@ export default TransactionsTable;
 //         );
 //     }
 
-//     doc.save("transactions.pdf");
+//     doc.save("customers.pdf");
 // }
 
 // setExportDropdownOpen(false);

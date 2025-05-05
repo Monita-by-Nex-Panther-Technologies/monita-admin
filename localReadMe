@@ -1,0 +1,6 @@
+
+nano /opt/homebrew/etc/nginx/nginx.conf 
+
+sudo nginx -t  
+
+sudo nginx -s reload   

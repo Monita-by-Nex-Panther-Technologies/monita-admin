@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { images } from "@/constants/images";
 import Image from "next/image";
 import React from "react";
@@ -11,12 +12,25 @@ import {
 } from "./SidebarComponents";
 import { icons } from "@/constants/icons";
 import { X } from "lucide-react";
+import { useAuthStore } from "@/store/authStore";
+import { useRouter } from 'next/navigation'
 
 interface SidebarProps {
   onCloseMobile?: () => void;
 }
 
 const Sidebar = ({ onCloseMobile }: SidebarProps) => {
+  const [isClient, setIsClient] = useState(false); // Client-side flag
+  const router = useRouter();
+  const logout = useAuthStore((state) => state.logout);
+
+
+
+  const handleLogout = () => {
+    logout(); // Call logout from store
+    router.push("/signin"); // Redirect to the login page
+  };
+
   return (
     <div className="w-full bg-[#262C05] flex flex-col px-6 py-8 gap-6 md:gap-10 h-full">
       <div className="flex w-full items-center justify-between">
@@ -134,7 +148,7 @@ const Sidebar = ({ onCloseMobile }: SidebarProps) => {
       </nav>
 
       <div className="mt-auto">
-        <Button icon={icons.logoutIcon} label="Logout" onClick={() => {}} />
+        <Button icon={icons.logoutIcon} label="Logout" onClick={handleLogout} />
       </div>
     </div>
   );
