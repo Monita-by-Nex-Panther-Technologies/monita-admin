@@ -98,12 +98,12 @@ const Sidebar = ({ onCloseMobile }: SidebarProps) => {
         <div className="w-full flex flex-col gap-[10px]">
           <SideBarSectionHeading title="Financial Services" />
           <BillPayments onMobileItemClick={onCloseMobile} />
-          <SidebarNavItem
+          {/* <SidebarNavItem
             icon={icons.giftcardIcon}
             label="GiftCards"
             href="/dashboard/giffCard"
             onClick={onCloseMobile}
-          />
+          /> */}
           <SidebarNavItem
             icon={icons.virtAccIcon}
             label="Virtual Accounts"
@@ -126,12 +126,12 @@ const Sidebar = ({ onCloseMobile }: SidebarProps) => {
             href="/dashboard/oneCard"
             onClick={onCloseMobile}
           />
-          <SidebarNavItem
+          {/* <SidebarNavItem
             icon={icons.esimIcon}
             label="eSIMs"
             href="/dashboard/bill-payments/products/esims"
             onClick={onCloseMobile}
-          />
+          /> */}
           <SidebarNavItem
             icon={icons.settingsIcon}
             label="Settings"

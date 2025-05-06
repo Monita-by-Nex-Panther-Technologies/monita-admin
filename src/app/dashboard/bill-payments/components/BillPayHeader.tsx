@@ -23,21 +23,21 @@ const BillPayHeader = () => {
                     className={`cursor-pointer justify-center items-center bg-background text-text-body font-poppins px-4 py-3 w-[186px] rounded-[8px] ${isPathActive("/dashboard/bill-payments/service-type") ? "bg-primary-alpha-8 border-2 border-primary text-text-title" : ""
                         }`}
                 >
-                    Service Type
+                    Services
                 </Link>
                 <Link
                     href="/dashboard/bill-payments/products/airtime"
                     className={`cursor-pointer justify-center items-center bg-background text-text-body font-poppins px-4 py-3 w-[186px] rounded-[8px] ${isPathActive("/dashboard/bill-payments/products") ? "bg-primary-alpha-8 border-2 border-primary text-text-title" : ""
                         }`}
                 >
-                    Product
+                    Brands
                 </Link>
                 <Link
                     href="/dashboard/bill-payments/plan/data-plan"
                     className={`cursor-pointer justify-center items-center bg-background text-text-body font-poppins px-4 py-3 w-[186px] rounded-[8px] ${isPathActive("/dashboard/bill-payments/plan") ? "bg-primary-alpha-8 border-2 border-primary text-text-title" : ""
                         }`}
                 >
-                    Plan
+                    Products
                 </Link>
             </div>
         </div>
