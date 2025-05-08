@@ -4,7 +4,7 @@ import DBRecentActivities from "@/components/common/DBRecentActivities";
 
 const page = () => {
   return (
-    <div className=" w-full">
+    <div className="w-full">
       <DashboardMetrics />
       <DBAnalyticsSection />
       <DBRecentActivities />

@@ -29,40 +29,42 @@ const DBAnalyticsSection = () => {
   ];
 
   return (
-    <div className="w-full py-6 px-4">
+    <div className="w-full  px-4">
       {/* Filter by Date Section */}
-      <div className="w-full flex flex-col sm:flex-row justify-between items-start sm:items-center bg-background p-4 rounded-[8px]">
-        <h1 className="text-text-title text-xl font-semibold font-poppins mb-2 sm:mb-0">
-          Filter by Date
+      {/* <div className="w-full flex flex-col sm:flex-row  gap-2 bg-background p-4 rounded-[8px] items-start md:items-center">
+        <h1 className="text-text-title text-sm  font-semibold font-poppins mb-2 sm:mb-0">
+          Filter by 
         </h1>
-        <div className="flex flex-row sm:flex-row bg-background-alt gap-x-1.5 gap-y-2 px-3 py-2 rounded-[8px]">
-          <button className="justify-center items-center bg-background text-text-body font-poppins px-4 py-3 w-full sm:w-[186px] rounded-[8px] active:bg-primary-foreground">
+       
+        <div className="w-full flex flex-col md:flex-row justify-between bg-background-alt gap-x-1 gap-y-2 px-3 py-2 rounded-[8px]">
+          <button className="justify-center items-center   text-sm  md:text-md bg-background text-text-body font-poppins px-3 py-3 w-full sm:w-[186px] rounded-[8px] active:bg-primary-foreground">
             Today
           </button>
-          <button className="justify-center items-center bg-background text-text-body font-poppins px-4 py-3 w-full sm:w-[186px] rounded-[8px]">
+          <button className="justify-center items-center text-sm  md:text-md bg-background text-text-body font-poppins px-3 py-3 w-full sm:w-[186px] rounded-[8px]">
             This Week
           </button>
-          <button className="justify-center items-center bg-background text-text-body font-poppins px-4 py-3 w-full sm:w-[186px] rounded-[8px]">
+          <button className="justify-center items-center text-sm  md:text-md bg-background text-text-body font-poppins px-3 py-3 w-full sm:w-[186px] rounded-[8px]">
             This Year
           </button>
+      
         </div>
-      </div>
+      </div> */}
 
       {/* Analytics & Trends Section */}
       <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 py-6">
         {/* Transaction Trends Chart */}
         <div className="flex flex-col w-full lg:col-span-2 gap-4">
           <div className="w-full bg-background rounded-[8px] p-4">
-            <div className="w-full flex flex-col sm:flex-row justify-between items-start sm:items-center">
-              <h1 className="text-text-title text-xl font-semibold font-poppins mb-3 sm:mb-0">
-                Analytics & Trends
+            <div className="w-full flex flex-col sm:flex-row justify-between gap-2 items-start md:items-center">
+              <h1 className="text-text-title text-sm font-semibold font-poppins mb-3 sm:mb-0">
+                Analytics 
               </h1>
               <div className="flex flex-row w-full sm:w-auto overflow-x-auto bg-background-alt gap-x-1.5 px-3 py-2 rounded-[8px]">
-                <button className="justify-center items-center bg-background text-text-body font-poppins px-4 py-3 w-full sm:w-[200px] min-w-[120px] rounded-[8px] active:bg-primary-foreground">
-                  Transaction Trends
+                <button className="justify-center items-center text-sm  md:text-md bg-background text-text-body font-poppins px-4 py-3 w-full sm:w-[200px] min-w-[120px] rounded-[8px] active:bg-primary-foreground">
+                   Credit
                 </button>
-                <button className="justify-center items-center bg-background text-text-body font-poppins px-4 py-3 w-full sm:w-[200px] min-w-[120px] rounded-[8px]">
-                  Revenue Breakdown
+                <button className="justify-center items-center text-sm  md:text-md bg-background text-text-body font-poppins px-4 py-3 w-full sm:w-[200px] min-w-[120px] rounded-[8px]">
+                  Debit 
                 </button>
               </div>
             </div>
@@ -119,11 +121,11 @@ const DBAnalyticsSection = () => {
         </div>
 
         {/* Users Growth Section */}
-        <div className="w-full lg:row-span-2 bg-background rounded-[8px] px-4 sm:px-8 h-auto sm:h-[445px] py-5 flex flex-col">
-          <h1 className="text-text-title text-xl font-semibold font-poppins mb-4">
+        <div className="w-full lg:row-span-2 bg-background rounded-[8px] px-4  h-auto sm:h-[445px] py-5 flex flex-col">
+          <h1 className="text-text-title text-sm font-semibold font-poppins mb-4">
             Users Growth
           </h1>
-          <div className="flex flex-col gap-8 justify-center sm:justify-start items-center sm:items-start relative w-full h-[80%] mt-8">
+          <div className="flex flex-col gap-4 justify-center  items-center  relative w-full ">
             {/* Circular Progress Bar */}
             <svg width="132" height="132" viewBox="0 0 200 200">
               {/* Background Circle */}
@@ -197,36 +199,36 @@ const DBAnalyticsSection = () => {
             <span className="border border-[#01010129] w-full"></span>
 
             {/* User Breakdown */}
-            <div className="flex flex-col sm:flex-row gap-6 w-full bg-background-alt py-7 rounded-[8px] justify-between px-4 sm:px-6">
+            <div className="flex flex-col gap-4 w-full bg-background-alt py-4 rounded-[8px] justify-between px-2 ">
               <div className="text-center">
-                <span className="text-base font-poppins text-text-body">
+                <span className=" font-poppins text-text-body text-xs">
                   New Users
                 </span>
                 <div className="flex items-center justify-center">
                   <span className="w-3 h-3 bg-[#CEEF0A] rounded-full mr-2"></span>
-                  <span className="font-bold font-poppins text-base text-text-title">
+                  <span className="font-bold font-poppins text-sm text-text-title">
                     7,000
                   </span>
                 </div>
               </div>
               <div className="text-center">
-                <span className="text-base font-poppins text-text-body">
+                <span className="text-xs font-poppins text-text-body">
                   Returning
                 </span>
                 <div className="flex items-center justify-center">
                   <span className="w-3 h-3 bg-[#728406] rounded-full mr-2"></span>
-                  <span className="font-bold font-poppins text-text-title text-base">
+                  <span className="font-bold font-poppins text-text-title text-sm">
                     2,000
                   </span>
                 </div>
               </div>
               <div className="text-center">
-                <span className="text-base font-poppins text-text-body">
+                <span className="text-xs font-poppins text-text-body">
                   Inactive
                 </span>
                 <div className="flex items-center justify-center">
                   <span className="w-3 h-3 bg-[#010101CC] rounded-full mr-2"></span>
-                  <span className="font-bold font-poppins text-text-title text-base">
+                  <span className="font-bold font-poppins text-text-title text-sm">
                     500
                   </span>
                 </div>

@@ -1,0 +1,48 @@
+brew install haproxy
+
+mkdir -p /usr/local/etc/haproxy
+
+nano /usr/local/etc/haproxy/haproxy.cfg
+
+
+paste this code 
+
+global
+    daemon
+    maxconn 256
+    log 127.0.0.1 local0
+
+defaults
+    mode http
+    timeout connect 5000ms
+    timeout client  50000ms
+    timeout server  50000ms
+
+frontend http_front
+    bind *:8888
+
+    acl is_ums path_beg /ums/v1/
+    acl is_wms path_beg /wms/v1/
+    acl is_bps path_beg /bps/v1/
+
+    use_backend ums_backend if is_ums
+    use_backend wms_backend if is_wms
+    use_backend bps_backend if is_bps
+
+backend ums_backend
+    server ums_server 127.0.0.1:8081
+
+backend wms_backend
+    server wms_server 127.0.0.1:8082
+
+backend bps_backend
+    server bps_server 127.0.0.1:8083
+
+
+
+end here 
+
+
+start
+
+haproxy -f /usr/local/etc/haproxy/haproxy.cfg

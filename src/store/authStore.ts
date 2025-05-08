@@ -1,146 +1,52 @@
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
-import { api, setAuthToken, removeAuthToken } from "@/utilities/api";
-import {
-  AuthState,
-  LoginCredentials,
-  ForgotPasswordPayload,
-  ResetPasswordPayload,
-  LoginResponse,
-  ForgotPasswordResponse,
-  APIErrorResponse,
-} from "@/interfaces";
+import { AuthState, LoginCredentials } from "../app/signin/interfaces";
+import { appname, ums_endpoint } from "@/constants/string";
+import axiosInstance from "@/utilities/axios";
+import { getErrorMessage } from "@/utilities/utils";
+import { removeAccessToken, setAccessToken } from "@/utilities/tokenHelpers";
 
 export const useAuthStore = create<AuthState>()(
   persist(
     (set) => ({
       isAuthenticated: false,
-      user: null,
       token: null,
-      otpReference: null,
       isLoading: false,
-      error: null,
 
       login: async (credentials: LoginCredentials) => {
-        set({ isLoading: true, error: null });
+        set({ isLoading: true });
         try {
-          const response = await api.post<{
-            success: boolean;
-            message: string;
-            data: LoginResponse;
-          }>("/internals/auth/login", credentials);
+          const { data } = await axiosInstance.post(
+            `${ums_endpoint}/auth/login`,
+            credentials
+          );
 
-          if (response.data.success) {
-            const { profile, token } = response.data.data;
-            setAuthToken(token);
+          setAccessToken({access_token:data.token, refresh_token: "fdhjgjghdfjhdfjhdf"}); // optional helper
+
             set({
-              isAuthenticated: true,
-              user: profile,
-              token,
-              isLoading: false,
-            });
-            return response.data;
-          } else {
-            set({
-              isLoading: false,
-              error: response.data.message || "Login failed",
-            });
-            throw new Error(response.data.message || "Login failed");
-          }
-        } catch (error: any) {
-          const apiError = error as APIErrorResponse;
-          const errorMessage =
-            apiError.message || "An error occurred during login";
-          set({
+            isAuthenticated: true,
+            token: data.token,
             isLoading: false,
-            error: errorMessage,
           });
-          throw new Error(errorMessage);
-        }
-      },
 
-      forgotPassword: async (payload: ForgotPasswordPayload) => {
-        set({ isLoading: true, error: null });
-        try {
-          const response = await api.post<{
-            success: boolean;
-            message: string;
-            data: ForgotPasswordResponse;
-          }>("/internals/auth/forgot-password", payload);
-
-          if (response.data.success) {
-            set({
-              isLoading: false,
-              otpReference: response.data.data.otpReference,
-            });
-            return response.data;
-          } else {
-            set({
-              isLoading: false,
-              error: response.data.message || "Password reset request failed",
-            });
-            throw new Error(
-              response.data.message || "Password reset request failed"
-            );
-          }
+          return data;
         } catch (error: any) {
-          const apiError = error as APIErrorResponse;
-          const errorMessage =
-            apiError.message ||
-            "An error occurred during password reset request";
-          set({
-            isLoading: false,
-            error: errorMessage,
-          });
-          throw new Error(errorMessage);
-        }
-      },
-
-      resetPassword: async (payload: ResetPasswordPayload) => {
-        set({ isLoading: true, error: null });
-        try {
-          const response = await api.post<{
-            success: boolean;
-            message: string;
-            data: any;
-          }>("/internals/auth/reset-password", payload);
-
-          if (response.data.success) {
-            set({
-              isLoading: false,
-              otpReference: null,
-            });
-            return response.data;
-          } else {
-            set({
-              isLoading: false,
-              error: response.data.message || "Password reset failed",
-            });
-            throw new Error(response.data.message || "Password reset failed");
-          }
-        } catch (error: any) {
-          const apiError = error as APIErrorResponse;
-          const errorMessage =
-            apiError.message || "An error occurred during password reset";
-          set({
-            isLoading: false,
-            error: errorMessage,
-          });
-          throw new Error(errorMessage);
+          set({ isLoading: false });
+          throw new Error(getErrorMessage(error));
         }
       },
 
       logout: () => {
-        removeAuthToken();
         set({
           isAuthenticated: false,
-          user: null,
           token: null,
         });
+        removeAccessToken()
+       
       },
     }),
     {
-      name: "monita-auth-storage",
+      name: `${appname}-storage`,
       storage: createJSONStorage(() => localStorage),
       onRehydrateStorage: () => (state) => {
         if (state) {

@@ -16,12 +16,12 @@ const ResetPassword = () => {
   const searchParams = useSearchParams();
   const email = searchParams.get("email") || "";
   const maskedEmail = maskEmail(email);
-  const {
-    resetPassword,
-    isLoading: authLoading,
-    error: authError,
-    otpReference,
-  } = useAuthStore();
+  // const {
+  //   resetPassword,
+  //   isLoading: authLoading,
+  //   error: authError,
+  //   otpReference,
+  // } = useAuthStore();
 
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -76,32 +76,32 @@ const ResetPassword = () => {
       return;
     }
 
-    if (!otpReference) {
-      toast.error(
-        "OTP reference is missing. Please request a new password reset"
-      );
-      return;
-    }
+    // if (!otpReference) {
+    //   toast.error(
+    //     "OTP reference is missing. Please request a new password reset"
+    //   );
+    //   return;
+    // }
 
-    const payload: ResetPasswordPayload = {
-      email,
-      otp,
-      otpReference,
-      password,
-    };
+    // const payload: ResetPasswordPayload = {
+    //   email,
+    //   otp,
+    //   otpReference,
+    //   password,
+    // };
 
-    try {
-      await resetPassword(payload);
-      toast.success("Password reset successful!");
-      setSuccess(true);
-      setPassword("");
-      setConfirmPassword("");
-      setOtp("");
-    } catch (error: any) {
-      toast.error(
-        error.message || "Failed to reset password. Please try again."
-      );
-    }
+    // try {
+    //   await resetPassword(payload);
+    //   toast.success("Password reset successful!");
+    //   setSuccess(true);
+    //   setPassword("");
+    //   setConfirmPassword("");
+    //   setOtp("");
+    // } catch (error: any) {
+    //   toast.error(
+    //     error.message || "Failed to reset password. Please try again."
+    //   );
+    // }
   };
 
   useEffect(() => {
@@ -268,7 +268,7 @@ const ResetPassword = () => {
               )}
             </div>
 
-            {authError && (
+            {/* {authError && (
               <div className="text-red-500 text-sm font-poppins">
                 {authError}
               </div>
@@ -287,7 +287,7 @@ const ResetPassword = () => {
               ) : (
                 "Reset Password"
               )}
-            </button>
+            </button> */}
 
             <div className="text-center">
               <Link

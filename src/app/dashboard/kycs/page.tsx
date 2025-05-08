@@ -1,3 +1,4 @@
+"use client"
 import React from 'react'
 import KycApplicationsTable from './components/kycApplication'
 import TransactionStat from '../transactions/components/TransactionStat'

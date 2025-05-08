@@ -3,6 +3,7 @@
 import { useState } from "react";
 import DBHeader from "@/components/common/DBHeader";
 import Sidebar from "@/components/ui/Sidebar";
+import AutoLogout from "@/components/common/AutoLogout";
 
 export default function DashboardLayout({
   children,
@@ -12,7 +13,8 @@ export default function DashboardLayout({
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   return (
-    <div className="flex flex-col lg:flex-row h-screen bg-background-alt">
+    <AutoLogout> 
+    <div className="flex flex-col lg:flex-row  bg-background-alt">
       {/* Sidebar Overlay for Mobile */}
       {isSidebarOpen && (
         <div
@@ -31,17 +33,19 @@ export default function DashboardLayout({
       </aside>
 
       {/* Main Content */}
-      <main className="flex-1 lg:ml-[275px] flex flex-col h-screen">
+
+      <main className="flex-1 lg:ml-[275px] flex flex-col min-w-0">
         {/* Header */}
         <div className="sticky top-0 z-10">
           <DBHeader toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} />
         </div>
 
         {/* Content Area */}
-        <div className="flex-1 overflow-y-auto">
-          <div className="w-full p-4 sm:p-6 md:p-8">{children}</div>
-        </div>
+        <div className="w-full p-4 sm:p-6 md:p-8 overflow-x-auto max-w-full">
+  <div className="min-w-0">{children}</div>
+</div>
       </main>
     </div>
+    </AutoLogout>
   );
 }
