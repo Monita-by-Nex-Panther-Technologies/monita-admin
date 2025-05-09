@@ -37,17 +37,17 @@ export interface ApiResponse<T> {
   data: T;
 }
 
-export interface AuthState {
-  isAuthenticated: boolean;
-  user: UserProfile | null;
-  token: string | null;
-  otpReference: string | null;
-  isLoading: boolean;
-  error: string | null;
-  login: (credentials: LoginCredentials) => Promise<ApiResponse<LoginResponse>>;
-  forgotPassword: (
-    payload: ForgotPasswordPayload
-  ) => Promise<ApiResponse<ForgotPasswordResponse>>;
-  resetPassword: (payload: ResetPasswordPayload) => Promise<ApiResponse<any>>;
-  logout: () => void;
-}
+// export interface AuthState {
+//   isAuthenticated: boolean;
+//   user: UserProfile | null;
+//   token: string | null;
+//   otpReference: string | null;
+//   isLoading: boolean;
+//   error: string | null;
+//   login: (credentials: LoginCredentials) => Promise<ApiResponse<LoginResponse>>;
+//   forgotPassword: (
+//     payload: ForgotPasswordPayload
+//   ) => Promise<ApiResponse<ForgotPasswordResponse>>;
+//   resetPassword: (payload: ResetPasswordPayload) => Promise<ApiResponse<any>>;
+//   logout: () => void;
+// }
