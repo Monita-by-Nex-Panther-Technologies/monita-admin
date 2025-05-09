@@ -14,7 +14,7 @@ interface BlockUserDialogProps {
 
         const {
             blockAndUnblockUser,
-            getCustomer
+            getCustomer,
         } = useCustomerStore()
     
         

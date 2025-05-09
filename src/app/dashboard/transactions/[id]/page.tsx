@@ -9,14 +9,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
     // Await the params to get the actual values
     const resolvedParams = await params
 
-    //   const {
-    //         getTransaction,
-    //         } = useTransactionStore()
-    
-    //         useEffect(() => {
-    //             getTransaction(resolvedParams.id)
-    //           }, []);
-
+   
     // Pass the id to the client component
     return <TransactionDetailsClient id={resolvedParams.id} />
 }
