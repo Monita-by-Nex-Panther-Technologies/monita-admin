@@ -1,14 +1,14 @@
+
 "use client"
 import React from 'react'
-import StaffManagementTable from './components/StaffManagmentTable'
+import RoleManagement from './components/RolesManagment'
 
 const Page = () => {
   return (
     <div>
-      <StaffManagementTable />
+      <RoleManagement />
     </div>
   )
 }
 
 export default Page
-
