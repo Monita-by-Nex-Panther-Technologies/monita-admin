@@ -9,7 +9,7 @@ import bilpayIcon from "@/assets/icons/billpay.svg";
 import giftcardIcon from "@/assets/icons/gift.svg";
 import virtAccIcon from "@/assets/icons/vitrual.svg";
 import cashbackIcon from "@/assets/icons/cashback.svg";
-import cardIcon from "@/assets/icons/card-1.svg";
+import cardIcon from "@/assets/icons/Card-1.svg";
 import esimIcon from "@/assets/icons/esimicon.svg";
 import settingsIcon from "@/assets/icons/mdi-light_settings.svg";
 import supportIcon from "@/assets/icons/mynaui_support.svg";
