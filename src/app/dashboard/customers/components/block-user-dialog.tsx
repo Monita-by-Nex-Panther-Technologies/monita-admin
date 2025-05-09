@@ -2,23 +2,34 @@
 
 import { Dialog, DialogContent } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
-import { X } from "lucide-react"
-
+import { useCustomerStore } from "@/store/customerStore"
 interface BlockUserDialogProps {
     open: boolean
+    action: string
+    user: string
     onOpenChange: (open: boolean) => void
 }
+    export function BlockUserDialog({ open,user,action,onOpenChange }: BlockUserDialogProps) {
 
-export function BlockUserDialog({ open, onOpenChange }: BlockUserDialogProps) {
+
+        const {
+            blockAndUnblockUser,
+            getCustomer
+        } = useCustomerStore()
+    
+        
     const handleCancel = () => {
         onOpenChange(false)
     }
-
     const handleConfirm = () => {
-        // Here you would handle the block user logic
-        alert("User blocked successfully")
+        blockAndUnblockUser(user, action).then(() => {
+            getCustomer(user);
+        });
         onOpenChange(false)
     }
+
+
+    
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
@@ -36,15 +47,13 @@ export function BlockUserDialog({ open, onOpenChange }: BlockUserDialogProps) {
                                 />
                             </svg>
                         </div>
-                        <h2 className="text-xl font-semibold">Block User</h2>
+                        <h2 className="text-xl font-semibold"> <span className="capitalize">{action}</span> User</h2>
                     </div>
-                    <Button variant="ghost" size="icon" className="rounded-full" onClick={handleCancel}>
-                        <X className="h-4 w-4" />
-                    </Button>
+                   
                 </div>
 
                 <p className="text-gray-600">
-                    Are you sure you want to block this user? This action can be undone but it may affect their related
+                    Are you sure you want to {action} this user? This action can be undone but it may affect their related
                     transactions.
                 </p>
 
@@ -56,7 +65,7 @@ export function BlockUserDialog({ open, onOpenChange }: BlockUserDialogProps) {
                         className="flex-1 bg-[#DDFF00] hover:bg-[#DDFF00]/90 text-black font-medium rounded-full"
                         onClick={handleConfirm}
                     >
-                        Confirm Block
+                        Confirm  <span className="capitalize">{action}</span>
                     </Button>
                 </div>
             </DialogContent>

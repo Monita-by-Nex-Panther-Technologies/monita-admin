@@ -42,7 +42,7 @@ function AutoLogout({ children }: { children: React.ReactNode; }) {
     };
 
     const startInactivityTimer = () => {
-        console.log("dfjhhjdf");
+        
         
         inactivityTimer.current = setTimeout(() => {
             setShowPopup(true);
@@ -68,11 +68,11 @@ function AutoLogout({ children }: { children: React.ReactNode; }) {
     };
 
     const handleUserActivity = (event: Event) => {
-        const target = event.target as HTMLElement | null;
-        if (target && target.closest(".no-reset")) return;
+        const target = event.target;
+        if (target instanceof HTMLElement && target.closest(".no-reset")) return;
         resetTimers();
     };
-
+    
     useEffect(() => {
         events.forEach((event) =>
             window.addEventListener(event, handleUserActivity)
