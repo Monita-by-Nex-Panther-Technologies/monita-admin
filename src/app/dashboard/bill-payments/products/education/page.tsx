@@ -412,7 +412,7 @@ const BrandTable: React.FC = () => {
         if (pathname.includes('/electricity')) return 'electricity';
         if (pathname.includes('/esims')) return 'esim';
         if (pathname.includes('/giftcards')) return 'giftcard';
-        return 'airtime'; // default
+        return 'education'; // default
     };
 
     const currentServiceType = getCurrentServiceType();
