@@ -93,7 +93,7 @@ export const useStaffStore = create<StaffState>()(
 
       try {
         const response = await axiosInstance.patch(
-          `${ums_endpoint}/staff/${staffId}`,
+          `${ums_endpoint}/staffs/${staffId}`,
           updatedData
         );
 

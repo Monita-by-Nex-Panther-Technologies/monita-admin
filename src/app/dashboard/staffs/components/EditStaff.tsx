@@ -5,24 +5,26 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { useStaffStore, CreateStaffPayload } from "@/store/staffStore"
+import { useStaffStore, Staff } from "@/store/staffStore"
 import { useRolesStore } from "@/store/rolesStore"
 import { toast } from "sonner"
 
-// Define types for the Add Staff Modal props
-interface AddStaffModalProps {
+// Define types for the Edit Staff Modal props
+interface EditStaffModalProps {
     open: boolean
     onOpenChange: (open: boolean) => void
+    staffToEdit: Staff | null
     onSuccess?: () => void
 }
 
-const AddStaffModal: React.FC<AddStaffModalProps> = ({
+const EditStaffModal: React.FC<EditStaffModalProps> = ({
     open,
     onOpenChange,
+    staffToEdit,
     onSuccess
 }) => {
     // Initialize form state
-    const [formData, setFormData] = useState<CreateStaffPayload>({
+    const [formData, setFormData] = useState<Partial<Staff>>({
         firstName: "",
         lastName: "",
         email: "",
@@ -32,10 +34,10 @@ const AddStaffModal: React.FC<AddStaffModalProps> = ({
     
     const [isSubmitting, setIsSubmitting] = useState(false)
     
-    const { createStaff } = useStaffStore()
+    const { updateStaff } = useStaffStore()
     const { roles, getRoles, isLoading: isLoadingRoles } = useRolesStore()
     
-    // Fetch roles when modal opens
+    // Fetch roles when modal opens and populate form data when staff to edit changes
     useEffect(() => {
         if (open) {
             const fetchRoles = async () => {
@@ -48,8 +50,19 @@ const AddStaffModal: React.FC<AddStaffModalProps> = ({
             }
             
             fetchRoles()
+            
+            if (staffToEdit) {
+                setFormData({
+                    id: staffToEdit.id,
+                    firstName: staffToEdit.firstName,
+                    lastName: staffToEdit.lastName,
+                    email: staffToEdit.email,
+                    phoneNumber: staffToEdit.phoneNumber,
+                    roleId: staffToEdit.roleId
+                })
+            }
         }
-    }, [open, getRoles])
+    }, [open, staffToEdit, getRoles])
 
     // Handle text input changes
     const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -69,18 +82,22 @@ const AddStaffModal: React.FC<AddStaffModalProps> = ({
         }
         
         try {
-            setIsSubmitting(true)
-            await createStaff(formData)
-            toast.success(`Staff ${formData.firstName} ${formData.lastName} added successfully!`)
+            if (!formData.id) {
+                throw new Error("Missing staff ID for update")
+            }
             
-            // Reset form after submission
-            setFormData({
-                firstName: "",
-                lastName: "",
-                email: "",
-                phoneNumber: "",
-                roleId: ""
-            })
+            // Prepare update data - only include fields that can be updated
+            const updateData: Partial<Staff> = {
+                firstName: formData.firstName,
+                lastName: formData.lastName,
+                email: formData.email,
+                phoneNumber: formData.phoneNumber,
+                roleId: formData.roleId
+            }
+            
+            setIsSubmitting(true)
+            await updateStaff(formData.id, updateData)
+            toast.success(`Staff ${formData.firstName} ${formData.lastName} updated successfully!`)
             
             // Close modal and notify parent component
             onOpenChange(false)
@@ -88,7 +105,7 @@ const AddStaffModal: React.FC<AddStaffModalProps> = ({
                 onSuccess()
             }
         } catch (error: any) {
-            toast.error(error.message || "Failed to add staff")
+            toast.error(error.message || "Failed to update staff")
         } finally {
             setIsSubmitting(false)
         }
@@ -99,7 +116,7 @@ const AddStaffModal: React.FC<AddStaffModalProps> = ({
             <DialogContent className="sm:max-w-[550px] p-0 overflow-auto max-h-[90vh]">
                 <div className="p-6 pb-0">
                     <div className="flex justify-between items-center">
-                        <DialogTitle className="text-2xl font-bold">Add Staff</DialogTitle>
+                        <DialogTitle className="text-2xl font-bold">Edit Staff</DialogTitle>
                     </div>
                 </div>
 
@@ -175,7 +192,7 @@ const AddStaffModal: React.FC<AddStaffModalProps> = ({
                                 Role*
                             </Label>
                             <Select 
-                                value={formData.roleId} 
+                                value={formData.roleId || ""} 
                                 onValueChange={(value) => setFormData(prev => ({...prev, roleId: value}))}
                                 disabled={isLoadingRoles}
                             >
@@ -199,7 +216,7 @@ const AddStaffModal: React.FC<AddStaffModalProps> = ({
                         className="w-full h-12 mt-4 rounded-md bg-yellow-100 hover:bg-yellow-200 text-black font-medium"
                         variant="ghost"
                     >
-                        {isSubmitting ? "Adding Staff..." : "Add Staff"}
+                        {isSubmitting ? "Updating Staff..." : "Update Staff"}
                     </Button>
                 </div>
             </DialogContent>
@@ -207,4 +224,4 @@ const AddStaffModal: React.FC<AddStaffModalProps> = ({
     )
 }
 
-export default AddStaffModal
+export default EditStaffModal

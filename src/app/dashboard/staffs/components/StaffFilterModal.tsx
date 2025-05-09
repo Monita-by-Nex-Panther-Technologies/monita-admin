@@ -1,8 +1,17 @@
-import React from "react";
+"use client";
+
+import React, { useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import {
+    Dialog,
+    DialogContent,
+    DialogHeader,
+    DialogTitle,
+    DialogFooter,
+} from "@/components/ui/dialog";
 import {
     Select,
     SelectContent,
@@ -10,8 +19,9 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
-import { X, Calendar as CalendarIcon } from "lucide-react";
+import { Calendar as CalendarIcon } from "lucide-react";
 import { format } from "date-fns";
+import { useRolesStore } from "@/store/rolesStore";
 
 interface FilterModalProps {
     isOpen: boolean;
@@ -27,6 +37,8 @@ export interface FilterCriteria {
 }
 
 const FilterModal: React.FC<FilterModalProps> = ({ isOpen, onClose, onApply }) => {
+    const { roles, isLoading: rolesLoading, getRoles } = useRolesStore();
+    
     const { control, handleSubmit, reset } = useForm<FilterCriteria>({
         defaultValues: {
             status: "",
@@ -35,6 +47,15 @@ const FilterModal: React.FC<FilterModalProps> = ({ isOpen, onClose, onApply }) =
             endDate: undefined,
         },
     });
+
+    // Fetch roles when the modal opens
+    useEffect(() => {
+        if (isOpen && roles.length === 0) {
+            getRoles().catch(error => {
+                console.error("Failed to load roles:", error);
+            });
+        }
+    }, [isOpen, roles.length, getRoles]);
 
     const handleApply = (data: FilterCriteria) => {
         const filteredData = Object.fromEntries(
@@ -45,28 +66,16 @@ const FilterModal: React.FC<FilterModalProps> = ({ isOpen, onClose, onApply }) =
         onClose();
     };
 
-    if (!isOpen) return null;
-
     return (
-        <div className="fixed inset-0 bg-black/30 bg-opacity-50 flex justify-center items-center z-50">
-            <div className="bg-white rounded-lg w-full max-w-md -mt-20 overflow-hidden shadow-xl">
-                {/* Header */}
-                <div className="flex justify-between items-center p-6 border-b">
-                    <h2 className="text-xl font-semibold">Filter Staff</h2>
-                    <Button
-                        variant="outline"
-                        size="icon"
-                        className="rounded-full h-8 w-8 p-0 flex items-center justify-center bg-gray-100 border-none"
-                        onClick={onClose}
-                    >
-                        <X size={16} className="text-gray-500" />
-                    </Button>
-                </div>
-
-                {/* Filter Form */}
-                <form onSubmit={handleSubmit(handleApply)} className="p-6 space-y-5">
+        <Dialog open={isOpen} onOpenChange={onClose}>
+            <DialogContent className="sm:max-w-md">
+                <DialogHeader>
+                    <DialogTitle>Filter Staff</DialogTitle>
+                </DialogHeader>
+                
+                <form onSubmit={handleSubmit(handleApply)} className="space-y-5 py-4">
                     {/* Status Field */}
-                    <div className="space-y-2">
+                    {/* <div className="space-y-2">
                         <label className="block text-sm font-medium">Status</label>
                         <Controller
                             name="status"
@@ -84,7 +93,7 @@ const FilterModal: React.FC<FilterModalProps> = ({ isOpen, onClose, onApply }) =
                                 </Select>
                             )}
                         />
-                    </div>
+                    </div> */}
 
                     <div className="space-y-2">
                         <label className="block text-sm font-medium">Role</label>
@@ -92,15 +101,21 @@ const FilterModal: React.FC<FilterModalProps> = ({ isOpen, onClose, onApply }) =
                             name="roleId"
                             control={control}
                             render={({ field }) => (
-                                <Select value={field.value} onValueChange={field.onChange}>
+                                <Select value={field.value} onValueChange={field.onChange} disabled={rolesLoading}>
                                     <SelectTrigger className="w-full h-12">
-                                        <SelectValue placeholder="Select" />
+                                        <SelectValue placeholder={rolesLoading ? "Loading roles..." : "Select role"} />
                                     </SelectTrigger>
                                     <SelectContent>
-                                        <SelectItem value="1">Admin</SelectItem>
-                                        <SelectItem value="2">Manager</SelectItem>
-                                        <SelectItem value="3">Support</SelectItem>
-                                        <SelectItem value="4">Agent</SelectItem>
+                                        {roles.map((role) => (
+                                            <SelectItem key={role.id} value={role.id}>
+                                                {role.name}
+                                            </SelectItem>
+                                        ))}
+                                        {roles.length === 0 && !rolesLoading && (
+                                            <SelectItem value="" disabled>
+                                                No roles available
+                                            </SelectItem>
+                                        )}
                                     </SelectContent>
                                 </Select>
                             )}
@@ -120,23 +135,21 @@ const FilterModal: React.FC<FilterModalProps> = ({ isOpen, onClose, onApply }) =
                                         <PopoverTrigger asChild>
                                             <Button
                                                 variant="outline"
-                                                className="w-full h-12 rounded-md border-gray-300 justify-start text-left font-normal pl-4 bg-white hover:bg-white"
+                                                className="w-full h-12 justify-start text-left font-normal"
                                             >
                                                 {field.value ? format(field.value, "PP") : "Select"}
-                                                <CalendarIcon className="ml-auto h-4 w-4 text-gray-400" />
+                                                <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                                             </Button>
                                         </PopoverTrigger>
                                         <PopoverContent
                                             className="w-auto p-0"
                                             align="start"
-                                            side="bottom"
-                                            sideOffset={5}
-                                            avoidCollisions={false}
                                         >
                                             <Calendar
                                                 mode="single"
                                                 selected={field.value}
                                                 onSelect={field.onChange}
+                                                initialFocus
                                             />
                                         </PopoverContent>
                                     </Popover>
@@ -155,23 +168,21 @@ const FilterModal: React.FC<FilterModalProps> = ({ isOpen, onClose, onApply }) =
                                         <PopoverTrigger asChild>
                                             <Button
                                                 variant="outline"
-                                                className="w-full h-12 rounded-md border-gray-300 justify-start text-left font-normal pl-4 bg-white hover:bg-white"
+                                                className="w-full h-12 justify-start text-left font-normal"
                                             >
                                                 {field.value ? format(field.value, "PP") : "Select"}
-                                                <CalendarIcon className="ml-auto h-4 w-4 text-gray-400" />
+                                                <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                                             </Button>
                                         </PopoverTrigger>
                                         <PopoverContent
                                             className="w-auto p-0"
                                             align="start"
-                                            side="bottom"
-                                            sideOffset={5}
-                                            avoidCollisions={false}
                                         >
                                             <Calendar
                                                 mode="single"
                                                 selected={field.value}
                                                 onSelect={field.onChange}
+                                                initialFocus
                                             />
                                         </PopoverContent>
                                     </Popover>
@@ -179,18 +190,22 @@ const FilterModal: React.FC<FilterModalProps> = ({ isOpen, onClose, onApply }) =
                             />
                         </div>
                     </div>
+                </form>
 
-                    {/* Apply Button */}
-                    <Button
-                        type="submit"
+                <DialogFooter>
+                    {/* <Button variant="outline" onClick={onClose}>
+                        Cancel
+                    </Button> */}
+                    <Button 
+                        onClick={handleSubmit(handleApply)}
                         className="w-full h-12 rounded-md bg-yellow-100 hover:bg-yellow-200 text-black font-medium"
                         variant="ghost"
                     >
                         Filter Staff
                     </Button>
-                </form>
-            </div>
-        </div>
+                </DialogFooter>
+            </DialogContent>
+        </Dialog>
     );
 };
 

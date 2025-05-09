@@ -12,6 +12,8 @@ import ConfirmDeleteDialog from "./ConfirmDeleteDialog";
 import { toast } from "sonner";
 import { formatedDate, isEmail, replacePrefix } from "@/utilities/utils";
 import { Plus } from "lucide-react";
+import EditStaffModal from "./EditStaff";
+import { useRouter } from "next/navigation";
 
 const StaffTable = () => {
     const {
@@ -31,13 +33,15 @@ const StaffTable = () => {
     const [selected, setSelected] = useState<string[]>([]);
     const [isFilterModalOpen, setIsFilterModalOpen] = useState<boolean>(false);
     const [isAddStaffModalOpen, setIsAddStaffModalOpen] = useState<boolean>(false);
+    const [isEditStaffModalOpen, setIsEditStaffModalOpen] = useState<boolean>(false);
+    const [staffToEdit, setStaffToEdit] = useState<Staff | null>(null);
     const [searchValue, setSearchValue] = useState("");
     
     // State for delete confirmation
     const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
     const [staffToDelete, setStaffToDelete] = useState<Staff | null>(null);
     const [deleteLoading, setDeleteLoading] = useState(false);
-
+    const router = useRouter();
     // Fetch staff on initial load
     useEffect(() => {
         getStaffs({ page: 1, limit: 10 });
@@ -100,9 +104,10 @@ const StaffTable = () => {
         getStaffs({ page: 1, limit });
     };
 
+    // Update edit functionality
     const handleEdit = (staff: Staff) => {
-        // Implement edit functionality
-        toast.info(`Editing staff: ${staff.firstName} ${staff.lastName}`);
+        setStaffToEdit(staff);
+        setIsEditStaffModalOpen(true);
     };
 
     // Initiate delete process
@@ -133,10 +138,8 @@ const StaffTable = () => {
         }
     };
 
-    // Handle successful staff creation
-    const handleStaffAdded = () => {
-        // Refresh the staff list with the first page
-        getStaffs({ page: 1, limit });
+    const handleStaffChange = () => {
+        getStaffs({ page, limit, ...filterData });
     };
 
     return (
@@ -144,7 +147,10 @@ const StaffTable = () => {
             <div className="w-full flex flex-row justify-between items-center bg-background p-4 rounded-[8px]">
                 <h1 className="text-text-title text-xl font-semibold font-poppins">Staff Management</h1>
                 <div className="flex flex-row gap-x-4">
-                    <button className="justify-center items-center bg-background border border-primary-300 text-text-body font-poppins font-medium px-4 py-2 rounded-[12px] active:bg-primary-foreground">
+                    <button 
+                        className="justify-center items-center bg-background border border-primary-300 text-text-body font-poppins font-medium px-4 py-2 rounded-[12px] active:bg-primary-foreground"
+                        onClick={() => router.push("/dashboard/roles")}
+                    >
                         Manage Roles
                     </button>
                     <button 
@@ -239,7 +245,15 @@ const StaffTable = () => {
             <AddStaffModal 
                 open={isAddStaffModalOpen}
                 onOpenChange={setIsAddStaffModalOpen}
-                onSuccess={handleStaffAdded}
+                onSuccess={handleStaffChange}
+            />
+
+            {/* Edit Staff Modal */}
+            <EditStaffModal
+                open={isEditStaffModalOpen}
+                onOpenChange={setIsEditStaffModalOpen}
+                staffToEdit={staffToEdit}
+                onSuccess={handleStaffChange}
             />
 
             {/* Delete Confirmation Dialog */}

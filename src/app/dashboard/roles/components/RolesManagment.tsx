@@ -1,8 +1,13 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { PlusIcon, CheckCircle, XCircle, Edit, Trash2 } from "lucide-react";
 import { useState, useEffect } from "react";
+import { PlusIcon } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import CreateRoleModal from "./CreateRoleModal";
+import UpdateRoleModal from "./UpdateRoleModal";
+import DeleteRoleModal from "./DeleteRoleModal";
+import RolePermissionList from "./RolePermissionList";
+import { usePermissionStore } from "@/store/permissionStore";
 
 // Mock data for roles
 const MOCK_ROLES = [
@@ -120,20 +125,34 @@ const ALL_PERMISSIONS = [
 ];
 
 const RoleManagement = () => {
-  const [popupIsActive, setPopupIsActive] = useState(false);
-  const [activePopup, setActivePopup] = useState("");
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedRole, setSelectedRole] = useState<typeof MOCK_ROLES[0] | null>(null);
   const [loading, setLoading] = useState(true);
-  const [roles, setRoles] = useState<{ roles: typeof MOCK_ROLES } | null>(null);
-  const [permissions, setPermissions] = useState<{ permissions: typeof ALL_PERMISSIONS } | null>(null);
+  const [roles, setRoles] = useState<typeof MOCK_ROLES>([]);
+  const [permissions, setPermissions] = useState<typeof ALL_PERMISSIONS>([]);
 
+
+  // const {
+  //         getPermissions,
+  //         getPermissionScopes,
+  //     } = usePermissionStore();
+
+  // useEffect(() => {
+  //     getPermissions();
+  //     getPermissionScopes();
+  // }, []);
+
+
+  
   // Simulate loading data
   useEffect(() => {
     const fetchData = async () => {
       // Simulate API call delay
       await new Promise(resolve => setTimeout(resolve, 1000));
-      setRoles({ roles: MOCK_ROLES });
-      setPermissions({ permissions: ALL_PERMISSIONS });
+      setRoles(MOCK_ROLES);
+      setPermissions(ALL_PERMISSIONS);
       setLoading(false);
       // Set default selected role to first role
       setSelectedRole(MOCK_ROLES[0]);
@@ -141,153 +160,42 @@ const RoleManagement = () => {
 
     fetchData();
   }, []);
+
+  // Modal handlers
+  const openCreateModal = () => setIsCreateModalOpen(true);
+  const closeCreateModal = () => setIsCreateModalOpen(false);
   
-  // Modal dialogs for create, update, delete actions
-  const renderPopup = () => {
-    if (!popupIsActive) return null;
-    
-    let content;
-    switch (activePopup) {
-      case "Create New Role":
-        content = (
-          <div className="grid gap-4">
-            <h3 className="text-xl font-bold">Create New Role</h3>
-            <div className="grid gap-2">
-              <label htmlFor="roleName" className="text-sm font-medium">Role Name</label>
-              <input id="roleName" type="text" className="border border-gray-300 rounded px-3 py-2" placeholder="Enter role name" />
-            </div>
-            <div className="grid gap-2">
-              <label htmlFor="roleDescription" className="text-sm font-medium">Description</label>
-              <textarea id="roleDescription" className="border border-gray-300 rounded px-3 py-2" rows={3} placeholder="Enter role description"></textarea>
-            </div>
-            <div className="grid gap-2">
-              <label className="text-sm font-medium">Permissions</label>
-              <div className="border border-gray-300 rounded max-h-60 overflow-y-auto p-2">
-                {ALL_PERMISSIONS.map((permission) => (
-                  <div key={permission._id} className="flex items-center gap-2 py-1">
-                    <input type="checkbox" id={`perm-${permission._id}`} />
-                    <label htmlFor={`perm-${permission._id}`}>{permission.name}</label>
-                  </div>
-                ))}
-              </div>
-            </div>
-            <div className="flex justify-end gap-3 mt-4">
-              <button 
-                className="px-4 py-2 border border-gray-300 rounded"
-                onClick={() => setPopupIsActive(false)}
-              >
-                Cancel
-              </button>
-              <button 
-                className="px-4 py-2 bg-brand-red text-white rounded"
-                onClick={() => setPopupIsActive(false)}
-              >
-                Create Role
-              </button>
-            </div>
-          </div>
-        );
-        break;
-      
-      case "Update Role":
-        content = (
-          <div className="grid gap-4">
-            <h3 className="text-xl font-bold">Update Role</h3>
-            <div className="grid gap-2">
-              <label htmlFor="updateRoleName" className="text-sm font-medium">Role Name</label>
-              <input 
-                id="updateRoleName" 
-                type="text" 
-                className="border border-gray-300 rounded px-3 py-2"
-                defaultValue={selectedRole?.name}
-              />
-            </div>
-            <div className="grid gap-2">
-              <label htmlFor="updateRoleDescription" className="text-sm font-medium">Description</label>
-              <textarea 
-                id="updateRoleDescription" 
-                className="border border-gray-300 rounded px-3 py-2" 
-                rows={3}
-                defaultValue={selectedRole?.description}
-              ></textarea>
-            </div>
-            <div className="grid gap-2">
-              <label className="text-sm font-medium">Permissions</label>
-              <div className="border border-gray-300 rounded max-h-60 overflow-y-auto p-2">
-                {ALL_PERMISSIONS.map((permission) => {
-                  const isChecked = selectedRole?.permissions?.some(
-                    p => p.codename === permission.codename
-                  );
-                  return (
-                    <div key={permission._id} className="flex items-center gap-2 py-1">
-                      <input 
-                        type="checkbox" 
-                        id={`update-perm-${permission._id}`}
-                        defaultChecked={isChecked}
-                      />
-                      <label htmlFor={`update-perm-${permission._id}`}>{permission.name}</label>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-            <div className="flex justify-end gap-3 mt-4">
-              <button 
-                className="px-4 py-2 border border-gray-300 rounded"
-                onClick={() => setPopupIsActive(false)}
-              >
-                Cancel
-              </button>
-              <button 
-                className="px-4 py-2 bg-blue-600 text-white rounded"
-                onClick={() => setPopupIsActive(false)}
-              >
-                Update Role
-              </button>
-            </div>
-          </div>
-        );
-        break;
-      
-      case "Delete Role":
-        content = (
-          <div className="grid gap-4">
-            <h3 className="text-xl font-bold">Delete Role</h3>
-            <p>Are you sure you want to delete the role "{selectedRole?.name}"? This action cannot be undone.</p>
-            <div className="flex justify-end gap-3 mt-4">
-              <button 
-                className="px-4 py-2 border border-gray-300 rounded"
-                onClick={() => setPopupIsActive(false)}
-              >
-                Cancel
-              </button>
-              <button 
-                className="px-4 py-2 bg-brand-red text-white rounded"
-                onClick={() => setPopupIsActive(false)}
-              >
-                Delete Role
-              </button>
-            </div>
-          </div>
-        );
-        break;
-      
-      default:
-        content = null;
-    }
-    
-    return (
-      <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-        <div className="bg-white rounded-lg p-6 max-w-md w-full max-h-[90vh] overflow-y-auto">
-          {content}
-        </div>
-      </div>
-    );
+  const openUpdateModal = () => setIsUpdateModalOpen(true);
+  const closeUpdateModal = () => setIsUpdateModalOpen(false);
+  
+  const openDeleteModal = () => setIsDeleteModalOpen(true);
+  const closeDeleteModal = () => setIsDeleteModalOpen(false);
+
+  const handleRoleSelect = (role: typeof MOCK_ROLES[0]) => {
+    setSelectedRole(role);
   };
 
   return (
     <section className="grid gap-6 mt-6 max-w-screen-xl mx-auto px-4">
-      {renderPopup()}
+      {/* Modals */}
+      <CreateRoleModal 
+        isOpen={isCreateModalOpen} 
+        onClose={closeCreateModal} 
+        permissions={permissions}
+      />
+      
+      <UpdateRoleModal 
+        isOpen={isUpdateModalOpen} 
+        onClose={closeUpdateModal}
+        role={selectedRole}
+        permissions={permissions}
+      />
+      
+      <DeleteRoleModal 
+        isOpen={isDeleteModalOpen} 
+        onClose={closeDeleteModal}
+        role={selectedRole}
+      />
       
       <div className="grid gap-12 lg:grid-cols-12 lg:gap-8 lg:items-start xl:flex">
         <div className="grid gap-8 xl:w-1/3 xl:shrink-0 lg:col-span-5">
@@ -303,7 +211,7 @@ const RoleManagement = () => {
             </div>
           ) : (
             <ul className="grid gap-2">
-              {roles?.roles?.map((role) => (
+              {roles.map((role) => (
                 <li key={role._id}>
                   <button
                     className={`px-3 py-2.5 border border-black/10 block w-full text-left rounded ${
@@ -312,7 +220,7 @@ const RoleManagement = () => {
                         : "text-brand-black hover:bg-primary/10"
                     }`}
                     type="button"
-                    onClick={() => setSelectedRole(role)}
+                    onClick={() => handleRoleSelect(role)}
                   >
                     {role.name}
                   </button>
@@ -336,10 +244,7 @@ const RoleManagement = () => {
               <Button
                 className="w-full mt-6 h-12 text-base font-semibold bg-primary hover:bg-primary/90 text-text-body rounded-full"
                 type="button"
-                onClick={() => {
-                  setPopupIsActive(true);
-                  setActivePopup("Create New Role");
-                }}
+                onClick={openCreateModal}
               >
                 <PlusIcon size={16} />
                 Create a custom role
@@ -348,118 +253,15 @@ const RoleManagement = () => {
           </div>
         </div>
 
-        <div className="grid gap-6 lg:col-span-7">
-          <div className="grid gap-3">
-            <div className="flex items-center gap-4 justify-between flex-wrap">
-              <h3 className="text-brand-black/80 font-semibold text-lg">
-                {selectedRole?.name || "Select a role"}
-              </h3>
-
-              {loading || !permissions || !roles ? (
-                <div className="flex items-center gap-2">
-                  <div className="animate-pulse px-8 py-2 rounded bg-gray-300"></div>
-                  <div className="animate-pulse px-8 py-2 rounded bg-gray-300"></div>
-                </div>
-              ) : selectedRole ? (
-                <div className="flex items-center gap-4">
-                  <Button
-                    className="rounded-lg px-4 py-2 text-sm font-medium bg-transparent border border-primary/40 text-gray-700 hover:bg-primary/40 flex items-center gap-1"
-                    type="button"
-                    onClick={() => {
-                      setPopupIsActive(true);
-                      setActivePopup("Update Role");
-                    }}
-                  >
-                    <Edit size={16} />
-                    Update
-                  </Button>
-                
-                  <Button
-                    className="rounded-lg px-4 py-2 text-sm font-mediumborder border border-primary/40 text-gray-700 bg-red/70 hover:bg-red/40 flex items-center gap-1"
-                    type="button"
-                    onClick={() => {
-                      setPopupIsActive(true); 
-                      setActivePopup("Delete Role");
-                    }}
-                  >
-                    <Trash2 size={16} />
-                    Delete
-                  </Button>
-                </div>
-              ) : null}
-            </div>
-
-            <p className="text-gray-600">{selectedRole?.description}</p>
-          </div>
-
-          {selectedRole && (
-            <div className="grid gap-4 items-start xl:grid-cols-2">
-              <div>
-                <p className="flex items-center gap-2 text-green-500 px-3 py-2.5 border border-black/10 w-full text-left font-medium rounded-t">
-                  <CheckCircle size={18} />
-                  Permissions Granted
-                </p>
-
-                {loading ? (
-                  <div className="space-y-2">
-                    {[1, 2, 3].map((i) => (
-                      <div key={i} className="rounded p-4 h-10 bg-gray-300 animate-pulse"></div>
-                    ))}
-                  </div>
-                ) : (
-                  <ul className="border border-black/10 rounded-b divide-y divide-black/10">
-                    {selectedRole?.permissions?.map(
-                      (permission) => (
-                        <li
-                          className="px-3 py-2.5 block w-full"
-                          key={permission.codename}
-                        >
-                          {permission.name.replace(/&amp;/g, "&")}
-                        </li>
-                      )
-                    )}
-                  </ul>
-                )}
-              </div>
-
-              <div>
-                <p className="flex items-center gap-2 text-red-500 px-3 py-2.5 border border-black/10 w-full text-left font-medium rounded-t">
-                  <XCircle size={18} />
-                  Restricted Access
-                </p>
-
-                {loading || !selectedRole || !permissions ? (
-                  <div className="space-y-2">
-                    {[1, 2, 3].map((i) => (
-                      <div key={i} className="rounded p-4 h-10 bg-gray-300 animate-pulse"></div>
-                    ))}
-                  </div>
-                ) : (
-                  <ul className="border border-black/10 rounded-b divide-y divide-black/10">
-                    {permissions?.permissions
-                      ?.filter(
-                        (permission) =>
-                          !selectedRole?.permissions?.some(
-                            (rolePermission) =>
-                              rolePermission.codename === permission.codename
-                          )
-                      )
-                      .map(
-                        (permission) => (
-                          <li
-                            className="px-3 py-2.5 block w-full"
-                            key={permission._id}
-                          >
-                            {permission.name.replace(/&amp;/g, "&")}
-                          </li>
-                        )
-                      )}
-                  </ul>
-                )}
-              </div>
-            </div>
-          )}
-        </div>
+        {/* Role management table component */}
+        <RolePermissionList
+          selectedRole={selectedRole}
+          roles={roles}
+          permissions={permissions}
+          loading={loading}
+          onUpdateClick={openUpdateModal}
+          onDeleteClick={openDeleteModal}
+        />
       </div>
     </section>
   );
