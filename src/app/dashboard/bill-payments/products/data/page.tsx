@@ -412,7 +412,7 @@ const BrandTable: React.FC = () => {
         if (pathname.includes('/electricity')) return 'electricity';
         if (pathname.includes('/esims')) return 'esim';
         if (pathname.includes('/giftcards')) return 'giftcard';
-        return 'airtime'; // default
+        return 'data'; // default
     };
 
     const currentServiceType = getCurrentServiceType();
@@ -480,19 +480,18 @@ const BrandTable: React.FC = () => {
             const serviceId = getServiceIdForCurrentType();
 
             if (!serviceId) {
-                // If no service ID is found, wait for services to load
+
                 if (services.length === 0) {
-                    // Services are still loading, wait
+
                     return;
                 }
-                // Services are loaded but no matching service found
-                console.warn(`No service found for ${currentServiceType}`);
+
                 return;
             }
 
             try {
                 const searchState = getSearchState(currentServiceType);
-                await getBrands(serviceId, currentPage, itemsPerPage, searchState.term);
+                getBrands(serviceId, currentPage, itemsPerPage, searchState.term);
             } catch (error: any) {
                 toast.error("Failed to load brands", {
                     description: error.message || "An error occurred"
@@ -503,11 +502,11 @@ const BrandTable: React.FC = () => {
         loadBrands();
     }, [currentServiceType, currentPage, itemsPerPage, services, getBrands, getSearchState, getServiceIdForCurrentType]);
 
-    // Effect to update search term when service type changes
+
     useEffect(() => {
         const currentState = getSearchState(currentServiceType);
         setSearchTerm(currentState.term);
-        setCurrentPage(1); // Reset to first page when service changes
+        setCurrentPage(1);
     }, [currentServiceType, getSearchState]);
 
     const debouncedSearch = useCallback(
@@ -518,7 +517,7 @@ const BrandTable: React.FC = () => {
             try {
                 setIsSearching(true);
                 setCurrentPage(1); // Reset to first page on search
-                // Save search term for this service type
+
                 updateSearchState(currentServiceType, term);
                 getBrands(serviceId, 1, itemsPerPage, term);
             } catch (error: any) {
@@ -537,7 +536,7 @@ const BrandTable: React.FC = () => {
         if (searchTerm) {
             debouncedSearch(searchTerm);
         }
-        //  else {
+        // else {
         //     // If search term is cleared, fetch all brands
         //     const serviceId = getServiceIdForCurrentType();
         //     if (serviceId) {
@@ -640,15 +639,15 @@ const BrandTable: React.FC = () => {
                 isEnabled: editEnabled
             };
 
-            await updateBrand(currentBrandId, updatedData);
+            updateBrand(currentBrandId, updatedData);
             toast.success("Brand updated successfully");
             setEditBrandOpen(false);
 
             // Refresh brands list
-            const serviceId = getServiceIdForCurrentType();
-            if (serviceId) {
-                await getBrands(serviceId, currentPage, itemsPerPage, searchTerm);
-            }
+            // const serviceId = getServiceIdForCurrentType();
+            // if (serviceId) {
+            //     await getBrands(serviceId, currentPage, itemsPerPage, searchTerm);
+            // }
         } catch (error: any) {
             toast.error("Failed to update brand", {
                 description: error.message || "An error occurred"
@@ -660,14 +659,8 @@ const BrandTable: React.FC = () => {
 
     const handleToggleStatus = async (brandId: string, isEnabled: boolean) => {
         try {
-            await toggleBrandStatus(brandId, isEnabled);
+            toggleBrandStatus(brandId, isEnabled);
             toast.success(`Brand ${isEnabled ? 'enabled' : 'disabled'} successfully`);
-
-            // Refresh the current page
-            // const serviceId = getServiceIdForCurrentType();
-            // if (serviceId) {
-            //     await getBrands(serviceId, currentPage, itemsPerPage, searchTerm);
-            // }
         } catch (error: any) {
             toast.error("Failed to update brand status", {
                 description: error.message || "An error occurred"
@@ -678,19 +671,18 @@ const BrandTable: React.FC = () => {
     const handleDeleteBrand = async (brandId: string, brandName: string) => {
         if (confirm(`Are you sure you want to delete "${brandName}"?`)) {
             try {
-                deleteBrand(brandId);
+                await deleteBrand(brandId);
                 toast.success(`"${brandName}" deleted successfully`);
 
                 // If current page becomes empty after deletion, go to previous page
                 if (brands.length === 1 && currentPage > 1) {
                     setCurrentPage(currentPage - 1);
-                }
-                else {
+                } else {
                     // Refresh the current page
-                    // const serviceId = getServiceIdForCurrentType();
-                    // if (serviceId) {
-                    //      getBrands(serviceId, currentPage, itemsPerPage, searchTerm);
-                    // }
+                    const serviceId = getServiceIdForCurrentType();
+                    if (serviceId) {
+                        await getBrands(serviceId, currentPage, itemsPerPage, searchTerm);
+                    }
                 }
             } catch (error: any) {
                 toast.error("Failed to delete brand", {
