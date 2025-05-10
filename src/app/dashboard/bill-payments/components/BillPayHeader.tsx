@@ -26,7 +26,7 @@ const BillPayHeader = () => {
                     Services
                 </Link>
                 <Link
-                    href="/dashboard/bill-payments/products/"
+                    href="/dashboard/bill-payments/products/airtime"
                     className={`cursor-pointer flex justify-center items-center bg-background text-text-body font-poppins px-4 py-3 w-full sm:w-[186px] rounded-[8px] text-center ${isPathActive("/dashboard/bill-payments/products")
                         ? "bg-primary-alpha-8 border-2 border-primary text-text-title"
                         : ""

@@ -318,7 +318,7 @@ const AddCablePlanModal: React.FC<AddCablePlanModalProps> = ({
             <DialogContent className="sm:max-w-[500px] p-0 overflow-auto max-h-[90vh] w-[95vw] sm:w-full rounded-lg">
                 <DialogHeader className="p-4 border-b">
                     <div className="flex justify-between items-center w-full">
-                        <DialogTitle className="text-xl font-bold">Add Cable Plan</DialogTitle>
+                        <DialogTitle className="text-xl font-bold">Add Gifcard</DialogTitle>
                         <button
                             onClick={() => onOpenChange(false)}
                             className="text-sm text-gray-500 flex items-center"
@@ -335,7 +335,7 @@ const AddCablePlanModal: React.FC<AddCablePlanModalProps> = ({
                             id="add-name"
                             value={name}
                             onChange={(e) => setName(e.target.value)}
-                            placeholder="e.g. Compact"
+                            placeholder="e.g. Zooplus"
                         />
                     </div>
 
@@ -345,7 +345,7 @@ const AddCablePlanModal: React.FC<AddCablePlanModalProps> = ({
                             id="add-description"
                             value={description}
                             onChange={(e) => setDescription(e.target.value)}
-                            placeholder="e.g. Basic, Premium"
+                            placeholder="e.g. Germany"
                         />
                     </div>
 
@@ -441,7 +441,7 @@ const AddCablePlanModal: React.FC<AddCablePlanModalProps> = ({
                         className="w-full py-2 bg-primary text-black rounded-md"
                         disabled={!name || !description || cost <= 0 || price <= 0 || !providerProductId || !categoryId}
                     >
-                        Add Cable Plan
+                        Add Giftcard
                     </Button>
                 </div>
             </DialogContent>
@@ -512,7 +512,7 @@ const EditCablePlanModal: React.FC<EditCablePlanModalProps> = ({
             <DialogContent className="sm:max-w-[500px] p-0 overflow-auto max-h-[90vh] w-[95vw] sm:w-full rounded-lg">
                 <DialogHeader className="p-4 border-b">
                     <div className="flex justify-between items-center w-full">
-                        <DialogTitle className="text-xl font-bold">Edit Cable Plan</DialogTitle>
+                        <DialogTitle className="text-xl font-bold">Edit Gifcard product</DialogTitle>
                         <button
                             onClick={() => onOpenChange(false)}
                             className="text-sm text-gray-500 flex items-center"
@@ -529,7 +529,7 @@ const EditCablePlanModal: React.FC<EditCablePlanModalProps> = ({
                             id="edit-name"
                             value={name}
                             onChange={(e) => setName(e.target.value)}
-                            placeholder="e.g. Compact"
+                            placeholder="e.g. "
                         />
                     </div>
 
@@ -539,7 +539,7 @@ const EditCablePlanModal: React.FC<EditCablePlanModalProps> = ({
                             id="edit-description"
                             value={description}
                             onChange={(e) => setDescription(e.target.value)}
-                            placeholder="e.g. Basic, Premium"
+                            placeholder="e.g. "
                         />
                     </div>
 
@@ -635,7 +635,7 @@ const EditCablePlanModal: React.FC<EditCablePlanModalProps> = ({
                         className="w-full py-2 bg-primary text-black rounded-md"
                         disabled={!name || !description || cost <= 0 || price <= 0 || !providerProductId || !categoryId}
                     >
-                        Update Cable Plan
+                        Update Giftcard product
                     </Button>
                 </div>
             </DialogContent>
@@ -1074,7 +1074,7 @@ const CablePlanManagement = () => {
                     {/* Cable Plan Header */}
                     <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center p-4 sm:p-6 gap-4">
                         <h1 className="text-xl sm:text-2xl font-bold text-gray-800">
-                            {selectedServiceName ? `Cable - ${selectedServiceName}` : "Giftcard"}
+                            {selectedServiceName ? `Giftcard - ${selectedServiceName}` : "Giftcard"}
                         </h1>
                         <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-4 w-full sm:w-auto">
                             <Button
@@ -1082,7 +1082,7 @@ const CablePlanManagement = () => {
                                 onClick={() => setAddProductOpen(true)}
                             >
                                 <Plus className="h-5 w-5 mr-2" />
-                                Add Plan
+                                Add Product
                             </Button>
                         </div>
                     </div>
@@ -1093,7 +1093,7 @@ const CablePlanManagement = () => {
                             <TableHeader>
                                 <TableRow className="bg-primary-alpha-8 hover:bg-primary-alpha-8 border-b border-gray-200">
                                     <TableHead className="font-medium text-sm sm:text-[16px] text-gray-700 py-3 pl-4">Product</TableHead>
-                                    <TableHead className="font-medium text-sm sm:text-[16px] text-gray-700 py-3">Package</TableHead>
+                                    <TableHead className="font-medium text-sm sm:text-[16px] text-gray-700 py-3">Description</TableHead>
                                     <TableHead className="font-medium text-sm sm:text-[16px] text-gray-700 py-3">Cost Price</TableHead>
                                     <TableHead className="font-medium text-sm sm:text-[16px] text-gray-700 py-3">Selling Price</TableHead>
                                     <TableHead className="font-medium text-sm sm:text-[16px] text-gray-700 py-3">Cashback</TableHead>

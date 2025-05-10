@@ -84,10 +84,11 @@ const ProductNavSection: React.FC<ProductNavSectionProps> = ({
     const { services, getServices, isLoading, setSelectedService } = useServiceStore();
     const [serviceMap, setServiceMap] = useState<Record<string, string>>({});
 
+
     useEffect(() => {
         const fetchServices = async () => {
             try {
-                await getServices();
+                getServices();
             } catch (error: any) {
                 toast.error("Failed to load services", {
                     description: error.message || "An error occurred"
@@ -133,13 +134,13 @@ const ProductNavSection: React.FC<ProductNavSectionProps> = ({
         {
             id: 'data' as ServiceType,
             label: 'Data Plan',
-            route: `/dashboard/bill-payments/plan/data-plan`,
+            route: `${basePath}/data`,
             lookupKey: 'data'
         },
         {
             id: 'cable' as ServiceType,
             label: 'Cable TV',
-            route: `/dashboard/bill-payments/plan/cable`,
+            route: `${basePath}/cable`,
             lookupKey: 'cable'
         },
         {
@@ -151,7 +152,7 @@ const ProductNavSection: React.FC<ProductNavSectionProps> = ({
         {
             id: 'internet' as ServiceType,
             label: 'Internet',
-            route: `/dashboard/bill-payments/plan/internet`,
+            route: `${basePath}/internet`,
             lookupKey: 'internet'
         },
         {
@@ -169,7 +170,7 @@ const ProductNavSection: React.FC<ProductNavSectionProps> = ({
         {
             id: 'giftcard' as ServiceType,
             label: 'GiftCards',
-            route: `/dashboard/bill-payments/plan/giftcard`,
+            route: `${basePath}/giftcard`,
             lookupKey: 'giftcard'
         },
     ];

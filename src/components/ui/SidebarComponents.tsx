@@ -181,20 +181,18 @@
 
 "use client";
 
-import { useState, useEffect } from "react";
-import { icons } from "@/constants/icons";
 import {
   Collapsible,
-  CollapsibleTrigger,
   CollapsibleContent,
+  CollapsibleTrigger,
 } from "@/components/ui/collapsible";
-import { ChevronDown, ChevronUp } from "lucide-react";
-import React from "react";
-import Link from "next/link";
-import Image, { StaticImageData } from "next/image";
-import { usePathname } from "next/navigation";
+import { icons } from "@/constants/icons";
 import { ServiceType, useServiceStore } from '@/store/BillpaymentStore';
-import { toast } from 'sonner';
+import { ChevronDown, ChevronUp } from "lucide-react";
+import Image, { StaticImageData } from "next/image";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import React, { useEffect, useState } from "react";
 
 export const SideBarSectionHeading = ({ title }: { title: string }) => {
   return (
@@ -230,7 +228,7 @@ export const SidebarNavItem: React.FC<SidebarNavItemProps> = ({
     if (serviceId && serviceType) {
       setSelectedService(serviceType, serviceId);
     }
-    
+
     // Call the original onClick if provided (for mobile menu closing)
     if (onClick) onClick();
   };
@@ -240,11 +238,10 @@ export const SidebarNavItem: React.FC<SidebarNavItemProps> = ({
       href={href}
       onClick={handleClick}
       className={`flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer transition-colors w-full h-fit
-                ${
-                  isActive
-                    ? "bg-[#CEEF0A1F] text-white"
-                    : "text-sidebar-foreground hover:bg-[#CEEF0A1A]"
-                }`}
+                ${isActive
+          ? "bg-[#CEEF0A1F] text-white"
+          : "text-sidebar-foreground hover:bg-[#CEEF0A1A]"
+        }`}
     >
       <div className="flex items-center justify-center w-6 h-6">
         <Image
@@ -252,16 +249,14 @@ export const SidebarNavItem: React.FC<SidebarNavItemProps> = ({
           alt={`${label} icon`}
           width={24}
           height={24}
-          className={`w-6 h-6 ${
-            isActive ? "text-white" : "text-text-body opacity-60"
-          }`}
+          className={`w-6 h-6 ${isActive ? "text-white" : "text-text-body opacity-60"
+            }`}
         />
       </div>
 
       <span
-        className={`text-[16px] font-light font-poppins leading-none text-white ${
-          isActive ? "text-text-title" : "text-text-body"
-        }`}
+        className={`text-[16px] font-light font-poppins leading-none text-white ${isActive ? "text-text-title" : "text-text-body"
+          }`}
       >
         {label}
       </span>
@@ -290,26 +285,14 @@ export const BillPayments: React.FC<BillPaymentsProps> = ({
       "/dashboard/bill-payments/plan/internet",
       "/dashboard/bill-payments/plan/cable",
     ];
-    
+
     if (billPaymentsPaths.some(path => pathname === path || pathname.startsWith(`${path}/`))) {
       setIsBillPaymentsOpen(true);
     }
   }, [pathname]);
 
   // Fetch services on mount
-  useEffect(() => {
-    const fetchServices = async () => {
-      try {
-        await getServices();
-      } catch (error: any) {
-        toast.error("Failed to load services", {
-          description: error.message || "An error occurred"
-        });
-      }
-    };
 
-    fetchServices();
-  }, [getServices]);
 
   // Create a map of service labels to service IDs for easy lookup
   useEffect(() => {
@@ -323,8 +306,8 @@ export const BillPayments: React.FC<BillPaymentsProps> = ({
   const isActive = [
     "/dashboard/bill-payments/products/airtime",
     "/dashboard/bill-payments/products/esims",
-    "/dashboard/bill-payments/plan/data-plan",
-    "/dashboard/bill-payments/plan/internet",
+    "/dashboard/bill-payments/products/data",
+    "/dashboard/bill-payments/products/internet",
     "/dashboard/bill-payments/plan/cable",
   ].some(path => pathname === path || pathname.startsWith(`${path}/`));
 
@@ -332,11 +315,10 @@ export const BillPayments: React.FC<BillPaymentsProps> = ({
     <Collapsible open={isBillPaymentsOpen} onOpenChange={setIsBillPaymentsOpen}>
       <CollapsibleTrigger asChild>
         <div
-          className={`flex items-center justify-between px-4 py-3 rounded-lg cursor-pointer transition-colors ${
-            isActive
-              ? "bg-sidebar-primary text-text-title"
-              : "text-sidebar-foreground hover:bg-[#CEEF0A1A]"
-          }`}
+          className={`flex items-center justify-between px-4 py-3 rounded-lg cursor-pointer transition-colors ${isActive
+            ? "bg-sidebar-primary text-text-title"
+            : "text-sidebar-foreground hover:bg-[#CEEF0A1A]"
+            }`}
         >
           <div className="flex items-center gap-3">
             <span className="icon-color">
@@ -345,9 +327,8 @@ export const BillPayments: React.FC<BillPaymentsProps> = ({
                 alt="Bill Payments"
                 width={24}
                 height={24}
-                className={`${
-                  isActive ? "text-text-title" : "text-text-body opacity-60"
-                }`}
+                className={`${isActive ? "text-text-title" : "text-text-body opacity-60"
+                  }`}
               />
             </span>
             <span className="text-sm text-[16px] font-normal font-poppins leading-none text-white">
@@ -381,7 +362,7 @@ export const BillPayments: React.FC<BillPaymentsProps> = ({
         <SidebarNavItem
           icon={icons.cashbackIcon}
           label="Data Plan"
-          href="/dashboard/bill-payments/plan/data-plan"
+          href="/dashboard/bill-payments/products/data"
           serviceId={serviceMap['data'] || ''}
           serviceType="data"
           onClick={onMobileItemClick}
@@ -389,7 +370,7 @@ export const BillPayments: React.FC<BillPaymentsProps> = ({
         <SidebarNavItem
           icon={icons.esimIcon}
           label="Internet"
-          href="/dashboard/bill-payments/plan/internet"
+          href="/dashboard/bill-payments/products/internet"
           serviceId={serviceMap['internet'] || ''}
           serviceType="internet"
           onClick={onMobileItemClick}
@@ -397,7 +378,7 @@ export const BillPayments: React.FC<BillPaymentsProps> = ({
         <SidebarNavItem
           icon={icons.esimIcon}
           label="Cable TV"
-          href="/dashboard/bill-payments/plan/cable"
+          href="/dashboard/bill-payments/products/cable"
           serviceId={serviceMap['cable'] || ''}
           serviceType="cable"
           onClick={onMobileItemClick}

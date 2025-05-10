@@ -412,7 +412,7 @@ const BrandTable: React.FC = () => {
         if (pathname.includes('/electricity')) return 'electricity';
         if (pathname.includes('/esims')) return 'esim';
         if (pathname.includes('/giftcards')) return 'giftcard';
-        return 'airtime'; // default
+        return 'cable'; // default
     };
 
     const currentServiceType = getCurrentServiceType();
@@ -480,19 +480,18 @@ const BrandTable: React.FC = () => {
             const serviceId = getServiceIdForCurrentType();
 
             if (!serviceId) {
-                // If no service ID is found, wait for services to load
+
                 if (services.length === 0) {
-                    // Services are still loading, wait
+
                     return;
                 }
-                // Services are loaded but no matching service found
-                console.warn(`No service found for ${currentServiceType}`);
+
                 return;
             }
 
             try {
                 const searchState = getSearchState(currentServiceType);
-                await getBrands(serviceId, currentPage, itemsPerPage, searchState.term);
+                getBrands(serviceId, currentPage, itemsPerPage, searchState.term);
             } catch (error: any) {
                 toast.error("Failed to load brands", {
                     description: error.message || "An error occurred"
@@ -503,11 +502,11 @@ const BrandTable: React.FC = () => {
         loadBrands();
     }, [currentServiceType, currentPage, itemsPerPage, services, getBrands, getSearchState, getServiceIdForCurrentType]);
 
-    // Effect to update search term when service type changes
+
     useEffect(() => {
         const currentState = getSearchState(currentServiceType);
         setSearchTerm(currentState.term);
-        setCurrentPage(1); // Reset to first page when service changes
+        setCurrentPage(1);
     }, [currentServiceType, getSearchState]);
 
     const debouncedSearch = useCallback(
@@ -518,7 +517,7 @@ const BrandTable: React.FC = () => {
             try {
                 setIsSearching(true);
                 setCurrentPage(1); // Reset to first page on search
-                // Save search term for this service type
+
                 updateSearchState(currentServiceType, term);
                 getBrands(serviceId, 1, itemsPerPage, term);
             } catch (error: any) {
@@ -537,7 +536,7 @@ const BrandTable: React.FC = () => {
         if (searchTerm) {
             debouncedSearch(searchTerm);
         }
-        //  else {
+        // else {
         //     // If search term is cleared, fetch all brands
         //     const serviceId = getServiceIdForCurrentType();
         //     if (serviceId) {
@@ -640,15 +639,15 @@ const BrandTable: React.FC = () => {
                 isEnabled: editEnabled
             };
 
-            await updateBrand(currentBrandId, updatedData);
+            updateBrand(currentBrandId, updatedData);
             toast.success("Brand updated successfully");
             setEditBrandOpen(false);
 
             // Refresh brands list
-            const serviceId = getServiceIdForCurrentType();
-            if (serviceId) {
-                await getBrands(serviceId, currentPage, itemsPerPage, searchTerm);
-            }
+            // const serviceId = getServiceIdForCurrentType();
+            // if (serviceId) {
+            //     await getBrands(serviceId, currentPage, itemsPerPage, searchTerm);
+            // }
         } catch (error: any) {
             toast.error("Failed to update brand", {
                 description: error.message || "An error occurred"
@@ -660,14 +659,8 @@ const BrandTable: React.FC = () => {
 
     const handleToggleStatus = async (brandId: string, isEnabled: boolean) => {
         try {
-            await toggleBrandStatus(brandId, isEnabled);
+            toggleBrandStatus(brandId, isEnabled);
             toast.success(`Brand ${isEnabled ? 'enabled' : 'disabled'} successfully`);
-
-            // Refresh the current page
-            // const serviceId = getServiceIdForCurrentType();
-            // if (serviceId) {
-            //     await getBrands(serviceId, currentPage, itemsPerPage, searchTerm);
-            // }
         } catch (error: any) {
             toast.error("Failed to update brand status", {
                 description: error.message || "An error occurred"
@@ -678,19 +671,18 @@ const BrandTable: React.FC = () => {
     const handleDeleteBrand = async (brandId: string, brandName: string) => {
         if (confirm(`Are you sure you want to delete "${brandName}"?`)) {
             try {
-                deleteBrand(brandId);
+                await deleteBrand(brandId);
                 toast.success(`"${brandName}" deleted successfully`);
 
                 // If current page becomes empty after deletion, go to previous page
                 if (brands.length === 1 && currentPage > 1) {
                     setCurrentPage(currentPage - 1);
-                }
-                else {
+                } else {
                     // Refresh the current page
-                    // const serviceId = getServiceIdForCurrentType();
-                    // if (serviceId) {
-                    //      getBrands(serviceId, currentPage, itemsPerPage, searchTerm);
-                    // }
+                    const serviceId = getServiceIdForCurrentType();
+                    if (serviceId) {
+                        await getBrands(serviceId, currentPage, itemsPerPage, searchTerm);
+                    }
                 }
             } catch (error: any) {
                 toast.error("Failed to delete brand", {
@@ -700,41 +692,23 @@ const BrandTable: React.FC = () => {
         }
     };
 
-    // Brand logo helper function (keep the same)
-    const getBrandLogo = (label: string) => {
+    const getServiceLogo = (label: string, color?: string) => {
         const normalizedLabel = label.toLowerCase();
-        if (normalizedLabel.includes('mtn')) {
-            return (
-                <div className="w-6 h-6 rounded-full bg-yellow-400 flex items-center justify-center">
-                    <span className="text-xs font-bold">MTN</span>
-                </div>
-            );
-        } else if (normalizedLabel.includes('glo')) {
-            return (
-                <div className="w-6 h-6 rounded-full bg-green-600 flex items-center justify-center">
-                    <span className="text-xs font-bold text-white">glo</span>
-                </div>
-            );
-        } else if (normalizedLabel.includes('airtel')) {
-            return (
-                <div className="w-6 h-6 rounded-full bg-red-600 flex items-center justify-center">
-                    <span className="text-xs font-bold text-white">A</span>
-                </div>
-            );
-        } else if (normalizedLabel.includes('9mobile')) {
-            return (
-                <div className="w-6 h-6 rounded-full bg-green-400 flex items-center justify-center">
-                    <span className="text-xs font-bold text-white">9</span>
-                </div>
-            );
-        } else {
-            return (
-                <div className="w-6 h-6 rounded-full bg-gray-400 flex items-center justify-center">
-                    <span className="text-xs font-bold text-white">{label.charAt(0)}</span>
-                </div>
-            );
-        }
+        const bgColor = color || (
+            normalizedLabel.includes('showmax') ? "#FF0000" :
+                normalizedLabel.includes('dstv') ? "#192F59" :
+                    normalizedLabel.includes('gotv') ? "#009900" :
+                        normalizedLabel.includes('startimes') ? "#FFA500" : "#6E6E6E"
+        );
+
+        return (
+            <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-full flex items-center justify-center" style={{ backgroundColor: bgColor }}>
+                <span className="text-xs font-bold text-white">{label.charAt(0)}</span>
+            </div>
+        );
     };
+
+
 
     if (isLoading && brands.length === 0) {
         return <BrandTableSkeleton />;
@@ -839,7 +813,7 @@ const BrandTable: React.FC = () => {
                                         <TableCell className="py-4 pl-6">
                                             <div className="flex items-center gap-3">
                                                 <div className="w-8 h-8 bg-primary-fade rounded-full flex items-center justify-center overflow-hidden">
-                                                    {getBrandLogo(brand.label)}
+                                                    {getServiceLogo(brand.label)}
                                                 </div>
                                                 <span className="text-base font-medium text-text-body">{brand.name}</span>
                                             </div>
