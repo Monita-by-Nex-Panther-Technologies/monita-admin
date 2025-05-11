@@ -1,6 +1,6 @@
 'use client'
 import { useServiceStore } from "@/store/BillpaymentStore";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { toast } from "sonner";
 import AddServiceModal from "./components/AddServiceModal";
 import ServiceTypeTable from "./components/ServiceTypeTable";
@@ -18,8 +18,23 @@ const ServiceManagement = () => {
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 
     // useEffect(() => {
+<<<<<<< HEAD
 
     //     getServices()
+=======
+    //     const fetchServices = async () => {
+    //         try {
+    //             await getServices();
+    //         } catch (error: any) {
+    //             console.error("Error fetching services:", error);
+    //             toast.error("Failed to load services", {
+    //                 description: error.message || "An error occurred"
+    //             });
+    //         }
+    //     };
+
+    //     fetchServices();
+>>>>>>> c54a9e807b21a85be3676783429bdf861a7662a1
     // }, [getServices]);
 
     const mappedServices = services.map(service => ({
@@ -30,7 +45,7 @@ const ServiceManagement = () => {
 
     const handleToggleService = async (id: string, enabled: boolean) => {
         try {
-            await toggleServiceStatus(id, enabled);
+            toggleServiceStatus(id, enabled);
         } catch (error: any) {
             console.error("Error toggling service:", error);
             toast.error("Failed to update service status", {

@@ -73,7 +73,7 @@ const PlanHeader = () => {
     useEffect(() => {
         const fetchServices = async () => {
             try {
-                await getServices();
+                getServices();
             } catch (error: any) {
                 toast.error("Failed to load services", {
                     description: error.message || "An error occurred"
@@ -137,10 +137,9 @@ const PlanHeader = () => {
 
     return (
         <div className='w-full flex flex-col sm:flex-row justify-between items-center bg-background p-3 sm:p-4 rounded-[8px] mt-4'>
-            <div className='grid grid-cols-1 sm:grid-cols-4 w-full sm:w-[70%] gap-2 sm:gap-x-1.5 px-2 sm:px-3 py-2 bg-background-alt rounded-[8px]'>
-                {categories.map((category) => (
+            {categories.map((category) => (
+                <div key={category.id} className='w-full sm:w-[23%] px-2 sm:px-3 py-2'>
                     <ProductNavItem
-                        key={category.id}
                         icon={category.icon}
                         label={category.label}
                         route={category.route}
@@ -149,8 +148,8 @@ const PlanHeader = () => {
                         serviceType={category.id}
                         onServiceSelect={handleServiceSelect}
                     />
-                ))}
-            </div>
+                </div>
+            ))}
         </div>
     )
 }

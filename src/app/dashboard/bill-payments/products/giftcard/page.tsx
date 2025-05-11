@@ -1,4 +1,5 @@
 
+
 "use client";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
@@ -411,8 +412,8 @@ const BrandTable: React.FC = () => {
         if (pathname.includes('/internet')) return 'internet';
         if (pathname.includes('/electricity')) return 'electricity';
         if (pathname.includes('/esims')) return 'esim';
-        if (pathname.includes('/giftcards')) return 'giftcard';
-        return 'airtime'; // default
+        if (pathname.includes('/giftcard')) return 'giftcard';
+        return 'giftcard';
     };
 
     const currentServiceType = getCurrentServiceType();
@@ -700,42 +701,40 @@ const BrandTable: React.FC = () => {
         }
     };
 
-    // Brand logo helper function (keep the same)
-    const getBrandLogo = (label: string) => {
-        const normalizedLabel = label.toLowerCase();
-        if (normalizedLabel.includes('mtn')) {
-            return (
-                <div className="w-6 h-6 rounded-full bg-yellow-400 flex items-center justify-center">
-                    <span className="text-xs font-bold">MTN</span>
-                </div>
-            );
-        } else if (normalizedLabel.includes('glo')) {
-            return (
-                <div className="w-6 h-6 rounded-full bg-green-600 flex items-center justify-center">
-                    <span className="text-xs font-bold text-white">glo</span>
-                </div>
-            );
-        } else if (normalizedLabel.includes('airtel')) {
-            return (
-                <div className="w-6 h-6 rounded-full bg-red-600 flex items-center justify-center">
-                    <span className="text-xs font-bold text-white">A</span>
-                </div>
-            );
-        } else if (normalizedLabel.includes('9mobile')) {
-            return (
-                <div className="w-6 h-6 rounded-full bg-green-400 flex items-center justify-center">
-                    <span className="text-xs font-bold text-white">9</span>
-                </div>
-            );
-        } else {
-            return (
-                <div className="w-6 h-6 rounded-full bg-gray-400 flex items-center justify-center">
-                    <span className="text-xs font-bold text-white">{label.charAt(0)}</span>
-                </div>
-            );
-        }
-    };
 
+
+    const getBrandLogo = (label: string, color?: string) => {
+        const normalizedLabel = label.toLowerCase();
+
+        // Define consistent colors for educational services
+        const educationColors: any = {
+            'jamb': "#3B82F6",    // Blue
+            'waec': "#10B981",    // Green
+            'neco': "#F59E0B",    // Amber
+            'gce': "#8B5CF6",     // Purple
+            'nbais': "#EC4899",   // Pink
+            'nabteb': "#EF4444",  // Red
+            'fce': "#6366F1"      // Indigo
+        };
+
+
+        const bgColor = color || (
+            normalizedLabel.includes('showmax') ? "#FF0000" :
+                normalizedLabel.includes('dstv') ? "#192F59" :
+                    normalizedLabel.includes('gotv') ? "#009900" :
+                        normalizedLabel.includes('startimes') ? "#FFA500" :
+                            // Then check for exact matches with education services
+                            educationColors[normalizedLabel] ||
+                            // If not found, generate a deterministic color based on the first letter
+                            `hsl(${normalizedLabel.charCodeAt(0) * 15 % 360}, 70%, 45%)`
+        );
+
+        return (
+            <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-full flex items-center justify-center" style={{ backgroundColor: bgColor }}>
+                <span className="text-xs font-bold text-white">{label.charAt(0)}</span>
+            </div>
+        );
+    };
     if (isLoading && brands.length === 0) {
         return <BrandTableSkeleton />;
     }

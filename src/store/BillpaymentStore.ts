@@ -214,7 +214,7 @@ export const useServiceStore = create<ServiceState>()(
                     query.append('search', search);
                 }
 
-                
+
 
                 const response = await axiosInstance.get(
                     `${bps_endpoint}/brands?${query}`
@@ -313,6 +313,12 @@ export const useServiceStore = create<ServiceState>()(
                     return { brands: updatedBrands, isLoading: false };
                 });
 
+                // After toggling status, refresh the brands list for the selected service
+                const selectedServiceId = get().selectedServiceId;
+                if (selectedServiceId) {
+                    await get().getBrands(selectedServiceId, get().brandsPage, get().brandsLimit);
+                }
+
                 return response.data;
             } catch (error: any) {
                 set({ isLoading: false });
@@ -335,6 +341,8 @@ export const useServiceStore = create<ServiceState>()(
                     );
                     return { brands: filteredBrands, isLoading: false };
                 });
+                const selectedServiceId = get().selectedServiceId;
+                await get().getBrands(selectedServiceId, get().brandsPage, get().brandsLimit);
             } catch (error: any) {
                 set({ isLoading: false });
                 throw new Error(getErrorMessage(error));
