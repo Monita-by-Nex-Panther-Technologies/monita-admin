@@ -9,7 +9,6 @@ import { useStaffStore, CreateStaffPayload } from "@/store/staffStore"
 import { useRolesStore } from "@/store/rolesStore"
 import { toast } from "sonner"
 
-// Define types for the Add Staff Modal props
 interface AddStaffModalProps {
     open: boolean
     onOpenChange: (open: boolean) => void
@@ -21,7 +20,6 @@ const AddStaffModal: React.FC<AddStaffModalProps> = ({
     onOpenChange,
     onSuccess
 }) => {
-    // Initialize form state
     const [formData, setFormData] = useState<CreateStaffPayload>({
         firstName: "",
         lastName: "",
@@ -35,7 +33,6 @@ const AddStaffModal: React.FC<AddStaffModalProps> = ({
     const { createStaff } = useStaffStore()
     const { roles, getRoles, isLoading: isLoadingRoles } = useRolesStore()
     
-    // Fetch roles when modal opens
     useEffect(() => {
         if (open) {
             const fetchRoles = async () => {
@@ -51,7 +48,6 @@ const AddStaffModal: React.FC<AddStaffModalProps> = ({
         }
     }, [open, getRoles])
 
-    // Handle text input changes
     const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target
         setFormData(prev => ({
@@ -60,9 +56,21 @@ const AddStaffModal: React.FC<AddStaffModalProps> = ({
         }))
     }
 
-    // Handle form submission
+    const formatPhoneNumber = (phone: string): string => {
+        const digitsOnly = phone.replace(/\D/g, '')
+        
+        if (digitsOnly.startsWith('234')) {
+            return `+${digitsOnly}`
+        }
+        
+        if (digitsOnly.startsWith('0')) {
+            return `+234${digitsOnly.substring(1)}`
+        }
+        
+        return `+234${digitsOnly}`
+    }
+
     const handleSubmit = async () => {
-        // Validate form data
         if (!formData.firstName || !formData.lastName || !formData.email || !formData.phoneNumber || !formData.roleId) {
             toast.error("Please fill all required fields")
             return
@@ -70,10 +78,15 @@ const AddStaffModal: React.FC<AddStaffModalProps> = ({
         
         try {
             setIsSubmitting(true)
-            await createStaff(formData)
+            
+            const formattedData = {
+                ...formData,
+                phoneNumber: formatPhoneNumber(formData.phoneNumber)
+            }
+            
+            await createStaff(formattedData)
             toast.success(`Staff ${formData.firstName} ${formData.lastName} added successfully!`)
             
-            // Reset form after submission
             setFormData({
                 firstName: "",
                 lastName: "",
@@ -82,7 +95,6 @@ const AddStaffModal: React.FC<AddStaffModalProps> = ({
                 roleId: ""
             })
             
-            // Close modal and notify parent component
             onOpenChange(false)
             if (onSuccess) {
                 onSuccess()
@@ -167,6 +179,7 @@ const AddStaffModal: React.FC<AddStaffModalProps> = ({
                                     className="h-10 text-sm rounded-lg border-gray-300"
                                     required
                                 />
+                                
                             </div>
                         </div>
 

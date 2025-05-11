@@ -43,9 +43,9 @@ export const usePermissionStore = create<PermissionState>()((set) => ({
 
 // Types
 export interface Permission {
-  id: string;
+  scope: string;
   name: string;
-  module?: string;
+  value: string;
 }
 
 export interface PermissionScope {
