@@ -96,13 +96,14 @@ export const useRolesStore = create<RolesState>()(
 export interface Role {
   id: string;
   name: string;
-  description?: string;
   createdAt: string;
   updatedAt: string;
   permissions?: Permission[];
 }
 
 export interface Permission {
+  action: "Accept" | "Reject";
+  value: any;
   id: string;
   name: string;
   module?: string;
@@ -110,7 +111,6 @@ export interface Permission {
 
 export interface CreateRolePayload {
   name: string;
-  description?: string;
   permissionIds?: string[];
 }
 
