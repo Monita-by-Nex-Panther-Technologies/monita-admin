@@ -297,19 +297,19 @@ export const BillPayments: React.FC<BillPaymentsProps> = ({
   }, [pathname]);
 
   // Fetch services on mount
-  useEffect(() => {
-    const fetchServices = async () => {
-      try {
-        await getServices();
-      } catch (error: any) {
-        toast.error("Failed to load services", {
-          description: error.message || "An error occurred"
-        });
-      }
-    };
+  // useEffect(() => {
+  //   const fetchServices = async () => {
+  //     try {
+  //       await getServices();
+  //     } catch (error: any) {
+  //       toast.error("Failed to load services", {
+  //         description: error.message || "An error occurred"
+  //       });
+  //     }
+  //   };
 
-    fetchServices();
-  }, [getServices]);
+  //   fetchServices();
+  // }, [getServices]);
 
   // Create a map of service labels to service IDs for easy lookup
   useEffect(() => {

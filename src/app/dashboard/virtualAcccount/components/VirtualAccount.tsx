@@ -5,7 +5,7 @@ import React from 'react'
 const VirtualAccount = () => {
     return (
         <div className=' grid xl:grid-col-4 lg:grid-cols-4 md:grid-cols-2 gap-4'>
-            <StatCard
+            {/* <StatCard
                 title="Total Users"
                 value="1,000,000"
                 Icon={icons.customersIcon} // Pass the icon component directly
@@ -24,7 +24,7 @@ const VirtualAccount = () => {
                 title="Blocked Accounts "
                 value="500"
                 Icon={icons.customersIcon} // Pass the icon component directly
-            />
+            /> */}
 
         </div>
     )

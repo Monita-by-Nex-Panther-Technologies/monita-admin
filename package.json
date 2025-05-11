@@ -46,12 +46,9 @@
     "react-hook-form": "^7.56.1",
     "react-quill": "^2.0.0",
     "react-redux": "^9.2.0",
-<<<<<<< HEAD
     "react-tailwindcss-datepicker": "^2.0.0",
     "react-time-picker": "^7.0.0",
-=======
     "react-use": "^17.6.0",
->>>>>>> fd70bf2e0ed1c58cbc6f06b3e7903cd8e25eb8d7
     "recharts": "^2.15.3",
     "sonner": "^2.0.3",
     "tailwind-merge": "^3.2.0",

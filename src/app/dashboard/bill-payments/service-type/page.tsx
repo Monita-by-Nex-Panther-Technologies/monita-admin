@@ -17,20 +17,10 @@ const ServiceManagement = () => {
 
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 
-    useEffect(() => {
-        const fetchServices = async () => {
-            try {
-                await getServices();
-            } catch (error: any) {
-                console.error("Error fetching services:", error);
-                toast.error("Failed to load services", {
-                    description: error.message || "An error occurred"
-                });
-            }
-        };
+    // useEffect(() => {
 
-        fetchServices();
-    }, [getServices]);
+    //     getServices()
+    // }, [getServices]);
 
     const mappedServices = services.map(service => ({
         id: service.id,

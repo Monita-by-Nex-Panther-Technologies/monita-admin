@@ -452,6 +452,10 @@ const BrandManagement: React.FC = () => {
     // Calculate total pages
     const totalPages = Math.ceil(brandsTotal / pageSize);
 
+
+    // same here check the transaction for reference
+
+    
     // Function to update URL with new parameters
     const updateUrlParams = (newParams: Record<string, string | number>) => {
         const params = new URLSearchParams(searchParams.toString());
@@ -467,6 +471,8 @@ const BrandManagement: React.FC = () => {
         router.push(`${window.location.pathname}?${params.toString()}`);
     };
 
+
+    // countrol the loasing srtate from state management
     // Debounced search function
     const debouncedSearch = useCallback(
         debounce(async (term: string) => {
@@ -486,32 +492,12 @@ const BrandManagement: React.FC = () => {
 
     // Fetch services on mount
     useEffect(() => {
-        const fetchServices = async () => {
-            try {
-                await getServices();
-            } catch (error: any) {
-                toast.error("Failed to load services", {
-                    description: error.message || "An error occurred"
-                });
-            }
-        };
-
-        fetchServices();
+        getServices();
     }, [getServices]);
 
     // Fetch brands when service, page, or search changes
     useEffect(() => {
-        const fetchBrands = async () => {
-            try {
-                await getBrands(selectedServiceId, currentPage, pageSize, searchTerm);
-            } catch (error: any) {
-                toast.error("Failed to load brands", {
-                    description: error.message || "An error occurred"
-                });
-            }
-        };
-
-        fetchBrands();
+        getBrands(selectedServiceId, currentPage, pageSize, searchTerm);
     }, [selectedServiceId, currentPage, pageSize, getBrands]);
 
     // Handle search term changes

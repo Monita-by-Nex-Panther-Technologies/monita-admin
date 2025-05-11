@@ -71,8 +71,8 @@ export default function StatisticsDash() {
     const [activeTab, setActiveTab] = useState("Transaction Volume")
 
     return (
-        <div className="p-6 bg-gray-50 min-h-screen">
-            <div className="grid gap-6">
+        <div className="mt-4">
+            <div className="flex flex-col gap-4 ">
                 {/* Filter by Date */}
                 <div className="w-full flex flex-row justify-between items-center bg-background p-4 rounded-[8px]">
                     <h1 className="text-text-title text-xl font-semibold font-poppins">Filter by Date</h1>
