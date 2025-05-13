@@ -1,3 +1,4 @@
+"use client"
 import StatCard from '@/components/common/StartCard'
 import { icons } from '@/constants/icons'
 import React from 'react'
