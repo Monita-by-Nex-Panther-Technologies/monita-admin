@@ -1,23 +1,20 @@
 "use client";
-import React, { useState, useEffect, type ChangeEvent } from "react";
+
+import { useState, useEffect } from "react";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
+import { useRolesStore } from "@/store/rolesStore";
+import { Permission } from "@/store/permissionStore";
 
-interface Permission {
-  _id: string;
-  codename: string;
-  name: string;
-  module: string;
-}
-
+// Define types for the component props
 interface CreateRoleModalProps {
   isOpen: boolean;
   onClose: () => void;
-  permissions: Permission[];
+  permissions: Permission[] | undefined;
   onSuccess?: () => void;
 }
 
@@ -29,74 +26,91 @@ const CreateRoleModal = ({
 }: CreateRoleModalProps) => {
   const [roleName, setRoleName] = useState("");
   const [roleDescription, setRoleDescription] = useState("");
-  const [selectedPermissions, setSelectedPermissions] = useState<string[]>([]);
-  const [selectedModules, setSelectedModules] = useState<string[]>([]);
+  const [selectedPermissions, setSelectedPermissions] = useState<Record<string, boolean>>({});
+  const [selectedScopes, setSelectedScopes] = useState<string[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Group permissions by module
-  const groupPermissionsByModule = () => {
-    const modules: Record<string, Permission[]> = {};
+  const { createRole } = useRolesStore();
+
+  // Group permissions by scope
+  const groupPermissionsByScope = () => {
+    const scopes: Record<string, Permission[]> = {};
     
-    permissions.forEach(permission => {
-      if (!modules[permission.module]) {
-        modules[permission.module] = [];
+    permissions?.forEach(permission => {
+      if (!scopes[permission.scope]) {
+        scopes[permission.scope] = [];
       }
-      modules[permission.module].push(permission);
+      scopes[permission.scope].push(permission);
     });
     
-    return modules;
+    return scopes;
   };
 
-  const permissionsByModule = groupPermissionsByModule();
+  const permissionsByScope = groupPermissionsByScope();
 
-  // Update selected modules whenever selected permissions change
+  // Reset form when modal is opened/closed
   useEffect(() => {
-    const modules = Object.keys(permissionsByModule);
-    const selected = modules.filter(module => {
-      const modulePermissions = permissionsByModule[module].map(p => p.codename);
-      return modulePermissions.every(p => selectedPermissions.includes(p));
-    });
-    
-    setSelectedModules(selected);
-  }, [selectedPermissions]);
+    if (isOpen) {
+      setRoleName("");
+      setRoleDescription("");
+      setSelectedPermissions({});
+      setSelectedScopes([]);
+    }
+  }, [isOpen]);
 
   // Toggle permission selection
-  const handlePermissionToggle = (permissionCodename: string) => {
-    setSelectedPermissions(prev =>
-      prev.includes(permissionCodename)
-        ? prev.filter(p => p !== permissionCodename)
-        : [...prev, permissionCodename]
-    );
+  const handlePermissionToggle = (permissionValue: string) => {
+    setSelectedPermissions(prev => {
+      const updated = { ...prev };
+      
+      if (updated[permissionValue]) {
+        // If permission is already selected, unselect it
+        delete updated[permissionValue];
+      } else {
+        // Add new permission
+        updated[permissionValue] = true;
+      }
+      
+      return updated;
+    });
   };
 
-  // Toggle all permissions for a module
-  const handleModuleToggle = (module: string) => {
-    const modulePermissions = permissionsByModule[module].map(p => p.codename);
-    const allSelected = modulePermissions.every(p => selectedPermissions.includes(p));
+  // Toggle all permissions for a scope
+  const handleScopeToggle = (scope: string) => {
+    const isSelected = selectedScopes.includes(scope);
     
-    if (allSelected) {
-      // Remove all module permissions
-      setSelectedPermissions(prev => 
-        prev.filter(p => !modulePermissions.includes(p))
-      );
+    // Update selected scopes list
+    if (isSelected) {
+      setSelectedScopes(prev => prev.filter(s => s !== scope));
     } else {
-      // Add all module permissions
-      setSelectedPermissions(prev => {
-        const newPerms = [...prev];
-        modulePermissions.forEach(p => {
-          if (!newPerms.includes(p)) {
-            newPerms.push(p);
-          }
-        });
-        return newPerms;
-      });
+      setSelectedScopes(prev => [...prev, scope]);
     }
+    
+    // Update permissions based on scope selection
+    setSelectedPermissions(prev => {
+      const updated = { ...prev };
+      const scopeWildcard = `${scope}.*`;
+      
+      if (isSelected) {
+        // Remove scope wildcard permission
+        delete updated[scopeWildcard];
+      } else {
+        // Add scope wildcard permission
+        updated[scopeWildcard] = true;
+      }
+      
+      return updated;
+    });
   };
 
-  // Check if all permissions in a module are selected
-  const isModuleSelected = (module: string) => {
-    const modulePermissions = permissionsByModule[module].map(p => p.codename);
-    return modulePermissions.every(p => selectedPermissions.includes(p));
+  // Check if a permission is selected
+  const isPermissionSelected = (permissionValue: string): boolean => {
+    return !!selectedPermissions[permissionValue];
+  };
+
+  // Check if a scope is selected
+  const isScopeSelected = (scope: string): boolean => {
+    return selectedScopes.includes(scope);
   };
 
   const handleCreateRole = async () => {
@@ -108,30 +122,31 @@ const CreateRoleModal = ({
     
     try {
       setIsSubmitting(true);
-      // Here you would implement the actual creation logic
-      console.log("Creating role:", {
-        name: roleName,
-        description: roleDescription,
-        permissions: selectedPermissions
-      });
       
-      // Simulate API call success
-      await new Promise(resolve => setTimeout(resolve, 500));
+      // Create the definitions array from selected permissions
+      const definitions = Object.keys(selectedPermissions)
+        .filter(key => selectedPermissions[key])
+        .map(value => ({ value }));
+      
+      // Create role data object that matches the expected format
+      const roleData = {
+        name: roleName,
+        description: roleDescription || undefined,
+        definitions
+      };
+      
+      // Call the create role function from the store
+      await createRole(roleData);
       
       toast.success(`Role "${roleName}" created successfully!`);
-      
-      // Reset form and close modal
-      setRoleName("");
-      setRoleDescription("");
-      setSelectedPermissions([]);
       
       // Close modal and notify parent component
       onClose();
       if (onSuccess) {
         onSuccess();
       }
-    } catch (error: any) {
-      toast.error(error.message || "Failed to create role");
+    } catch (error) {
+      toast.error((error as Error).message || "Failed to create role");
     } finally {
       setIsSubmitting(false);
     }
@@ -157,7 +172,7 @@ const CreateRoleModal = ({
               <Input
                 id="roleName"
                 value={roleName}
-                onChange={(e: ChangeEvent<HTMLInputElement>) => setRoleName(e.target.value)}
+                onChange={(e) => setRoleName(e.target.value)}
                 placeholder="Enter role name"
                 className="h-10 text-sm rounded-lg border-gray-300"
                 required
@@ -171,7 +186,7 @@ const CreateRoleModal = ({
               <Textarea
                 id="roleDescription"
                 value={roleDescription}
-                onChange={(e: ChangeEvent<HTMLTextAreaElement>) => setRoleDescription(e.target.value)}
+                onChange={(e) => setRoleDescription(e.target.value)}
                 placeholder="Enter role description"
                 className="min-h-[100px] text-sm rounded-lg border-gray-300 resize-none"
                 rows={3}
@@ -179,37 +194,65 @@ const CreateRoleModal = ({
             </div>
             
             <div className="space-y-2">
-              <Label className="text-sm font-medium">
-                Permissions*
-              </Label>
+              <div className="flex items-center justify-between">
+                <Label className="text-sm font-medium">
+                  Permissions*
+                </Label>
+                <div className="flex items-center gap-2 text-xs">
+                  <span className="inline-block w-4 h-4 bg-green-100 border border-green-400 rounded-sm"></span>
+                  <span className="text-gray-600">Selected</span>
+                </div>
+              </div>
+              
               <div className="border border-gray-300 rounded-lg max-h-[60vh] overflow-y-auto p-3">
-                {Object.keys(permissionsByModule).map((module) => (
-                  <div key={module} className="mb-4">
+                {/* All permissions option */}
+                <div className="mb-4 pb-2 border-b border-gray-200">
+                  <div className="flex items-center gap-2 mb-2">
+                    <input
+                      type="checkbox"
+                      id="all-permissions"
+                      checked={isPermissionSelected("*.*")}
+                      onChange={() => handlePermissionToggle("*.*")}
+                      className="rounded text-brand-red focus:ring-brand-red"
+                    />
+                    <Label htmlFor="all-permissions" className="text-sm font-medium">
+                      All Permissions
+                    </Label>
+                  </div>
+                </div>
+                
+                {/* Permissions by scope */}
+                {Object.keys(permissionsByScope).map((scope) => (
+                  <div key={scope} className="mb-4">
                     <div className="flex items-center gap-2 mb-2">
                       <input
                         type="checkbox"
-                        id={`module-${module}`}
-                        checked={isModuleSelected(module)}
-                        onChange={() => handleModuleToggle(module)}
+                        id={`scope-${scope}`}
+                        checked={isScopeSelected(scope)}
+                        onChange={() => handleScopeToggle(scope)}
                         className="rounded text-brand-red focus:ring-brand-red"
                       />
-                      <Label htmlFor={`module-${module}`} className="text-sm font-medium capitalize">
-                        {module}
+                      <Label htmlFor={`scope-${scope}`} className="text-sm font-medium capitalize">
+                        {scope}
                       </Label>
                     </div>
                     <div className="ml-6 space-y-1">
-                      {permissionsByModule[module].map((permission) => (
-                        <div key={permission._id} className="flex items-center gap-2 py-1">
-                          <input
-                            type="checkbox"
-                            id={`perm-${permission._id}`}
-                            checked={selectedPermissions.includes(permission.codename)}
-                            onChange={() => handlePermissionToggle(permission.codename)}
-                            className="rounded text-brand-red focus:ring-brand-red"
-                          />
-                          <Label htmlFor={`perm-${permission._id}`} className="text-sm font-normal">
-                            {permission.name}
-                          </Label>
+                      {permissionsByScope[scope].map((permission) => (
+                        <div key={permission.value} className="flex items-center py-1">
+                          <div className="flex-1 flex items-center gap-2">
+                            <button
+                              type="button"
+                              onClick={() => handlePermissionToggle(permission.value)}
+                              className={`w-4 h-4 rounded-sm border ${
+                                isPermissionSelected(permission.value)
+                                  ? "bg-green-100 border-green-400"
+                                  : "bg-white border-gray-300"
+                              }`}
+                            ></button>
+                            <Label htmlFor={`perm-${permission.value}`} className="text-sm font-normal">
+                              {permission.name}
+                            </Label>
+                          </div>
                         </div>
                       ))}
                     </div>

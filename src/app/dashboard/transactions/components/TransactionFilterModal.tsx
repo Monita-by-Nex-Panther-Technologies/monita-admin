@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
@@ -13,23 +13,25 @@ import {
 import { X, Calendar as CalendarIcon } from "lucide-react";
 import { format } from "date-fns";
 
+
 interface FilterModalProps {
     isOpen: boolean;
     onClose: () => void;
-    onApply: (filters: Partial<FilterCriteria>) => void;
+    onApply: (filters: Partial<TransactionFilterCriteria>) => void;
 }
 
-export interface FilterCriteria {
+export interface TransactionFilterCriteria {
     user: string;
+    userId?: string;
     category: string;
     status: string;
     type: string;
-    startDate: Date | undefined;
-    endDate: Date | undefined;
+    startDate?:  Date;
+    endDate?:   Date;
 }
 
 const FilterModal: React.FC<FilterModalProps> = ({ isOpen, onClose, onApply }) => {
-    const { control, handleSubmit, reset } = useForm<FilterCriteria>({
+    const { control, handleSubmit, reset } = useForm<TransactionFilterCriteria>({
         defaultValues: {
             user: "",
             status: "",
@@ -39,16 +41,21 @@ const FilterModal: React.FC<FilterModalProps> = ({ isOpen, onClose, onApply }) =
         },
     });
 
-    const handleApply = (data: FilterCriteria) => {
-        const filteredData = Object.fromEntries(
+    const handleApply = (data: TransactionFilterCriteria) => {
+        let filteredData = Object.fromEntries(
             Object.entries(data).filter(([_, value]) => value !== "" && value !== undefined)
         );
-        reset()
+       
+
+        reset();
         onApply(filteredData); // Pass the form data to the parent component
         onClose(); // Close the modal
     };
 
     if (!isOpen) return null;
+
+
+    
 
     return (
         <div className="fixed inset-0 bg-black/30 bg-opacity-50 flex justify-center items-center z-50">
@@ -131,6 +138,9 @@ const FilterModal: React.FC<FilterModalProps> = ({ isOpen, onClose, onApply }) =
                             )}
                         />
                     </div>
+
+
+
 {/* Transaction Type Field */}
                     {/* <div className="space-y-2">
                         <label className="block text-sm font-medium">Product</label>
@@ -228,6 +238,7 @@ const FilterModal: React.FC<FilterModalProps> = ({ isOpen, onClose, onApply }) =
                         </div>
                     </div>
 
+                   
                     {/* Apply Button */}
                     <Button
                         type="submit"

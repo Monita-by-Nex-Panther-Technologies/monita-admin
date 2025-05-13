@@ -5,6 +5,7 @@ import { formatAmount, formatedDate } from "@/utilities/utils";
 import DataTable from "@/components/table/DataTable";
 import { TableCell } from "@/components/ui/table";
 import { Transaction } from "@/store/transactionStore";
+import { useRouter } from "next/navigation";
 
 
 interface Props {
@@ -14,6 +15,8 @@ interface Props {
     handleSelect?: (id: string) => void;
     copyToClipboard?: (text: string) => void;
 }
+
+
 
 const TransactionTableContent: React.FC<Props> = ({
     transactions,
@@ -35,6 +38,8 @@ const TransactionTableContent: React.FC<Props> = ({
         "Actions",
     ];
 
+    const router = useRouter()
+
     return (
         <DataTable
             headers={headers}
@@ -53,8 +58,8 @@ const TransactionTableContent: React.FC<Props> = ({
                         />
                     </TableCell>
                     {/* <TableCell className="text-text-body font-poppins text-base py-6">{transaction.userId}</TableCell> */}
-                    <TableCell className="text-text-body font-poppins text-base py-6 flex items-center gap-2">
-                        {transaction.reference}
+                    <TableCell className="text-text-body font-poppins text-base py-6 flex items-center gap-2 cursor-pointer" >
+                       <span onClick={() => router.push(`/dashboard/transactions/${transaction.id}`)}>  {transaction.reference} </span>
                         <Button variant="ghost" size="sm" onClick={() => copyToClipboard && copyToClipboard(transaction.reference)}>
                             <Copy className="w-4 h-4" />
                         </Button>

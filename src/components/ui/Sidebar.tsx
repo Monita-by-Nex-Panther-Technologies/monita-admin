@@ -116,16 +116,18 @@ const Sidebar = ({ onCloseMobile }: SidebarProps) => {
             href="/dashboard/cashback"
             onClick={onCloseMobile}
           />
-        </div>
 
-        <div className="w-full flex flex-col gap-[10px]">
-          <SideBarSectionHeading title="Products & Support" />
-          <SidebarNavItem
+<SidebarNavItem
             icon={icons.cardIcon}
             label="One Card"
             href="/dashboard/oneCard"
             onClick={onCloseMobile}
           />
+        </div>
+
+        <div className="w-full flex flex-col gap-[10px]">
+          <SideBarSectionHeading title="Others" />
+         
           {/* <SidebarNavItem
             icon={icons.esimIcon}
             label="eSIMs"
@@ -138,12 +140,12 @@ const Sidebar = ({ onCloseMobile }: SidebarProps) => {
             href="/dashboard/settings"
             onClick={onCloseMobile}
           />
-          <SidebarNavItem
+          {/* <SidebarNavItem
             icon={icons.supportIcon}
             label="Support Tickets"
             href="/dashboard/supportTickets"
             onClick={onCloseMobile}
-          />
+          /> */}
         </div>
       </nav>
 

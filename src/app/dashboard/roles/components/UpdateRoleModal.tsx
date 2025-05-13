@@ -1,108 +1,328 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { toast } from "sonner";
+import { useRolesStore, Role } from "@/store/rolesStore";
+import { Permission } from "@/store/permissionStore";
 
+// Define types for the component props
 interface UpdateRoleModalProps {
   isOpen: boolean;
   onClose: () => void;
-  role: any;
-  permissions: any[];
+  role: Role | null;
+  permissions: Permission[] | undefined;
+  onSuccess?: () => void;
 }
 
-const UpdateRoleModal = ({ isOpen, onClose, role, permissions }: UpdateRoleModalProps) => {
+// Define the type for selected permissions
+interface SelectedPermission {
+  value: string;
+  action: "Accept" | "Reject";
+}
+
+const UpdateRoleModal = ({ 
+  isOpen, 
+  onClose, 
+  role, 
+  permissions,
+  onSuccess 
+}: UpdateRoleModalProps) => {
   const [roleName, setRoleName] = useState("");
   const [roleDescription, setRoleDescription] = useState("");
-  const [selectedPermissions, setSelectedPermissions] = useState<string[]>([]);
+  const [selectedPermissions, setSelectedPermissions] = useState<Record<string, SelectedPermission>>({});
+  const [selectedScopes, setSelectedScopes] = useState<string[]>([]);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Update form values when role changes
-  useEffect(() => {
-    if (role) {
-      setRoleName(role.name || "");
-      setRoleDescription(role.description || "");
-      setSelectedPermissions(role.permissions?.map((p: any) => p.codename) || []);
-    }
-  }, [role]);
+  const { updateRole } = useRolesStore();
 
-  const handlePermissionToggle = (permissionCodename: string) => {
-    setSelectedPermissions(prev => 
-      prev.includes(permissionCodename)
-        ? prev.filter(p => p !== permissionCodename)
-        : [...prev, permissionCodename]
-    );
-  };
-
-  const handleUpdateRole = () => {
-    // Here you would implement the actual update logic
-    console.log("Updating role:", {
-      id: role?._id,
-      name: roleName,
-      description: roleDescription,
-      permissions: selectedPermissions
+  // Group permissions by scope
+  const groupPermissionsByScope = () => {
+    const scopes: Record<string, Permission[]> = {};
+    
+    permissions?.forEach(permission => {
+      if (!scopes[permission.scope]) {
+        scopes[permission.scope] = [];
+      }
+      scopes[permission.scope].push(permission);
     });
     
-    onClose();
+    return scopes;
   };
 
-  if (!isOpen || !role) return null;
+  const permissionsByScope = groupPermissionsByScope();
+
+  // Update form when role changes
+  useEffect(() => {
+    if (role && isOpen) {
+      setRoleName(role.name || "");
+      // setRoleDescription(role.description || "");
+      
+      // Initialize selected permissions from role data
+      const permissionsData: Record<string, SelectedPermission> = {};
+      if (role.permissions) {
+        Object.entries(role.permissions).forEach(([key, value]) => {
+          permissionsData[key] = {
+            value: key,
+            action: value.action as "Accept" | "Reject"
+          };
+        });
+      }
+      setSelectedPermissions(permissionsData);
+      
+      // Initialize selected scopes based on permissions
+      const scopes = new Set<string>();
+      Object.keys(permissionsData).forEach(key => {
+        if (key.endsWith(".*")) {
+          const scope = key.split(".")[0];
+          scopes.add(scope);
+        }
+      });
+      setSelectedScopes(Array.from(scopes));
+    }
+  }, [role, isOpen]);
+
+  // Toggle permission selection
+  const handlePermissionToggle = (permissionValue: string) => {
+    setSelectedPermissions(prev => {
+      const updated = { ...prev };
+      
+      if (updated[permissionValue]) {
+        // If permission exists, remove it (we're only using Accept now as requested)
+        delete updated[permissionValue];
+      } else {
+        // Add new permission with Accept action (always Accept as requested)
+        updated[permissionValue] = { value: permissionValue, action: "Accept" };
+      }
+      
+      return updated;
+    });
+  };
+
+  // Toggle all permissions for a scope
+  const handleScopeToggle = (scope: string) => {
+    const isSelected = selectedScopes.includes(scope);
+    
+    // Update selected scopes list
+    if (isSelected) {
+      setSelectedScopes(prev => prev.filter(s => s !== scope));
+    } else {
+      setSelectedScopes(prev => [...prev, scope]);
+    }
+    
+    // Update permissions based on scope selection
+    setSelectedPermissions(prev => {
+      const updated = { ...prev };
+      const scopeWildcard = `${scope}.*`;
+      
+      if (isSelected) {
+        // Remove scope wildcard permission
+        delete updated[scopeWildcard];
+      } else {
+        // Add scope wildcard permission
+        updated[scopeWildcard] = { value: scopeWildcard, action: "Accept" };
+      }
+      
+      return updated;
+    });
+  };
+
+  // Check if a permission is selected with Accept action
+  const isPermissionAccepted = (permissionValue: string): boolean => {
+    return selectedPermissions[permissionValue]?.action === "Accept";
+  };
+
+  // Check if a permission is selected with Reject action
+  const isPermissionRejected = (permissionValue: string): boolean => {
+    return selectedPermissions[permissionValue]?.action === "Reject";
+  };
+
+  // Check if a scope is selected (all permissions in scope are accepted)
+  const isScopeSelected = (scope: string): boolean => {
+    return selectedScopes.includes(scope);
+  };
+
+  const handleUpdateRole = async () => {
+    // Validate form data
+    if (!roleName) {
+      toast.error("Please enter a role name");
+      return;
+    }
+
+    if (!role) {
+      toast.error("No role selected for update");
+      return;
+    }
+    
+    try {
+      setIsSubmitting(true);
+      
+      // Convert the selected permissions to the required format
+      const definitions = Object.keys(selectedPermissions).map(key => ({
+        value: key,
+        action: selectedPermissions[key].action
+      }));
+      
+      // Create updated role data object
+      const updatedData = {
+        name: roleName,
+        // Note: Ignoring description as requested
+        definitions: definitions
+      };
+      
+      // Call the update role function from the store with separate roleId and updatedData
+      await updateRole(role.id, updatedData);
+      
+      toast.success(`Role "${roleName}" updated successfully!`);
+      
+      // Close modal and notify parent component
+      onClose();
+      if (onSuccess) {
+        onSuccess();
+      }
+    } catch (error) {
+      toast.error((error as Error).message || "Failed to update role");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  if (!role) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-lg p-6 max-w-md w-full max-h-[90vh] overflow-y-auto">
-        <div className="grid gap-4">
-          <h3 className="text-xl font-bold">Update Role</h3>
-          <div className="grid gap-2">
-            <label htmlFor="updateRoleName" className="text-sm font-medium">Role Name</label>
-            <input 
-              id="updateRoleName" 
-              type="text" 
-              className="border border-gray-300 rounded px-3 py-2" 
-              value={roleName}
-              onChange={(e) => setRoleName(e.target.value)}
-            />
-          </div>
-          <div className="grid gap-2">
-            <label htmlFor="updateRoleDescription" className="text-sm font-medium">Description</label>
-            <textarea 
-              id="updateRoleDescription" 
-              className="border border-gray-300 rounded px-3 py-2" 
-              rows={3}
-              value={roleDescription}
-              onChange={(e) => setRoleDescription(e.target.value)}
-            ></textarea>
-          </div>
-          <div className="grid gap-2">
-            <label className="text-sm font-medium">Permissions</label>
-            <div className="border border-gray-300 rounded max-h-60 overflow-y-auto p-2">
-              {permissions.map((permission) => (
-                <div key={permission._id} className="flex items-center gap-2 py-1">
-                  <input 
-                    type="checkbox" 
-                    id={`update-perm-${permission._id}`}
-                    checked={selectedPermissions.includes(permission.codename)}
-                    onChange={() => handlePermissionToggle(permission.codename)}
-                  />
-                  <label htmlFor={`update-perm-${permission._id}`}>{permission.name}</label>
-                </div>
-              ))}
-            </div>
-          </div>
-          <div className="flex justify-end gap-3 mt-4">
-            <button 
-              className="px-4 py-2 border border-gray-300 rounded"
-              onClick={onClose}
-            >
-              Cancel
-            </button>
-            <button 
-              className="px-4 py-2 bg-blue-600 text-white rounded"
-              onClick={handleUpdateRole}
-            >
-              Update Role
-            </button>
+    <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
+      <DialogContent className="sm:max-w-[550px] p-0 overflow-auto max-h-[90vh]">
+        <div className="p-6 pb-0">
+          <div className="flex justify-between items-center">
+            <DialogTitle className="text-2xl font-bold">Update Role</DialogTitle>
           </div>
         </div>
-      </div>
-    </div>
+
+        <div className="h-[1px] bg-gray-200 w-full my-6"></div>
+
+        <div className="p-6 pt-0">
+          <div className="bg-white rounded-lg space-y-6">
+            <div className="space-y-2">
+              <Label htmlFor="roleName" className="text-sm font-medium">
+                Role Name*
+              </Label>
+              <Input
+                id="roleName"
+                value={roleName}
+                onChange={(e) => setRoleName(e.target.value)}
+                placeholder="Enter role name"
+                className="h-10 text-sm rounded-lg border-gray-300"
+                required
+              />
+            </div>
+            
+            <div className="space-y-2">
+              <Label htmlFor="roleDescription" className="text-sm font-medium">
+                Description
+              </Label>
+              <Textarea
+                id="roleDescription"
+                value={roleDescription}
+                onChange={(e) => setRoleDescription(e.target.value)}
+                placeholder="Enter role description"
+                className="min-h-[100px] text-sm rounded-lg border-gray-300 resize-none"
+                rows={3}
+              />
+            </div>
+            
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <Label className="text-sm font-medium">
+                  Permissions*
+                </Label>
+                <div className="flex items-center gap-2 text-xs">
+                  <span className="inline-block w-4 h-4 bg-green-100 border border-green-400 rounded-sm"></span>
+                  <span className="text-gray-600">Selected</span>
+                </div>
+              </div>
+              
+              <div className="border border-gray-300 rounded-lg max-h-[60vh] overflow-y-auto p-3">
+                {/* All permissions option */}
+                <div className="mb-4 pb-2 border-b border-gray-200">
+                  <div className="flex items-center gap-2 mb-2">
+                    <input
+                      type="checkbox"
+                      id="all-permissions"
+                      checked={isPermissionAccepted("*.*")}
+                      onChange={() => handlePermissionToggle("*.*")}
+                      className="rounded text-brand-red focus:ring-brand-red"
+                    />
+                    <Label htmlFor="all-permissions" className="text-sm font-medium">
+                      All Permissions
+                    </Label>
+                  </div>
+                </div>
+                
+                {/* Permissions by scope */}
+                {Object.keys(permissionsByScope).map((scope) => (
+                  <div key={scope} className="mb-4">
+                    <div className="flex items-center gap-2 mb-2">
+                      <input
+                        type="checkbox"
+                        id={`scope-${scope}`}
+                        checked={isScopeSelected(scope)}
+                        onChange={() => handleScopeToggle(scope)}
+                        className="rounded text-brand-red focus:ring-brand-red"
+                      />
+                      <Label htmlFor={`scope-${scope}`} className="text-sm font-medium capitalize">
+                        {scope}
+                      </Label>
+                    </div>
+                    <div className="ml-6 space-y-1">
+                      {permissionsByScope[scope].map((permission) => (
+                        <div key={permission.value} className="flex items-center py-1">
+                          <div className="flex-1 flex items-center gap-2">
+                            <button
+                              type="button"
+                              onClick={() => handlePermissionToggle(permission.value)}
+                              className={`w-4 h-4 rounded-sm border ${
+                                isPermissionAccepted(permission.value)
+                                  ? "bg-green-100 border-green-400"
+                                  : "bg-white border-gray-300"
+                              }`}
+                            ></button>
+                            <Label htmlFor={`perm-${permission.value}`} className="text-sm font-normal">
+                              {permission.name}
+                            </Label>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          <div className="flex justify-end gap-3 mt-6">
+            <Button
+              onClick={onClose}
+              variant="outline"
+              className="h-12 rounded-md"
+            >
+              Cancel
+            </Button>
+            <Button
+              onClick={handleUpdateRole}
+              disabled={isSubmitting}
+              className="h-12 rounded-md bg-yellow-100 hover:bg-yellow-200 text-black font-medium"
+              variant="ghost"
+            >
+              {isSubmitting ? "Updating Role..." : "Update Role"}
+            </Button>
+          </div>
+        </div>
+      </DialogContent>
+    </Dialog>
   );
 };
 

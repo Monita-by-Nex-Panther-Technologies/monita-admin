@@ -18,6 +18,10 @@ const ServiceManagement = () => {
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 
     // useEffect(() => {
+<<<<<<< HEAD
+
+    //     getServices()
+=======
     //     const fetchServices = async () => {
     //         try {
     //             await getServices();
@@ -30,6 +34,7 @@ const ServiceManagement = () => {
     //     };
 
     //     fetchServices();
+>>>>>>> c54a9e807b21a85be3676783429bdf861a7662a1
     // }, [getServices]);
 
     const mappedServices = services.map(service => ({

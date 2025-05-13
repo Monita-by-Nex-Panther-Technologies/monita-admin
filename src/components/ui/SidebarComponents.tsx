@@ -293,7 +293,6 @@ export const BillPayments: React.FC<BillPaymentsProps> = ({
 
   // Fetch services on mount
 
-
   // Create a map of service labels to service IDs for easy lookup
   useEffect(() => {
     const map: Record<string, string> = {};

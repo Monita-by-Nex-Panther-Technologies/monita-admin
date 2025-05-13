@@ -1,5 +1,8 @@
 "use client";
-import React from "react";
+import { useTransactionStore } from "@/store/transactionStore";
+import { combineArrayToObject } from "@/utilities/utils";
+import { set } from "lodash";
+import React, { useEffect, useState } from "react";
 import {
   Line,
   XAxis,
@@ -12,43 +15,33 @@ import {
 } from "recharts";
 
 const DBAnalyticsSection = () => {
-  // Sample transaction trend data matching the graph
-  const transactionData = [
-    { name: "Jan", value: 250000 },
-    { name: "Feb", value: 280000 },
-    { name: "Mar", value: 320000 },
-    { name: "Apr", value: 300000 },
-    { name: "May", value: 350000 },
-    { name: "Jun", value: 380000 },
-    { name: "Jul", value: 370000 },
-    { name: "Aug", value: 360000 },
-    { name: "Sep", value: 390000 },
-    { name: "Oct", value: 400000 },
-    { name: "Nov", value: 420000 },
-    { name: "Dec", value: 440000 },
-  ];
+
+  const {
+        isLoading,
+        graphData,
+        getTransactionGraph,
+        } = useTransactionStore()
+
+        const [transactionData, setTransactionData] = useState<{ name: string; value: number }[]>([]);
+
+        const [type, setType] = useState("credit");
+
+        useEffect(() => {
+            getTransactionGraph({ queryType: "yearly" }); 
+          }, []);
+
+          useEffect(() => {
+
+            if(graphData){
+
+              setTransactionData(combineArrayToObject(graphData?.period , type === "credit" ? graphData?.creditValues : graphData?.debitValues))
+
+            }
+          }, [graphData,type]);
 
   return (
     <div className="w-full  px-4">
-      {/* Filter by Date Section */}
-      {/* <div className="w-full flex flex-col sm:flex-row  gap-2 bg-background p-4 rounded-[8px] items-start md:items-center">
-        <h1 className="text-text-title text-sm  font-semibold font-poppins mb-2 sm:mb-0">
-          Filter by 
-        </h1>
-       
-        <div className="w-full flex flex-col md:flex-row justify-between bg-background-alt gap-x-1 gap-y-2 px-3 py-2 rounded-[8px]">
-          <button className="justify-center items-center   text-sm  md:text-md bg-background text-text-body font-poppins px-3 py-3 w-full sm:w-[186px] rounded-[8px] active:bg-primary-foreground">
-            Today
-          </button>
-          <button className="justify-center items-center text-sm  md:text-md bg-background text-text-body font-poppins px-3 py-3 w-full sm:w-[186px] rounded-[8px]">
-            This Week
-          </button>
-          <button className="justify-center items-center text-sm  md:text-md bg-background text-text-body font-poppins px-3 py-3 w-full sm:w-[186px] rounded-[8px]">
-            This Year
-          </button>
-      
-        </div>
-      </div> */}
+ 
 
       {/* Analytics & Trends Section */}
       <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 py-6">
@@ -60,64 +53,62 @@ const DBAnalyticsSection = () => {
                 Analytics 
               </h1>
               <div className="flex flex-row w-full sm:w-auto overflow-x-auto bg-background-alt gap-x-1.5 px-3 py-2 rounded-[8px]">
-                <button className="justify-center items-center text-sm  md:text-md bg-background text-text-body font-poppins px-4 py-3 w-full sm:w-[200px] min-w-[120px] rounded-[8px] active:bg-primary-foreground">
+                <button 
+                
+                className={`justify-center cursor-pointer items-center text-sm  md:text-md bg-background text-text-body font-poppins px-4 py-3 w-full sm:w-[200px] min-w-[120px] rounded-[8px] active:bg-primary-foreground ${type === "credit" && "bg-primary text-black"}` }
+onClick={()=>setType("credit")}
+                >
                    Credit
                 </button>
-                <button className="justify-center items-center text-sm  md:text-md bg-background text-text-body font-poppins px-4 py-3 w-full sm:w-[200px] min-w-[120px] rounded-[8px]">
+                <button className={`justify-center cursor-pointer items-center text-sm  md:text-md bg-background text-text-body font-poppins px-4 py-3 w-full sm:w-[200px] min-w-[120px] rounded-[8px] ${type === "debit" && "bg-primary text-black"}` }
+                
+                onClick={()=>setType("debit")}
+                
+                >
                   Debit 
                 </button>
               </div>
             </div>
           </div>
           <div className="w-full bg-background rounded-[8px] p-4">
-            <div className="h-[300px] w-full">
-              <ResponsiveContainer width="100%" height="100%">
-                <ComposedChart data={transactionData}>
-                  <defs>
-                    <linearGradient
-                      id="verticalGradient"
-                      x1="0"
-                      y1="0"
-                      x2="0"
-                      y2="1"
-                    >
-                      <stop
-                        offset="0%"
-                        stopColor="#CEEF0A"
-                        stopOpacity="0.32"
-                      />
-                      <stop
-                        offset="100%"
-                        stopColor="#FFFFFF"
-                        stopOpacity="0.04"
-                      />
-                    </linearGradient>
-                  </defs>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#eee" />
-                  <XAxis dataKey="name" />
-                  <YAxis
-                    tickFormatter={(value) => `${value / 1000}k`} // Abbreviate values (e.g., 250000 -> 250k)
-                    domain={[0, 500000]} // Set the Y-axis domain (min: 0, max: 500000)
-                    ticks={[0, 100000, 200000, 300000, 400000, 500000]} // Set fixed intervals at 100k
-                  />
-                  <Tooltip />
-                  <Area
-                    type="monotone"
-                    dataKey="value"
-                    fill="url(#verticalGradient)"
-                    stroke="none"
-                  />
-                  <Line
-                    type="monotone"
-                    dataKey="value"
-                    stroke="#CEEF0A"
-                    strokeWidth={3}
-                    dot={{ fill: "#CEEF0A", r: 5 }}
-                  />
-                </ComposedChart>
-              </ResponsiveContainer>
-            </div>
-          </div>
+      <div className="h-[300px] w-full">
+        {isLoading ? (
+          <div className="w-full h-full rounded-md bg-gray-200 animate-pulse" />
+        ) : (
+          <ResponsiveContainer width="100%" height="100%">
+            <ComposedChart data={transactionData}>
+              <defs>
+                <linearGradient id="verticalGradient" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor="#CEEF0A" stopOpacity={0.32} />
+                  <stop offset="100%" stopColor="#FFFFFF" stopOpacity={0.04} />
+                </linearGradient>
+              </defs>
+              <CartesianGrid strokeDasharray="3 3" stroke="#eee" />
+              <XAxis dataKey="name" />
+              <YAxis
+                tickFormatter={(value) => `${value / 1000}k`}
+                domain={[0, 500000]}
+                ticks={[0, 100000, 200000, 300000, 400000, 500000]}
+              />
+              <Tooltip />
+              <Area
+                type="monotone"
+                dataKey="value"
+                fill="url(#verticalGradient)"
+                stroke="none"
+              />
+              <Line
+                type="monotone"
+                dataKey="value"
+                stroke="#CEEF0A"
+                strokeWidth={3}
+                dot={{ fill: "#CEEF0A", r: 5 }}
+              />
+            </ComposedChart>
+          </ResponsiveContainer>
+        )}
+      </div>
+    </div>
         </div>
 
         {/* Users Growth Section */}

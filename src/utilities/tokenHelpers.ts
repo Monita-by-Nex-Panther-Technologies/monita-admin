@@ -12,17 +12,20 @@ export const setAccessToken = (token: { access_token: string; refresh_token: str
   };
   
   export const getAccessToken = (): { access_token: string; refresh_token: string } | null => {
+    if (typeof document === 'undefined') {
+      return null;
+    }
+  
     const cookieMap: Record<string, string> = {};
     document.cookie.split(';').forEach((cookie) => {
       const [key, value] = cookie.trim().split('=');
       if (key && value) cookieMap[key] = value;
     });
   
-    if (!cookieMap.access_token && !cookieMap.refresh_token) return null;
-  
     return {
-      access_token: cookieMap.access_token,
-      refresh_token: cookieMap.refresh_token,
+      access_token: cookieMap['access_token'],
+      refresh_token: cookieMap['refresh_token'],
     };
   };
+  
   

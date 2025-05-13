@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useRef } from "react";
-import FilterModal, { FilterCriteria } from "./TransactionFilterModal";
+import FilterModal, { TransactionFilterCriteria } from "./TransactionFilterModal";
 import { useTransactionStore } from "@/store/transactionStore";
 import TableLoading from "@/components/table/TableLoading";
 import GetPagination from "@/components/table/pagination";
@@ -8,7 +8,6 @@ import Empty from "@/components/table/Empty";
 import TransactionTableContent from "./TransactionTableContent";
 import TableActions from "@/components/table/TableActions";
 import { toast } from "sonner";
-import { formatDate } from "date-fns";
 import { formatedDate } from "@/utilities/utils";
 
 
@@ -33,7 +32,7 @@ const TransactionsTable = () => {
     const [searchValue, setSearchValue] = useState("");
 
 
-    const handleFilterApply = (newFilters: Partial<FilterCriteria>) => {
+    const handleFilterApply = (newFilters: Partial<TransactionFilterCriteria>) => {
         setField("filterData", newFilters);
         getTransactions({ page, limit, ...newFilters });
       
@@ -66,9 +65,6 @@ const TransactionsTable = () => {
     const exportData = (format: string) => {
      
     };
-
-
-
 
     const onChangePage = (page: number, limit: number) => {
 

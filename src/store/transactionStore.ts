@@ -1,18 +1,22 @@
 import { create } from "zustand";
-import { base_endpoint, wms_endpoint } from "@/constants/string";
+import { appname, base_endpoint, wms_endpoint } from "@/constants/string";
 import axiosInstance from "@/utilities/axios";
 import { getErrorMessage } from "@/utilities/utils";
-import { FilterCriteria } from "@/app/dashboard/transactions/components/TransactionFilterModal";
+import { TransactionFilterCriteria } from "@/app/dashboard/transactions/components/TransactionFilterModal";
+import moment from "moment";
+import { createJSONStorage, persist } from "zustand/middleware";
 
 export const useTransactionStore = create<TransactionState>()(
-    (set) => ({
+    persist( (set) => ({
       transactions: [],
       page: 1,
+      transaction:null,
       statistic:null,
       limit: 10,
       total: 0,
       filterData: null,
       totalPages:0,
+      graphData:null,
       isLoading: false,
       isQueryResult:false,
       isFilterResult:false,
@@ -28,6 +32,9 @@ export const useTransactionStore = create<TransactionState>()(
         category,
         status,
         userId,
+        user,
+        startDate,
+        endDate,
         reference,
         
       }: TransactionQueryParams) => {
@@ -42,13 +49,20 @@ export const useTransactionStore = create<TransactionState>()(
             ...(category && { category }),
             ...(status && { status }),
             ...(userId && { userId }),
+            ...(startDate && { startDate: moment(startDate).local().toISOString() }),
+            ...(endDate && { endDate:moment(endDate).local().toISOString() }),
             ...(reference && { reference }),
           });
 
+
           set({
           isQueryResult: !!reference, // Explicitly cast to boolean
-          isFilterResult: !!(walletId || type || category || status || userId), // Explicitly cast to boolean
+          isFilterResult: !!(walletId || type || category || status || userId || startDate || endDate ), // Explicitly cast to boolean
           })
+
+          if (user) {
+            query.append("userId", user);
+          }
 
           const { data } = await axiosInstance.get(
             `${wms_endpoint}/transactions?${query.toString()}`
@@ -90,6 +104,56 @@ export const useTransactionStore = create<TransactionState>()(
         }
       },
 
+      getTransactionGraph: async ({
+        queryType,
+        startDate,
+        endDate,
+      }: TransactionGraphParams) => {
+        set({ isLoading: true });
+
+        try {
+
+          const query = new URLSearchParams({
+            queryType: queryType.toString(),
+            ...(startDate && { startDate: moment(startDate).local().toISOString() }),
+            ...(endDate && { endDate:moment(endDate).local().toISOString() }),
+          });
+        
+          const { data } = await axiosInstance.get(
+            `${wms_endpoint}/transactions/chart?${query.toString()}`
+          );
+
+          set({
+            graphData: data,
+            isLoading: false,});
+
+
+        } catch (error: any) {
+          set({ isLoading: false });
+          throw new Error(getErrorMessage(error));
+        }
+      },
+
+      getTransaction: async (id:string) => {
+        set({ isLoading: true });
+
+        try {
+        
+          const { data } = await axiosInstance.get(
+            `${wms_endpoint}/transactions/${id}`
+          );
+
+          set({
+            transaction: data,
+            isLoading: false,});
+
+
+        } catch (error: any) {
+          set({ isLoading: false });
+          throw new Error(getErrorMessage(error));
+        }
+      },
+
       updateTransaction: async (transactionId: string, updatedData: Partial<Transaction>) => {
         set({ isLoading: true });
         try {
@@ -113,8 +177,23 @@ export const useTransactionStore = create<TransactionState>()(
           throw new Error(getErrorMessage(error));
         }
       },
-    }),
-    
+
+      
+    }
+  
+  
+  ),
+
+  {
+    name: `${appname}-transactions`,
+    storage: createJSONStorage(() => localStorage),
+    onRehydrateStorage: () => (state) => {
+      if (state) {
+        state.isLoading = false;
+      }
+    },
+  }
+    )
 );
 
 
@@ -158,7 +237,10 @@ export const useTransactionStore = create<TransactionState>()(
     category?: string;
     status?: string;
     userId?: string;
+    user?: string;
     reference?: string;
+    startDate?: Date;
+    endDate?: Date;
   }
 
 
@@ -170,11 +252,27 @@ export const useTransactionStore = create<TransactionState>()(
   }
 
 
-  
+  interface TransactionGraph {
+    period: Array<string>;
+    creditValues: Array<number>;
+    debitValues: Array<number>;
+  }
+
+
+
+  interface TransactionGraphParams {
+    queryType: string;
+    startDate?: Date;
+    endDate?: Date;
+  }
+
+
   interface TransactionState {
     transactions: Transaction[];
+    transaction:Transaction | null;
     page: number;
-    filterData: Partial<FilterCriteria> | null
+    graphData: TransactionGraph | null;
+    filterData: Partial<TransactionFilterCriteria> | null
     totalPages: number;
     limit: number;
     statistic:TransactionStatistics | null;
@@ -183,7 +281,9 @@ export const useTransactionStore = create<TransactionState>()(
     isQueryResult:boolean;
     isFilterResult:boolean;
     getTransactionStatistic: () => Promise<void>;
+    getTransactionGraph: (params: TransactionGraphParams) => Promise<void>;
     getTransactions: (params: TransactionQueryParams) => Promise<void>;
+    getTransaction: (id: string) => Promise<void>;
     setField: <K extends keyof TransactionState>(field: K, value: TransactionState[K]) => void;
   }
   

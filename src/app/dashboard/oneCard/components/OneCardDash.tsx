@@ -127,26 +127,26 @@ export default function OneCardDashboard() {
     })
 
     return (
-        <div className="p-6 bg-gray-50 min-h-screen">
-            <div className="grid gap-6">
+        <div className=" ">
+            <div className=" flex flex-col gap-6">
                 {/* Filter by Date */}
-                <div className="w-full flex flex-row justify-between items-center bg-background p-4 rounded-[8px]">
-                    <h1 className="text-text-title text-xl font-semibold font-poppins">Filter by Date</h1>
-                    <div className="flex flex-row bg-background-alt gap-x-1.5 px-3 py-2 rounded-[8px]">
+                <div className="w-full flex flex-col md:flex-row  gap-4 justify-between items-center bg-background p-4 rounded-[12px] mt-6">
+                    <h1 className="text-text-title text-md font-semibold font-poppins">Filter </h1>
+                    <div className="flex flex-col md:flex-row w-full gap-2 bg-background-alt gap-x-1.5 px-3 py-2 rounded-[8px]">
                         <button
-                            className={`justify-center items-center ${activeFilter === "Today" ? "bg-primary-light border border-primary" : "bg-background"} text-text-body font-poppins px-4 py-3 w-[186px] rounded-[8px]`}
+                            className={`justify-center items-center w-full text-sm ${activeFilter === "Today" ? "bg-primary-light border border-primary" : "bg-background"} text-text-body font-poppins px-4 py-3 w-[186px] rounded-[8px]`}
                             onClick={() => setActiveFilter("Today")}
                         >
                             Today
                         </button>
                         <button
-                            className={`justify-center items-center ${activeFilter === "This Week" ? "bg-primary-light border border-primary" : "bg-background"} text-text-body font-poppins px-4 py-3 w-[186px] rounded-[8px]`}
+                            className={`justify-center items-center  w-full text-sm ${activeFilter === "This Week" ? "bg-primary-light border border-primary" : "bg-background"} text-text-body font-poppins px-4 py-3 w-[186px] rounded-[8px]`}
                             onClick={() => setActiveFilter("This Week")}
                         >
                             This Week
                         </button>
                         <button
-                            className={`justify-center items-center ${activeFilter === "This Year" ? "bg-primary-light border border-primary" : "bg-background"} text-text-body font-poppins px-4 py-3 w-[186px] rounded-[8px]`}
+                            className={`justify-center items-center w-full  text-sm ${activeFilter === "This Year" ? "bg-primary-light border border-primary" : "bg-background"} text-text-body font-poppins px-4 py-3 w-[186px] rounded-[8px]`}
                             onClick={() => setActiveFilter("This Year")}
                         >
                             This Year
@@ -156,18 +156,18 @@ export default function OneCardDashboard() {
 
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                     {/* Usage Statistics - Takes 2/3 of the width */}
-                    <div className="bg-white p-4 rounded-lg shadow-sm lg:col-span-2">
+                    <div className="bg-white p-4 rounded-lg  lg:col-span-2">
                         <div className="w-full flex flex-row justify-between items-center mb-4">
-                            <h1 className="text-text-title text-xl font-semibold font-poppins">Usage Statistics</h1>
+                            <h1 className="text-text-title text-sm md:text-lg font-semibold font-poppins">Card Usage </h1>
                             <button
-                                className="justify-center items-center bg-primary text-text-body font-poppins px-6 py-3 rounded-[8px]"
+                                className="justify-center text-sm md:text-md items-center bg-primary text-text-body font-poppins px-4 py-2 rounded-[8px]"
                                 onClick={() => setSpendingLimitOpen(true)}
                             >
-                                Set Spending Limit
+                                Spending Limit
                             </button>
                         </div>
                         <div className="mt-6">
-                            <div className="font-medium text-text-title mb-4 font-poppins">Card Usage Overtime</div>
+                            {/* <div className="font-medium text-text-title mb-4  text-xs md:text-md font-poppins">Card Usage Overtime</div> */}
                             <div className="h-64">
                                 <ResponsiveContainer width="100%" height="100%">
                                     <ComposedChart data={cardUsageData} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
@@ -205,9 +205,9 @@ export default function OneCardDashboard() {
                     </div>
 
                     {/* Spending Overview - Takes 1/3 of the width */}
-                    <div className="bg-white p-4 rounded-lg shadow-sm">
-                        <div className="mb-2 font-medium text-text-title font-poppins">Spending Overview</div>
-                        <div className="h-64 flex justify-center items-center">
+                    <div className="bg-white p-4 rounded-lg ">
+                        <div className="mb-2 font-medium text-sm md:text-lg font-poppins ">Spending Overview</div>
+                        <div className="h-100 flex justify-center items-center">
                             <ResponsiveContainer width="100%" height="100%">
                                 <PieChart>
                                     <Pie
@@ -226,8 +226,8 @@ export default function OneCardDashboard() {
                                         ))}
                                     </Pie>
                                     <text
-                                        x="32%"
-                                        y="50%"
+                                        x="50%"
+                                        y="35%"
                                         textAnchor="middle"
                                         dominantBaseline="middle"
                                         className="font-poppins font-medium"
@@ -236,11 +236,11 @@ export default function OneCardDashboard() {
                                     </text>
                                     <Legend
                                         layout="vertical"
-                                        verticalAlign="middle"
-                                        align="right"
+                                        verticalAlign="bottom"
+                                        align="center"
                                         iconType="circle"
                                         iconSize={8}
-                                        formatter={(value) => <span className="text-text-body font-poppins">{value}</span>}
+                                        formatter={(value) => <span className="text-text-body font-poppins text-xs">{value}</span>}
                                     />
                                 </PieChart>
                             </ResponsiveContainer>
@@ -249,27 +249,27 @@ export default function OneCardDashboard() {
                 </div>
 
                 {/* Manage User Cards */}
-                <div className="bg-white p-4 rounded-lg shadow-sm">
+                <div className="bg-white p-4 rounded-lg ">
                     <div className="w-full flex flex-row justify-between items-center mb-6">
-                        <h1 className="text-text-title text-xl font-semibold font-poppins">Manage User Cards</h1>
+                        <h1 className="text-text-title text-sm md:text-lg font-semibold font-poppins"> Cards</h1>
                         <div className="flex gap-4">
                             <button
-                                className="justify-center items-center bg-background border border-primary text-text-body font-poppins px-6 py-3 rounded-[8px]"
+                                className="justify-center items-center bg-background border border-primary text-xs md:text-md font-poppins px-6 py-3 rounded-[8px]"
                                 onClick={() => setExchangeRateOpen(true)}
                             >
-                                Set Exchange Rate
+                                Set Rate
                             </button>
                             <button
-                                className="justify-center items-center bg-primary text-text-body font-poppins px-6 py-3 rounded-[8px]"
+                                className="justify-center items-center bg-primary text-xs md:text-md font-poppins px-6 py-3 rounded-[8px]"
                                 onClick={() => setCardFeesOpen(true)}
                             >
-                                Set Card Fees
+                                Set Fees
                             </button>
                         </div>
                     </div>
 
-                    <div className="flex justify-between items-center my-4 px-6">
-                        <div className="flex flex-row gap-5">
+                    <div className="flex justify-between items-center my-4 ">
+                        <div className="flex flex-col md:flex-row gap-3 w-full ">
                             <button
                                 className="border border-primary bg-background flex gap-3 justify-center items-center px-10 py-3 rounded-[8px]"
                                 onClick={() => setFilterTransactionOpen(true)}
@@ -278,40 +278,20 @@ export default function OneCardDashboard() {
                                 <span className="text-text-title font-poppins text-base">Filter</span>
                             </button>
 
-                            <div className="flex flex-row justify-center items-center">
+                            <div className="flex flex-row justify-center items-center ">
                                 <input
                                     type="text"
                                     placeholder="Search"
-                                    className="bg-background-alt border-border rounded-l-[8px] p-4"
+                                    className="bg-background-alt border-border  w-full rounded-l-[8px] p-3"
                                     value={searchTerm}
                                     onChange={(e) => setSearchTerm(e.target.value)}
                                 />
-                                <button className="bg-primary rounded-r-[8px] p-4 px-6">
+                                <button className="bg-primary rounded-r-[8px] p-3 px-4">
                                     <Search size={24} className="text-text-body" />
                                 </button>
                             </div>
                         </div>
 
-                        <button className="bg-[#010101CC] flex gap-3 justify-center items-center px-6 py-3 rounded-[12px] text-white">
-                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path
-                                    d="M14 10V12.6667C14 13.0203 13.8595 13.3594 13.6095 13.6095C13.3594 13.8595 13.0203 14 12.6667 14H3.33333C2.97971 14 2.64057 13.8595 2.39052 13.6095C2.14048 13.3594 2 13.0203 2 12.6667V10"
-                                    stroke="white"
-                                    strokeWidth="1.33333"
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                />
-                                <path
-                                    d="M4.66699 6.66699L8.00033 10.0003L11.3337 6.66699"
-                                    stroke="white"
-                                    strokeWidth="1.33333"
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                />
-                                <path d="M8 10V2" stroke="white" strokeWidth="1.33333" strokeLinecap="round" strokeLinejoin="round" />
-                            </svg>
-                            <span className="font-poppins text-base">Export</span>
-                        </button>
                     </div>
 
                     <div className="overflow-auto relative">
