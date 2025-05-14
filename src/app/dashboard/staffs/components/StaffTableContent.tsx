@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Copy, MoreHorizontal, Pencil, Trash2 } from "lucide-react";
+import { Copy, MoreHorizontal, Pencil, Trash2, Mail, KeyRound } from "lucide-react";
 import { formatedDate } from "@/utilities/utils";
 import DataTable from "@/components/table/DataTable";
 import { TableCell } from "@/components/ui/table";
@@ -8,49 +8,69 @@ import { Staff } from "@/store/staffStore";
 
 interface Props {
     staffs: Staff[];
-    selected: string[];
-    handleSelectAll: (e: React.ChangeEvent<HTMLInputElement>) => void;
-    handleSelect: (id: string) => void;
     copyToClipboard: (text: string) => void;
     onEdit?: (staff: Staff) => void;
-    onDelete?: (staff: Staff) => void; // Changed to accept full staff object instead of just ID
+    onDelete?: (staff: Staff) => void;
+    onResendInvite?: (staff: Staff) => void;
+    onResetPassword?: (staff: Staff) => void;
 }
 
 const StaffTableContent: React.FC<Props> = ({
     staffs,
-    selected,
-    handleSelectAll,
-    handleSelect,
     copyToClipboard,
     onEdit,
     onDelete,
+    onResendInvite,
+    onResetPassword,
 }) => {
     const headers = [
         "Name",
         "Email Address",
         "phoneNumber",
         "Role",
-        // "Status",
         "Registration Date",
         "Actions",
     ];
+
+    // Track which dropdown menu is currently open
+    const [openDropdownId, setOpenDropdownId] = useState<string | null>(null);
+    const dropdownRefs = useRef<Map<string, HTMLDivElement | null>>(new Map());
+
+    // Toggle dropdown visibility
+    const toggleDropdown = (e: React.MouseEvent, staffId: string) => {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        // This will close the dropdown if it's already open, or open it if it's closed
+        setOpenDropdownId(prevId => prevId === staffId ? null : staffId);
+    };
+
+    // Handle clicks outside the dropdown to close it
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (openDropdownId && 
+                dropdownRefs.current.has(openDropdownId) && 
+                dropdownRefs.current.get(openDropdownId) && 
+                !dropdownRefs.current.get(openDropdownId)?.contains(event.target as Node)) {
+                setOpenDropdownId(null);
+            }
+        };
+
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, [openDropdownId]);
 
     return (
         <DataTable
             headers={headers}
             data={staffs}
             selectable
-            selectedItems={selected}
-            onSelectAll={handleSelectAll}
+            showSelectAllCheckbox={false}
             renderRow={(staff) => (
                 <>
                     <TableCell className="p-4">
-                        <input
-                            type="checkbox"
-                            className="w-6 h-6 mt-1 cursor-pointer"
-                            checked={selected.includes(staff.id)}
-                            onChange={() => handleSelect(staff.id)}
-                        />
                     </TableCell>
                     
                     <TableCell className="text-text-body font-poppins text-base py-6">{staff.lastName} {staff.firstName}</TableCell>
@@ -64,19 +84,10 @@ const StaffTableContent: React.FC<Props> = ({
                     <TableCell className="text-text-body font-poppins text-base py-6">
                         {staff.role?.name ?? "N/A"}
                     </TableCell>
-                    {/* <TableCell className="text-text-body font-poppins text-base py-6">
-                        <span className={`px-3 py-1 rounded-full text-xs ${
-                            staff.status === "ACTIVE" ? "bg-green-100 text-green-800" : 
-                            staff.status === "INACTIVE" ? "bg-gray-100 text-gray-800" : 
-                            "bg-red-100 text-red-800"
-                        }`}>
-                            {staff.status}
-                        </span>
-                    </TableCell> */}
                     <TableCell className="text-text-body font-poppins text-base py-6">
                         {formatedDate(staff.createdAt)}
                     </TableCell>
-                    <TableCell className="py-6 flex gap-2">
+                    <TableCell className="py-6 flex gap-2 relative">
                         <Button
                             variant="ghost"
                             className="cursor-pointer hover:bg-transparent p-1"
@@ -87,16 +98,53 @@ const StaffTableContent: React.FC<Props> = ({
                         <Button
                             variant="ghost"
                             className="cursor-pointer hover:bg-transparent p-1"
-                            onClick={() => onDelete && onDelete(staff)} // Pass the full staff object
+                            onClick={() => onDelete && onDelete(staff)}
                         >
                             <Trash2 size={18} className="text-red-500" />
                         </Button>
-                        <Button
-                            variant="ghost"
-                            className="cursor-pointer border border-primary-300 rounded-sm hover:bg-transparent p-1"
+                        <div 
+                            className="relative" 
+                            ref={(el) => {
+                                dropdownRefs.current.set(staff.id, el);
+                            }}
                         >
-                            <MoreHorizontal size={14} className="text-primary-300" />
-                        </Button>
+                            <Button
+                                variant="ghost"
+                                className="cursor-pointer border border-primary-300 rounded-sm hover:bg-transparent p-1"
+                                onClick={(e) => toggleDropdown(e, staff.id)}
+                            >
+                                <MoreHorizontal size={14} className="text-primary-300" />
+                            </Button>
+                            
+                            {openDropdownId === staff.id && (
+                                <div 
+                                    className="absolute right-0 top-full min-w-[160px] bg-white rounded-md shadow-lg border border-gray-200 z-50"
+                                >
+                                    <div className="py-1">
+                                        <button 
+                                            className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                            onClick={() => {
+                                                setOpenDropdownId(null);
+                                                if (onResendInvite) onResendInvite(staff);
+                                            }}
+                                        >
+                                            <Mail size={16} className="mr-2 text-primary-300" />
+                                            Resend Invite
+                                        </button>
+                                        <button 
+                                            className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                            onClick={() => {
+                                                setOpenDropdownId(null);
+                                                if (onResetPassword) onResetPassword(staff);
+                                            }}
+                                        >
+                                            <KeyRound size={16} className="mr-2 text-primary-300" />
+                                            Reset Password
+                                        </button>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
                     </TableCell>
                 </>
             )}

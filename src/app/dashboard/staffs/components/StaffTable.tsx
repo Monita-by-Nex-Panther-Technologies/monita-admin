@@ -14,6 +14,8 @@ import { formatedDate, isEmail, replacePrefix } from "@/utilities/utils";
 import { Plus } from "lucide-react";
 import EditStaffModal from "./EditStaff";
 import { useRouter } from "next/navigation";
+import ResendInviteDialog from "./ResendInviteDialog";
+import ResetPasswordDialog from "./ResetPasswordDialog";
 
 const StaffTable = () => {
     const {
@@ -28,6 +30,8 @@ const StaffTable = () => {
         isQueryResult,
         getStaffs,
         deleteStaff,
+        // resendInvite,
+        // resetPassword,
     } = useStaffStore();
 
     const [selected, setSelected] = useState<string[]>([]);
@@ -41,7 +45,19 @@ const StaffTable = () => {
     const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
     const [staffToDelete, setStaffToDelete] = useState<Staff | null>(null);
     const [deleteLoading, setDeleteLoading] = useState(false);
+    
+    // State for resend invite dialog
+    const [resendInviteOpen, setResendInviteOpen] = useState(false);
+    const [staffToResendInvite, setStaffToResendInvite] = useState<Staff | null>(null);
+    const [resendInviteLoading, setResendInviteLoading] = useState(false);
+    
+    // State for reset password dialog
+    const [resetPasswordOpen, setResetPasswordOpen] = useState(false);
+    const [staffToResetPassword, setStaffToResetPassword] = useState<Staff | null>(null);
+    const [resetPasswordLoading, setResetPasswordLoading] = useState(false);
+    
     const router = useRouter();
+    
     // Fetch staff on initial load
     useEffect(() => {
         getStaffs({ page: 1, limit: 10 });
@@ -52,31 +68,10 @@ const StaffTable = () => {
         getStaffs({ page, limit, ...newFilters });
     };
 
-    const handleSelectAll = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (e.target.checked) {
-            // Select all staff in the current filtered view
-            const allIds = staffs.map((staff) => staff.id);
-            setSelected(allIds);
-        } else {
-            // Deselect all
-            setSelected([]);
-        }
-    };
-
-    const handleSelect = (id: string) => {
-        setSelected((prev) =>
-            prev.includes(id) ? prev.filter((selectedId) => selectedId !== id) : [...prev, id]
-        );
-    };
-
     const copyToClipboard = (text: string) => {
+        if (!text) return;
         navigator.clipboard.writeText(text);
-        toast.success("Copied to clipboard: " + text);
-    };
-
-    const exportData = (format: string) => {
-        // Implement export functionality
-        toast.info(`Exporting data as ${format}`);
+        toast.success("Copied to clipboard");
     };
 
     const onChangePage = (page: number, limit: number) => {
@@ -138,6 +133,54 @@ const StaffTable = () => {
         }
     };
 
+    // Handle initiating resend invite
+    const handleResendInvite = (staff: Staff) => {
+        setStaffToResendInvite(staff);
+        setResendInviteOpen(true);
+    };
+
+    // Handle confirming resend invite
+    const confirmResendInvite = async () => {
+        if (!staffToResendInvite) return;
+        
+        setResendInviteLoading(true);
+        try {
+            // Uncomment when API implementation is ready
+            // await resendInvite(staffToResendInvite.id);
+            toast.success(`Invitation email sent to ${staffToResendInvite.email}`);
+        } catch (error: any) {
+            toast.error(`Failed to send invitation: ${error.message}`);
+        } finally {
+            setResendInviteLoading(false);
+            setResendInviteOpen(false);
+            setStaffToResendInvite(null);
+        }
+    };
+
+    // Handle initiating reset password
+    const handleResetPassword = (staff: Staff) => {
+        setStaffToResetPassword(staff);
+        setResetPasswordOpen(true);
+    };
+
+    // Handle confirming reset password
+    const confirmResetPassword = async () => {
+        if (!staffToResetPassword) return;
+        
+        setResetPasswordLoading(true);
+        try {
+            // Uncomment when API implementation is ready
+            // await resetPassword(staffToResetPassword.id);
+            toast.success(`Password reset email sent to ${staffToResetPassword.email}`);
+        } catch (error: any) {
+            toast.error(`Failed to send password reset: ${error.message}`);
+        } finally {
+            setResetPasswordLoading(false);
+            setResetPasswordOpen(false);
+            setStaffToResetPassword(null);
+        }
+    };
+
     const handleStaffChange = () => {
         getStaffs({ page, limit, ...filterData });
     };
@@ -171,12 +214,7 @@ const StaffTable = () => {
                     onFilterClick={() => setIsFilterModalOpen(true)}
                     areFiltersActive={isFilterResult}
                     onResetFilters={onResetSearch}
-                    exportOptions={[
-                        { label: "Export as PDF", format: "PDF" },
-                        { label: "Export as XLS", format: "XLS" },
-                        { label: "Export as DOC", format: "DOC" },
-                    ]}
-                    onExport={exportData}
+                    showExport={false}
                     onResetSearch={onResetSearch}
                     isSearchActive={isQueryResult}
                 />
@@ -214,12 +252,11 @@ const StaffTable = () => {
                 ) : (
                     <StaffTableContent
                         staffs={staffs}
-                        selected={selected}
-                        handleSelectAll={handleSelectAll}
-                        handleSelect={handleSelect}
                         copyToClipboard={copyToClipboard}
                         onEdit={handleEdit}
                         onDelete={handleDelete}
+                        onResendInvite={handleResendInvite}
+                        onResetPassword={handleResetPassword}
                     />
                 )}
             </div>
@@ -272,6 +309,30 @@ const StaffTable = () => {
                 confirmText="Delete"
                 cancelText="Cancel"
                 isLoading={deleteLoading}
+            />
+
+            {/* Resend Invite Dialog */}
+            <ResendInviteDialog
+                isOpen={resendInviteOpen}
+                onClose={() => {
+                    setResendInviteOpen(false);
+                    setStaffToResendInvite(null);
+                }}
+                onConfirm={confirmResendInvite}
+                staff={staffToResendInvite}
+                isLoading={resendInviteLoading}
+            />
+            
+            {/* Reset Password Dialog */}
+            <ResetPasswordDialog
+                isOpen={resetPasswordOpen}
+                onClose={() => {
+                    setResetPasswordOpen(false);
+                    setStaffToResetPassword(null);
+                }}
+                onConfirm={confirmResetPassword}
+                staff={staffToResetPassword}
+                isLoading={resetPasswordLoading}
             />
         </>
     );

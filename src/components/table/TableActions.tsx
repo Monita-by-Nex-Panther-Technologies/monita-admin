@@ -13,8 +13,9 @@ interface TableActionsProps {
     areFiltersActive: boolean;
     onFilterClick: () => void;
     onResetFilters: () => void;
-    exportOptions: { label: string; format: string }[];
-    onExport: (format: string) => void;
+    showExport?: boolean; 
+    exportOptions?: { label: string; format: string }[];
+    onExport?: (format: string) => void;
 }
 
 const TableActions: React.FC<TableActionsProps> = ({
@@ -26,6 +27,7 @@ const TableActions: React.FC<TableActionsProps> = ({
     onResetSearch,
     onResetFilters,
     isSearchActive,
+    showExport = true,
     exportOptions,
     onExport,
 }) => {
@@ -76,40 +78,42 @@ const TableActions: React.FC<TableActionsProps> = ({
                             }
                         }}
                     >
-                                            {isSearchActive ? 
+                        {isSearchActive ? 
                         <X size={24} className="text-text-body" /> :  <Search size={24} className="text-text-body" /> }
                     </button>
 
                 </div>
             </div>
 
-            {/* Export Dropdown */}
-            <div className="relative" ref={exportDropdownRef}>
-                <button
-                    className="bg-[#010101CC] flex gap-3 justify-center items-center px-6 py-3 rounded-[12px] text-white"
-                    onClick={() => setExportDropdownOpen(!exportDropdownOpen)}
-                >
-                    <Image src={icons.exportIcon} alt="Export Icon" className="w-6 h-6 text-white" />
-                    <span className="font-poppins text-base">Export</span>
-                </button>
+            {/* Export Dropdown - Only show if showExport is true */}
+            {showExport && (
+                <div className="relative" ref={exportDropdownRef}>
+                    <button
+                        className="bg-[#010101CC] flex gap-3 justify-center items-center px-6 py-3 rounded-[12px] text-white"
+                        onClick={() => setExportDropdownOpen(!exportDropdownOpen)}
+                    >
+                        <Image src={icons.exportIcon} alt="Export Icon" className="w-6 h-6 text-white" />
+                        <span className="font-poppins text-base">Export</span>
+                    </button>
 
-                {exportDropdownOpen && (
-                    <div className="absolute right-0 mt-2 w-32 rounded-md shadow-xl py-1 bg-white z-10">
-                        {exportOptions.map((option) => (
-                            <button
-                                key={option.format}
-                                className="block px-4 py-2 text-sm text-gray-700 w-full border-border hover:bg-primary-alpha-8 text-left border-b"
-                                onClick={() => {
-                                    onExport(option.format);
-                                    setExportDropdownOpen(false);
-                                }}
-                            >
-                                {option.label}
-                            </button>
-                        ))}
-                    </div>
-                )}
-            </div>
+                    {exportDropdownOpen && (
+                        <div className="absolute right-0 mt-2 w-32 rounded-md shadow-xl py-1 bg-white z-10">
+                            {exportOptions?.map((option) => (
+                                <button
+                                    key={option.format}
+                                    className="block px-4 py-2 text-sm text-gray-700 w-full border-border hover:bg-primary-alpha-8 text-left border-b"
+                                    onClick={() => {
+                                        onExport && onExport(option.format);
+                                        setExportDropdownOpen(false);
+                                    }}
+                                >
+                                    {option.label}
+                                </button>
+                            ))}
+                        </div>
+                    )}
+                </div>
+            )}
         </div>
     );
 };
