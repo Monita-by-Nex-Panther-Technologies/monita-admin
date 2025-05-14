@@ -5,7 +5,7 @@ import React from 'react'
 const CashBackStat = () => {
     return (
         <div className=' grid xl:grid-col-3 lg:grid-cols-3 md:grid-cols-2 gap-4 mb-4'>
-            <StatCard
+            {/* <StatCard
                 title="Total Users"
                 value="1,000,000"
                 Icon={icons.customersIcon} // Pass the icon component directly
@@ -19,7 +19,7 @@ const CashBackStat = () => {
                 title="Inactive Accounts"
                 value="8,000,000"
                 Icon={icons.customersIcon} // Pass the icon component directly
-            />
+            /> */}
 
 
         </div>

@@ -16,11 +16,12 @@ import { format } from "date-fns";
 interface FilterModalProps {
     isOpen: boolean;
     onClose: () => void;
-    onApply: (filters: Partial<FilterCriteria>) => void;
+    onApply: (filters: Partial<UserFilterCriteria>) => void;
 }
 
-export interface FilterCriteria {
+export interface UserFilterCriteria {
     user: string;
+
     category: string;
     status: string;
     type: string;
@@ -29,7 +30,7 @@ export interface FilterCriteria {
 }
 
 const FilterModal: React.FC<FilterModalProps> = ({ isOpen, onClose, onApply }) => {
-    const { control, handleSubmit, reset } = useForm<FilterCriteria>({
+    const { control, handleSubmit, reset } = useForm<UserFilterCriteria>({
         defaultValues: {
             user: "",
             status: "",
@@ -39,7 +40,7 @@ const FilterModal: React.FC<FilterModalProps> = ({ isOpen, onClose, onApply }) =
         },
     });
 
-    const handleApply = (data: FilterCriteria) => {
+    const handleApply = (data: UserFilterCriteria) => {
         const filteredData = Object.fromEntries(
             Object.entries(data).filter(([_, value]) => value !== "" && value !== undefined)
         );

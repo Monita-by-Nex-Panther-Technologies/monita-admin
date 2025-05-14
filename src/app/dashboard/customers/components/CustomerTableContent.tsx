@@ -5,6 +5,7 @@ import { formatAmount, formatedDate } from "@/utilities/utils";
 import DataTable from "@/components/table/DataTable";
 import { TableCell } from "@/components/ui/table";
 import { Customer } from "@/store/customerStore";
+import { useRouter } from "next/navigation";
 
 
 interface Props {
@@ -14,6 +15,7 @@ interface Props {
     handleSelect: (id: string) => void;
     copyToClipboard: (text: string) => void;
 }
+
 
 const CustomerTableContent: React.FC<Props> = ({
     customers,
@@ -31,6 +33,8 @@ const CustomerTableContent: React.FC<Props> = ({
         "Registration Date",
         "Actions",
     ];
+
+    const router = useRouter()
 
     return (
         <DataTable
@@ -51,7 +55,7 @@ const CustomerTableContent: React.FC<Props> = ({
                     </TableCell>
                     {/* <TableCell className="text-text-body font-poppins text-base py-6">{customer.userId}</TableCell> */}
                     
-                    <TableCell className="text-text-body font-poppins text-base py-6">{customer.lastName} {customer.firstName}</TableCell>
+                    <TableCell className="text-text-body font-poppins text-base py-6 cursor-pointer" onClick={() => router.push(`/dashboard/customers/${customer.id}`)}>{customer.lastName} {customer.firstName}</TableCell>
                     <TableCell className="text-text-body font-poppins text-base py-6">{customer.monitag ?? "N/A"}</TableCell>
                     <TableCell className="text-text-body font-poppins text-base py-6">{customer.email ?? "N/A"}</TableCell>
                     <TableCell className="text-text-body font-poppins text-base py-6">

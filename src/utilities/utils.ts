@@ -159,3 +159,10 @@ export function replacePrefix(phoneNumber:string) {
   }
   return phoneNumber; // Return the number unchanged if it doesn't start with +234
 }
+
+export function combineArrayToObject(months: string[], values: number[]): { name: string; value: number }[] {
+  return months.map((month, index) => ({
+    name: month,
+    value: values[index]
+  }));
+}
