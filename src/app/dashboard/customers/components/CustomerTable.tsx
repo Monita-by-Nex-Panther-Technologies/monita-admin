@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useRef } from "react";
-import FilterModal, { FilterCriteria } from "./CustomerFilterModal";
+import FilterModal from "./CustomerFilterModal";
 import { CustomerQueryParams, useCustomerStore } from "@/store/customerStore";
 import TableLoading from "@/components/table/TableLoading";
 import GetPagination from "@/components/table/pagination";
@@ -9,6 +9,7 @@ import CustomerTableContent from "./CustomerTableContent";
 import TableActions from "@/components/table/TableActions";
 import { toast } from "sonner";
 import { formatedDate, isEmail, replacePrefix } from "@/utilities/utils";
+import { FilterCriteria } from "../../staffs/components/StaffFilterModal";
 
 
 
