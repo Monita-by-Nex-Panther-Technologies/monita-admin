@@ -20,6 +20,7 @@ export const useStaffStore = create<StaffState>()(
     limit: 10,
     totalPages: 0,
     isLoading: false,
+    isSubmitting: false,
     isFilterResult: false,
     isQueryResult: false,
     filterData: null,
@@ -67,7 +68,7 @@ export const useStaffStore = create<StaffState>()(
     },
 
     createStaff: async (staffData: CreateStaffPayload) => {
-      set({ isLoading: true });
+      set({ isSubmitting: true });
 
       try {
         const response = await axiosInstance.post(
@@ -80,16 +81,19 @@ export const useStaffStore = create<StaffState>()(
           page: 1, 
           limit: currentState.limit 
         });
+        
+        // Explicitly set isSubmitting to false after success
+        set({ isSubmitting: false });
 
         return response.data;
       } catch (error: any) {
-        set({ isLoading: false });
+        set({ isSubmitting: false });
         throw new Error(getErrorMessage(error));
       }
     },
 
     updateStaff: async (staffId: string, updatedData: Partial<Staff>) => {
-      set({ isLoading: true });
+      set({ isSubmitting: true });
 
       try {
         const response = await axiosInstance.patch(
@@ -103,18 +107,18 @@ export const useStaffStore = create<StaffState>()(
               ? { ...staff, ...updatedData }
               : staff
           );
-          return { staffs: updatedStaffs, isLoading: false };
+          return { staffs: updatedStaffs, isLoading: false, isSubmitting: false };
         });
 
         return response.data;
       } catch (error: any) {
-        set({ isLoading: false });
+        set({ isSubmitting: false });
         throw new Error(getErrorMessage(error));
       }
     },
 
     deleteStaff: async (staffId: string) => {
-      set({ isLoading: true });
+      set({ isLoading: true, isSubmitting: true });
 
       try {
         const response = await axiosInstance.delete(
@@ -133,7 +137,8 @@ export const useStaffStore = create<StaffState>()(
             staffs: updatedStaffs,
             total: updatedTotal,
             totalPages: updatedTotalPages,
-            isLoading: false
+            isLoading: false,
+            isSubmitting: false
           };
         });
 
@@ -149,7 +154,7 @@ export const useStaffStore = create<StaffState>()(
 
         return response.data;
       } catch (error: any) {
-        set({ isLoading: false });
+        set({ isLoading: false,  isSubmitting: false });
         throw new Error(getErrorMessage(error));
       }
     },
@@ -192,6 +197,7 @@ interface StaffState {
   limit: number;
   totalPages: number;
   isLoading: boolean;
+  isSubmitting: boolean;
   isFilterResult: boolean;
   isQueryResult: boolean;
   filterData: Partial<FilterCriteria> | null;

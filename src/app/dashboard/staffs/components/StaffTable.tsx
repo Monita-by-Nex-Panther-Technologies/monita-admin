@@ -26,6 +26,7 @@ const StaffTable = () => {
         limit,
         filterData,
         isLoading,
+        isSubmitting,
         setField,
         isQueryResult,
         getStaffs,

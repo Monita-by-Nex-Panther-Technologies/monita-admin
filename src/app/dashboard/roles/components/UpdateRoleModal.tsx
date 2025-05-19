@@ -9,6 +9,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import { useRolesStore, Role } from "@/store/rolesStore";
 import { Permission } from "@/store/permissionStore";
+import Loading from "@/components/ui/Loading";
 
 // Define types for the component props
 interface UpdateRoleModalProps {
@@ -191,6 +192,10 @@ const UpdateRoleModal = ({
     }
   };
 
+  if (isSubmitting) {
+    return <Loading />;
+  }
+
   if (!role) return null;
 
   return (
@@ -317,7 +322,7 @@ const UpdateRoleModal = ({
               className="h-12 rounded-md bg-yellow-100 hover:bg-yellow-200 text-black font-medium"
               variant="ghost"
             >
-              {isSubmitting ? "Updating Role..." : "Update Role"}
+              Update Role
             </Button>
           </div>
         </div>
