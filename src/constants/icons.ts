@@ -1,20 +1,24 @@
 // src/constants/icons.ts
-import homeIcon from "@/assets/icons/lets-icons_home-fill.svg";
-import transact from "@/assets/icons/transact.svg";
-import statisticsIcon from "@/assets/icons/statit.svg";
-import customersIcon from "@/assets/icons/usermain.svg";
-import kycIcon from "@/assets/icons/kyx.svg";
-import staffIcon from "@/assets/icons/userplus.svg";
 import bilpayIcon from "@/assets/icons/billpay.svg";
-import giftcardIcon from "@/assets/icons/gift.svg";
-import virtAccIcon from "@/assets/icons/vitrual.svg";
-import cashbackIcon from "@/assets/icons/cashback.svg";
 import cardIcon from "@/assets/icons/Card-1.svg";
+import cashbackIcon from "@/assets/icons/cashback.svg";
+<<<<<<< HEAD
+import cardIcon from "@/assets/icons/Card-1.svg";
+=======
+>>>>>>> 682bfbcb239ebd4d7a4ec21e3d705c8f818b6837
 import esimIcon from "@/assets/icons/esimicon.svg";
+import exportIcon from "@/assets/icons/export.svg";
+import giftcardIcon from "@/assets/icons/gift.svg";
+import kycIcon from "@/assets/icons/kyx.svg";
+import homeIcon from "@/assets/icons/lets-icons_home-fill.svg";
+import logoutIcon from "@/assets/icons/logoutIcon.svg";
 import settingsIcon from "@/assets/icons/mdi-light_settings.svg";
 import supportIcon from "@/assets/icons/mynaui_support.svg";
-import logoutIcon from "@/assets/icons/logoutIcon.svg";
-import exportIcon from "@/assets/icons/export.svg";
+import statisticsIcon from "@/assets/icons/statit.svg";
+import transact from "@/assets/icons/transact.svg";
+import customersIcon from "@/assets/icons/usermain.svg";
+import staffIcon from "@/assets/icons/userplus.svg";
+import virtAccIcon from "@/assets/icons/vitrual.svg";
 
 export const icons = {
   home: homeIcon,
