@@ -11,6 +11,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Staff } from "@/store/staffStore";
 import { KeyRound } from "lucide-react";
+import Loading from "@/components/ui/Loading";
 
 interface ResetPasswordDialogProps {
   isOpen: boolean;
@@ -28,6 +29,15 @@ const ResetPasswordDialog: React.FC<ResetPasswordDialogProps> = ({
   isLoading = false,
 }) => {
   if (!staff) return null;
+
+  // Show loading overlay when isLoading is true
+  if (isLoading) {
+    return (
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+        <Loading />
+      </div>
+    );
+  }
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -48,7 +58,6 @@ const ResetPasswordDialog: React.FC<ResetPasswordDialogProps> = ({
           <Button 
             variant="outline" 
             onClick={() => onClose()}
-            disabled={isLoading}
             className="w-full sm:w-auto"
           >
             Cancel
@@ -59,15 +68,14 @@ const ResetPasswordDialog: React.FC<ResetPasswordDialogProps> = ({
               onConfirm();
             }}
             variant="default"
-            disabled={isLoading}
             className="w-full sm:w-auto bg-primary-300 hover:bg-primary-400"
           >
-            {isLoading ? "Sending..." : "Reset Password"}
+            Reset Password
           </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
   );
 };
-
+ 
 export default ResetPasswordDialog;

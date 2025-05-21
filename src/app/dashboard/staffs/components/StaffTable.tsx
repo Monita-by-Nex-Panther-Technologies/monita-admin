@@ -31,8 +31,8 @@ const StaffTable = () => {
         isQueryResult,
         getStaffs,
         deleteStaff,
-        // resendInvite,
-        // resetPassword,
+        resendInvite, // Uncommented
+        resetPassword, // Uncommented
     } = useStaffStore();
 
     const [selected, setSelected] = useState<string[]>([]);
@@ -146,8 +146,8 @@ const StaffTable = () => {
         
         setResendInviteLoading(true);
         try {
-            // Uncomment when API implementation is ready
-            // await resendInvite(staffToResendInvite.id);
+            // Implementation now active
+            await resendInvite(staffToResendInvite.id);
             toast.success(`Invitation email sent to ${staffToResendInvite.email}`);
         } catch (error: any) {
             toast.error(`Failed to send invitation: ${error.message}`);
@@ -170,8 +170,8 @@ const StaffTable = () => {
         
         setResetPasswordLoading(true);
         try {
-            // Uncomment when API implementation is ready
-            // await resetPassword(staffToResetPassword.id);
+            // Implementation now active
+            await resetPassword(staffToResetPassword.id);
             toast.success(`Password reset email sent to ${staffToResetPassword.email}`);
         } catch (error: any) {
             toast.error(`Failed to send password reset: ${error.message}`);

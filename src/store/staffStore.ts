@@ -82,7 +82,6 @@ export const useStaffStore = create<StaffState>()(
           limit: currentState.limit 
         });
         
-        // Explicitly set isSubmitting to false after success
         set({ isSubmitting: false });
 
         return response.data;
@@ -158,6 +157,38 @@ export const useStaffStore = create<StaffState>()(
         throw new Error(getErrorMessage(error));
       }
     },
+    
+    resendInvite: async (staffId: string) => {
+      set({ isSubmitting: true });
+      
+      try {
+        const response = await axiosInstance.post(
+          `${ums_endpoint}/staffs/${staffId}/resend-invite`
+        );
+        
+        set({ isSubmitting: false });
+        return response.data;
+      } catch (error: any) {
+        set({ isSubmitting: false });
+        throw new Error(getErrorMessage(error));
+      }
+    },
+    
+    resetPassword: async (staffId: string) => {
+      set({ isSubmitting: true });
+      
+      try {
+        const response = await axiosInstance.post(
+          `${ums_endpoint}/staffs/${staffId}/reset-password`
+        );
+        
+        set({ isSubmitting: false });
+        return response.data;
+      } catch (error: any) {
+        set({ isSubmitting: false });
+        throw new Error(getErrorMessage(error));
+      }
+    },
 
     setField: <K extends keyof StaffState>(field: K, value: StaffState[K]) => {
       set({ [field]: value } as Pick<StaffState, K>);
@@ -205,5 +236,7 @@ interface StaffState {
   createStaff: (staffData: CreateStaffPayload) => Promise<any>;
   updateStaff: (staffId: string, updatedData: Partial<Staff>) => Promise<any>;
   deleteStaff: (staffId: string) => Promise<any>;
+  resendInvite: (staffId: string) => Promise<any>;
+  resetPassword: (staffId: string) => Promise<any>; 
   setField: <K extends keyof StaffState>(field: K, value: StaffState[K]) => void;
 }

@@ -11,6 +11,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Staff } from "@/store/staffStore";
 import { Mail } from "lucide-react";
+import Loading from "@/components/ui/Loading";
 
 interface ResendInviteDialogProps {
   isOpen: boolean;
@@ -19,7 +20,7 @@ interface ResendInviteDialogProps {
   staff: Staff | null;
   isLoading?: boolean;
 }
-
+ 
 const ResendInviteDialog: React.FC<ResendInviteDialogProps> = ({
   isOpen,
   onClose,
@@ -28,6 +29,15 @@ const ResendInviteDialog: React.FC<ResendInviteDialogProps> = ({
   isLoading = false,
 }) => {
   if (!staff) return null;
+
+  // Show loading overlay when isLoading is true
+  if (isLoading) {
+    return (
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+        <Loading />
+      </div>
+    );
+  }
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -48,7 +58,6 @@ const ResendInviteDialog: React.FC<ResendInviteDialogProps> = ({
           <Button 
             variant="outline" 
             onClick={() => onClose()}
-            disabled={isLoading}
             className="w-full sm:w-auto"
           >
             Cancel
@@ -59,10 +68,9 @@ const ResendInviteDialog: React.FC<ResendInviteDialogProps> = ({
               onConfirm();
             }}
             variant="default"
-            disabled={isLoading}
             className="w-full sm:w-auto bg-primary-300 hover:bg-primary-400"
           >
-            {isLoading ? "Sending..." : "Resend Invitation"}
+            Resend Invitation
           </Button>
         </DialogFooter>
       </DialogContent>
