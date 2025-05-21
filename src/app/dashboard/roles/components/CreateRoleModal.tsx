@@ -9,6 +9,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import { useRolesStore } from "@/store/rolesStore";
 import { Permission } from "@/store/permissionStore";
+import Loading from "@/components/ui/Loading";
 
 // Define types for the component props
 interface CreateRoleModalProps {
@@ -152,6 +153,10 @@ const CreateRoleModal = ({
     }
   };
 
+  if (isSubmitting) {
+    return <Loading />;
+  }
+
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
       <DialogContent className="sm:max-w-[550px] p-0 overflow-auto max-h-[90vh]">
@@ -264,12 +269,17 @@ const CreateRoleModal = ({
 
           <div className="flex justify-end gap-3 mt-6">
             <Button
-              onClick={handleCreateRole}
-              disabled={isSubmitting}
-              className="w-full h-12 mt-4 rounded-md bg-yellow-100 hover:bg-yellow-200 text-black font-medium"
-              variant="ghost"
+              onClick={onClose}
+              variant="outline"
+              className="h-12 rounded-md"
             >
-              {isSubmitting ? "Creating Role..." : "Create Role"}
+              Cancel
+            </Button>
+            <Button
+              onClick={handleCreateRole}
+              className="h-12 rounded-md bg-yellow-100 hover:bg-yellow-200 text-black font-medium"
+            >
+              Create Role
             </Button>
           </div>
         </div>

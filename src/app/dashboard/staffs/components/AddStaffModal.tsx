@@ -8,6 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { useStaffStore, CreateStaffPayload } from "@/store/staffStore"
 import { useRolesStore } from "@/store/rolesStore"
 import { toast } from "sonner"
+import Loading from "@/components/ui/Loading"
 
 interface AddStaffModalProps {
     open: boolean
@@ -27,12 +28,12 @@ const AddStaffModal: React.FC<AddStaffModalProps> = ({
         phoneNumber: "",
         roleId: ""
     })
-    
+
     const [isSubmitting, setIsSubmitting] = useState(false)
-    
-    const { createStaff } = useStaffStore()
+
+    const { createStaff, isLoading } = useStaffStore()
     const { roles, getRoles, isLoading: isLoadingRoles } = useRolesStore()
-    
+
     useEffect(() => {
         if (open) {
             const fetchRoles = async () => {
@@ -43,7 +44,7 @@ const AddStaffModal: React.FC<AddStaffModalProps> = ({
                     toast.error("Failed to load roles")
                 }
             }
-            
+
             fetchRoles()
         }
     }, [open, getRoles])
@@ -58,15 +59,15 @@ const AddStaffModal: React.FC<AddStaffModalProps> = ({
 
     const formatPhoneNumber = (phone: string): string => {
         const digitsOnly = phone.replace(/\D/g, '')
-        
+
         if (digitsOnly.startsWith('234')) {
             return `+${digitsOnly}`
         }
-        
+
         if (digitsOnly.startsWith('0')) {
             return `+234${digitsOnly.substring(1)}`
         }
-        
+
         return `+234${digitsOnly}`
     }
 
@@ -75,18 +76,18 @@ const AddStaffModal: React.FC<AddStaffModalProps> = ({
             toast.error("Please fill all required fields")
             return
         }
-        
+
         try {
             setIsSubmitting(true)
-            
+
             const formattedData = {
                 ...formData,
                 phoneNumber: formatPhoneNumber(formData.phoneNumber)
             }
-            
+
             await createStaff(formattedData)
             toast.success(`Staff ${formData.firstName} ${formData.lastName} added successfully!`)
-            
+
             setFormData({
                 firstName: "",
                 lastName: "",
@@ -94,7 +95,7 @@ const AddStaffModal: React.FC<AddStaffModalProps> = ({
                 phoneNumber: "",
                 roleId: ""
             })
-            
+
             onOpenChange(false)
             if (onSuccess) {
                 onSuccess()
@@ -105,6 +106,11 @@ const AddStaffModal: React.FC<AddStaffModalProps> = ({
             setIsSubmitting(false)
         }
     }
+
+    if (isSubmitting) {
+        return <Loading />
+    }
+    
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
@@ -179,7 +185,6 @@ const AddStaffModal: React.FC<AddStaffModalProps> = ({
                                     className="h-10 text-sm rounded-lg border-gray-300"
                                     required
                                 />
-                                
                             </div>
                         </div>
 
@@ -212,7 +217,7 @@ const AddStaffModal: React.FC<AddStaffModalProps> = ({
                         className="w-full h-12 mt-4 rounded-md bg-yellow-100 hover:bg-yellow-200 text-black font-medium"
                         variant="ghost"
                     >
-                        {isSubmitting ? "Adding Staff..." : "Add Staff"}
+                        Add Staff
                     </Button>
                 </div>
             </DialogContent>

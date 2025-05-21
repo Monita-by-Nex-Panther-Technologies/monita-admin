@@ -2,6 +2,7 @@
 import bilpayIcon from "@/assets/icons/billpay.svg";
 import cardIcon from "@/assets/icons/Card-1.svg";
 import cashbackIcon from "@/assets/icons/cashback.svg";
+// import cardIcon from "@/assets/icons/Card-1.svg";
 import esimIcon from "@/assets/icons/esimicon.svg";
 import exportIcon from "@/assets/icons/export.svg";
 import giftcardIcon from "@/assets/icons/gift.svg";

@@ -5,6 +5,7 @@ import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { useRolesStore, Role } from "@/store/rolesStore";
+import Loading from "@/components/ui/Loading";
 
 // Define types for the component props
 interface DeleteRoleModalProps {
@@ -20,7 +21,7 @@ const DeleteRoleModal = ({
   role,
   onSuccess 
 }: DeleteRoleModalProps) => {
-  const [isDeleting, setIsDeleting] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const { deleteRole } = useRolesStore();
 
   const handleDeleteRole = async () => {
@@ -30,7 +31,7 @@ const DeleteRoleModal = ({
     }
     
     try {
-      setIsDeleting(true);
+      setIsSubmitting(true);
       
       // Call the delete role function from the store
       await deleteRole(role.id);
@@ -45,9 +46,13 @@ const DeleteRoleModal = ({
     } catch (error) {
       toast.error((error as Error).message || "Failed to delete role");
     } finally {
-      setIsDeleting(false);
+      setIsSubmitting(false);
     }
   };
+
+  if (isSubmitting) {
+    return <Loading />;
+  }
 
   if (!role) return null;
 
@@ -85,10 +90,10 @@ const DeleteRoleModal = ({
               </Button>
               <Button
                 onClick={handleDeleteRole}
-                disabled={isDeleting}
+                disabled={isSubmitting}
                 className="h-12 rounded-md bg-red-600 hover:bg-red-700 text-white font-medium"
               >
-                {isDeleting ? "Deleting Role..." : "Delete Role"}
+                Delete Role
               </Button>
             </div>
           </div>

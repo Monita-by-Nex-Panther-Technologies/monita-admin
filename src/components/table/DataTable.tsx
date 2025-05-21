@@ -1,7 +1,6 @@
 import React from "react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
-
 interface DataTableProps<T> {
     headers: string[];
     data: T[];
@@ -10,6 +9,7 @@ interface DataTableProps<T> {
     selectedItems?: string[];
     onSelectAll?: (e: React.ChangeEvent<HTMLInputElement>) => void;
     onSelectItem?: (id: string) => void;
+    showSelectAllCheckbox?: boolean;
 }
 
 const DataTable = <T extends { id: string }>({
@@ -20,6 +20,7 @@ const DataTable = <T extends { id: string }>({
     selectedItems = [],
     onSelectAll,
     onSelectItem,
+    showSelectAllCheckbox = true,
 }: DataTableProps<T>) => {
     return (
         <div className="w-full overflow-x-auto max-w-full min-w-0">
@@ -27,7 +28,7 @@ const DataTable = <T extends { id: string }>({
                 <Table className="w-full table-auto border-collapse rounded-2xl bg-background p-5">
                     <TableHeader className="bg-primary-fade text-muted-foreground hover:bg-primary-fade ml-5">
                         <TableRow>
-                            {selectable && (
+                            {selectable && showSelectAllCheckbox && (
                                 <TableHead className="p-4">
                                     <input
                                         type="checkbox"
@@ -36,6 +37,9 @@ const DataTable = <T extends { id: string }>({
                                         onChange={onSelectAll}
                                     />
                                 </TableHead>
+                            )}
+                            {selectable && !showSelectAllCheckbox && (
+                                <TableHead className="p-4"></TableHead>
                             )}
                             {headers.map((header, index) => (
                                 <TableHead key={index} className="text-base font-poppins text-text-title">
